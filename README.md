@@ -28,12 +28,20 @@ pnpm build      # 类型检查 + 打包到 dist/
 
 ### 部署
 
-使用 History 路由（`/batch`、`/collage/grid`），静态托管需要把未知路径回退到 `index.html`，否则直接访问或刷新子页面会 404：
+使用 History 路由（`/batch`、`/collage/grid`）。构建时会为每个路由预渲染一份带独立标题 / 描述 / 结构化数据的 HTML（`dist/batch.html`、`dist/collage/grid.html`…），静态托管需要：先按 `路径.html` 查找，找不到再回退到 `index.html`：
 
-- **Nginx**：`location / { try_files $uri $uri/ /index.html; }`
-- **Vercel**：`vercel.json` → `{ "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }] }`
-- **Netlify / Cloudflare Pages**：`public/_redirects` → `/*  /index.html  200`
+- **Nginx**：`location / { try_files $uri $uri.html /index.html; }`
+- **Vercel**：`vercel.json` → `{ "cleanUrls": true, "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }] }`
+- **Netlify / Cloudflare Pages**：自动按 `路径.html` 匹配；再在 `public/_redirects` 加 `/*  /index.html  200` 兜底
 - **部署在子路径**：`pnpm build --base=/tubox/`，路由 basename 会自动跟随
+
+### SEO
+
+各页面的标题、描述、关键词、功能要点集中在 `src/seo.ts`，构建时由 `scripts/seo-plugin.ts` 写入每个路由的 HTML（含给百度等不执行 JS 的爬虫看的静态正文），站内跳转时由 `useSeo` 同步更新。构建前设置站点地址，才会输出 canonical、`og:url` 与 `sitemap.xml`：
+
+```bash
+VITE_SITE_URL=https://tubox.example.com pnpm build   # 或写进 .env.production
+```
 
 `pnpm dev` / `pnpm preview` 已内置回退，开发时无需配置。
 

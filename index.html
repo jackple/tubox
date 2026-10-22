@@ -4,9 +4,14 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="图盒 Tubox：在浏览器里完成批量压缩、证件照、拼图排版，图片永不上传。" />
-    <title>图盒 Tubox · 专业图片工具箱</title>
+    <!-- 标题、描述、OG、结构化数据由 scripts/seo-plugin.ts 按路由注入，数据见 src/seo.ts -->
+    <!-- seo:head -->
+    <style>
+      /* 预渲染的静态正文只给不执行 JS 的爬虫看，有 JS 时隐藏，避免挂载前闪现 */
+      .js .seo-static { display: none }
+    </style>
     <script>
+      document.documentElement.classList.add('js')
       // 首屏前应用主题，避免闪烁
       try {
         var t = localStorage.getItem('tubox-theme') || 'system'
@@ -16,7 +21,7 @@
     </script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root"><!-- seo:body --></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

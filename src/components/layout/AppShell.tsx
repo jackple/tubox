@@ -1,10 +1,12 @@
 import { Suspense } from 'react'
 import { Outlet } from 'react-router-dom'
 import { Loader2 } from 'lucide-react'
+import { useSeo } from '@/hooks/useSeo'
 import { MobileNav } from './MobileNav'
 import { Sidebar } from './Sidebar'
 
 export function AppShell() {
+  useSeo()
   return (
     <div className="flex h-full overflow-hidden">
       <Sidebar />
