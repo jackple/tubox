@@ -10,7 +10,7 @@ import { resolveSpec, useIdPhoto } from '@/stores/idphoto'
 import { useComposed } from './useComposed'
 
 const STEPS = [
-  { id: 'model', label: '加载端侧 AI 模型' },
+  { id: 'model', label: '加载 AI 模型' },
   { id: 'segment', label: '人像分割 · 抠除背景' },
   { id: 'face', label: '人脸定位 · 自动构图' },
 ] as const

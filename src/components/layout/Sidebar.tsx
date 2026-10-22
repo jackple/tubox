@@ -42,7 +42,7 @@ export function Sidebar() {
             <span className="relative inline-flex h-2 w-2 rounded-full bg-success" />
           </span>
           <div className="min-w-0 leading-tight">
-            <div className="text-[12px] font-medium">本地处理中</div>
+            <div className="text-[12px] font-medium">隐私保护已开启</div>
             <div className="text-[11px] text-muted">图片不会离开此设备</div>
           </div>
         </div>

@@ -50,7 +50,7 @@ function Hero() {
             className="group inline-flex h-8 items-center gap-2 rounded-full border border-line bg-panel/70 pl-1 pr-3 text-[12px] text-muted shadow-[var(--highlight),0_1px_2px_rgb(0_0_0/0.04)] backdrop-blur transition hover:border-fg/20 hover:text-fg"
           >
             <span className="rounded-full bg-fg px-2 py-0.5 font-mono text-[10px] font-semibold tracking-wider text-bg">NEW</span>
-            证件照已支持端侧 AI 换底
+            证件照已支持 AI 换底
             <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
           </Link>
         </motion.div>
@@ -324,7 +324,7 @@ function SocialVisual() {
 /* ───────────────────────── Privacy ───────────────────────── */
 
 function Privacy() {
-  const points = ['所有解码、压缩与 AI 推理都在本机完成', '没有服务器、没有账号、没有追踪', '关闭页面即清空，不留任何痕迹']
+  const points = ['所有解码、压缩与 AI 推理都在浏览器内完成', '没有服务器、没有账号、没有追踪', '关闭页面即清空，不留任何痕迹']
   return (
     <section className="border-t border-line bg-panel/40">
       <div className="mx-auto grid max-w-6xl items-center gap-14 px-6 py-24 lg:grid-cols-2">
@@ -359,9 +359,9 @@ function Privacy() {
           </div>
           <div className="space-y-2 p-5 leading-relaxed">
             <div className="text-muted">$ tubox process ./photos --to webp</div>
-            <LogLine k="decode" v="128 images" r="local" />
+            <LogLine k="decode" v="128 images" r="0.6s" />
             <LogLine k="resize · encode" v="Web Worker × 8" r="1.8s" />
-            <LogLine k="ai.segment" v="WebGPU" r="on-device" />
+            <LogLine k="ai.segment" v="WebGPU" r="0.4s" />
             <LogLine k="export" v="tubox-batch.zip" r="41.2 MB" />
             <div className="!my-4 border-t border-dashed border-line" />
             <div className="flex justify-between">

@@ -44,7 +44,7 @@ export const tools: Tool[] = [
     id: 'idphoto',
     group: 'photo',
     title: '证件照',
-    desc: '一寸二寸、签证照、考试报名照，端侧 AI 换底与自动构图',
+    desc: '一寸二寸、签证照、考试报名照，AI 换底与自动构图',
     path: '/id-photo',
     icon: IdPhotoGlyph,
     en: 'ID Photo',

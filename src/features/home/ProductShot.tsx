@@ -101,7 +101,7 @@ export function ProductShot() {
                   头部比例 <b className="font-mono font-medium">63%</b>
                 </div>
                 <div className="absolute -left-24 bottom-12 hidden items-center gap-1.5 rounded-full border border-line bg-panel/90 px-2.5 py-1 text-[11px] shadow-soft backdrop-blur sm:flex">
-                  <IdPhotoGlyph className="h-3.5 w-3.5" /> AI 换底 · 端侧
+                  <IdPhotoGlyph className="h-3.5 w-3.5" /> AI 换底
                 </div>
               </div>
               <div className="absolute bottom-4 flex items-center gap-1 rounded-xl border border-line bg-panel/90 p-1 text-[11px] text-muted shadow-soft backdrop-blur">
