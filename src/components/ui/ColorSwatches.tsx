@@ -21,7 +21,7 @@ const isLight = (css: string) => /^#(f|e)[\da-f]{5}$/i.test(css) || css === '#ff
 export function ColorSwatches({ swatches, value, onChange, custom, size = 'md' }: Props) {
   const dim = size === 'sm' ? 'h-7 w-7' : 'h-8 w-8'
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="-mx-1.5 flex flex-wrap gap-2.5 p-1.5">
       {swatches.map((s) => {
         const active = s.id === value
         return (
