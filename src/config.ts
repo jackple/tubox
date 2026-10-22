@@ -10,7 +10,7 @@ const cdn = `https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${__MEDIAPIPE_
 const custom = import.meta.env.VITE_MODEL_BASE as string | undefined
 
 export const visionAssets = {
-  wasm: [custom && `${custom}/wasm`, `${base}/mediapipe/wasm`, cdn].filter(Boolean) as string[],
+  wasm: [custom && `${custom}/wasm`, `${base}/mediapipe/${__MEDIAPIPE_VERSION__}/wasm`, cdn].filter(Boolean) as string[],
   segmenter: [
     custom && `${custom}/selfie_multiclass_256x256.tflite`,
     `${base}/models/selfie_multiclass_256x256.tflite`,

@@ -19,6 +19,21 @@ async function firstAvailable(candidates: string[], probe: string): Promise<stri
   return candidates[candidates.length - 1]
 }
 
+/** 依次直接下载模型，首个成功的即返回，省去 HEAD 探测的额外请求 */
+async function fetchFirst(candidates: string[]): Promise<Uint8Array> {
+  let lastError: unknown
+  for (const url of candidates) {
+    try {
+      const res = await fetch(url)
+      if (res.ok && !(res.headers.get('content-type') ?? '').includes('text/html')) return new Uint8Array(await res.arrayBuffer())
+      lastError = new Error(`HTTP ${res.status}: ${url}`)
+    } catch (e) {
+      lastError = e
+    }
+  }
+  throw lastError
+}
+
 let filesetPromise: ReturnType<typeof loadFileset> | null = null
 async function loadFileset() {
   const { FilesetResolver } = await import('@mediapipe/tasks-vision')
@@ -41,11 +56,11 @@ export function getSegmenter(): Promise<ImageSegmenter> {
     const [{ ImageSegmenter }, fs, model] = await Promise.all([
       import('@mediapipe/tasks-vision'),
       fileset(),
-      firstAvailable(visionAssets.segmenter, ''),
+      fetchFirst(visionAssets.segmenter),
     ])
     return withDelegate((delegate) =>
       ImageSegmenter.createFromOptions(fs, {
-        baseOptions: { modelAssetPath: model, delegate },
+        baseOptions: { modelAssetBuffer: model, delegate },
         runningMode: 'IMAGE',
         outputConfidenceMasks: true,
         outputCategoryMask: false,
@@ -58,14 +73,10 @@ export function getSegmenter(): Promise<ImageSegmenter> {
 let facePromise: Promise<FaceDetector> | null = null
 export function getFaceDetector(): Promise<FaceDetector> {
   facePromise ??= (async () => {
-    const [{ FaceDetector }, fs, model] = await Promise.all([
-      import('@mediapipe/tasks-vision'),
-      fileset(),
-      firstAvailable(visionAssets.face, ''),
-    ])
+    const [{ FaceDetector }, fs, model] = await Promise.all([import('@mediapipe/tasks-vision'), fileset(), fetchFirst(visionAssets.face)])
     return withDelegate((delegate) =>
       FaceDetector.createFromOptions(fs, {
-        baseOptions: { modelAssetPath: model, delegate },
+        baseOptions: { modelAssetBuffer: model, delegate },
         runningMode: 'IMAGE',
         minDetectionConfidence: 0.5,
       }),

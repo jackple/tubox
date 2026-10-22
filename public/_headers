@@ -1,0 +1,10 @@
+# Cloudflare Pages / Netlify 缓存策略
+# 带 hash 的构建产物与按版本号分目录的 MediaPipe wasm：永久缓存
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+/mediapipe/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# 模型文件名不含版本，缓存 30 天，到期后按 ETag 重新验证
+/models/*
+  Cache-Control: public, max-age=2592000

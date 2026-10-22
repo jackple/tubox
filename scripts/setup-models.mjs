@@ -1,6 +1,6 @@
 // 将 MediaPipe 的 wasm 与模型文件落地到 public/，实现完全自托管（国内网络 / 离线部署友好）。
 // 用法：pnpm setup:models
-import { cp, mkdir, writeFile, access } from 'node:fs/promises'
+import { cp, mkdir, writeFile, access, readFile, rm } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -17,8 +17,12 @@ const MODELS = {
 const exists = (p) => access(p).then(() => true, () => false)
 
 async function main() {
-  const wasmSrc = resolve(root, 'node_modules/@mediapipe/tasks-vision/wasm')
-  const wasmDst = resolve(pub, 'mediapipe/wasm')
+  const pkgDir = resolve(root, 'node_modules/@mediapipe/tasks-vision')
+  const { version } = JSON.parse(await readFile(resolve(pkgDir, 'package.json'), 'utf8'))
+  const wasmSrc = resolve(pkgDir, 'wasm')
+  // 目录带版本号：升级 MediaPipe 后路径随之变化，wasm 可以放心长缓存
+  const wasmDst = resolve(pub, 'mediapipe', version, 'wasm')
+  await rm(resolve(pub, 'mediapipe'), { recursive: true, force: true })
   await mkdir(wasmDst, { recursive: true })
   await cp(wasmSrc, wasmDst, { recursive: true })
   console.log('✓ wasm  ->', wasmDst)
