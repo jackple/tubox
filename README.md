@@ -23,7 +23,7 @@ pnpm dev
 也可以设置 `VITE_MODEL_BASE=https://your-cdn/tubox`，从自己的 CDN 加载。
 
 ```bash
-pnpm build      # 类型检查 + 打包到 dist/
+pnpm build      # 自动执行 setup:models + 类型检查 + 打包到 dist/（模型随站点自托管）
 ```
 
 ### 部署

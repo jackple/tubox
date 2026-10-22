@@ -14,7 +14,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 pnpm install
 pnpm dev             # 开发服务器（已内置 History 路由回退）
 pnpm typecheck       # tsc --noEmit
-pnpm build           # 类型检查 + vite build 到 dist/
+pnpm build           # setup:models + 类型检查 + vite build 到 dist/（模型随站点自托管）
 pnpm preview         # 预览构建产物
 pnpm format          # prettier 格式化 src/**/*.{ts,tsx,css}
 pnpm setup:models    # 把 MediaPipe wasm 与 .tflite 模型下载到 public/（自托管，已 gitignore）

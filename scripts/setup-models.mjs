@@ -33,7 +33,7 @@ async function main() {
     }
     process.stdout.write(`↓ fetch  ${name} ... `)
     try {
-      const res = await fetch(url)
+      const res = await fetch(url, { signal: AbortSignal.timeout(120_000) })
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       await writeFile(dst, Buffer.from(await res.arrayBuffer()))
       console.log('ok')
