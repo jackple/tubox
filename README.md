@@ -39,7 +39,7 @@ pnpm build      # 类型检查 + 打包到 dist/
 
 ## 技术栈
 
-Vite 6 · React 19 · TypeScript · Tailwind CSS 3 · Zustand · Framer Motion · Comlink（Web Worker）· MediaPipe Tasks Vision · JSZip
+Vite 6 · React 19 · TypeScript · Tailwind CSS 3 · Zustand · Framer Motion · Comlink（Web Worker）· MediaPipe Tasks Vision · JSZip · Geist 字体
 
 ## 架构
 
@@ -55,6 +55,7 @@ src/
 ├── workers/               # Worker 池（按 CPU 核数并行，不支持 OffscreenCanvas 时回退主线程）
 ├── stores/                # Zustand：每个工具一个 store，切换页面状态不丢失
 ├── components/
+│   ├── icons/             #   工具专属双色图标（墨色描边 + 品牌色强调）
 │   ├── ui/                #   设计系统：Button / Segmented / Slider / Switch / Section / ColorSwatches…
 │   ├── layout/            #   AppShell / Sidebar / ToolLayout（标题栏 + 素材栏 + 舞台 + 检查器）
 │   └── common/            #   Dropzone / CompareSlider / ScenePreview / SceneThumb / ImageStrip

@@ -1,0 +1,7 @@
+node_modules
+dist
+*.local
+.DS_Store
+# 由 pnpm setup:models 生成的本地模型与 wasm
+public/models
+public/mediapipe
