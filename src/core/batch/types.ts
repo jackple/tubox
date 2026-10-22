@@ -61,6 +61,8 @@ export interface BatchOptions {
 export interface ProcessMeta {
   index: number
   name: string
+  /** 同时生成列表缩略图 */
+  thumb?: boolean
 }
 
 export interface ProcessResult {
@@ -68,6 +70,7 @@ export interface ProcessResult {
   width: number
   height: number
   name: string
+  thumb?: Blob
 }
 
 export const defaultBatchOptions: BatchOptions = {

@@ -2,6 +2,7 @@ import * as Comlink from 'comlink'
 import { hasOffscreen } from '@/core/canvas'
 import { processImage } from '@/core/batch/process'
 import type { BatchOptions, ProcessMeta, ProcessResult } from '@/core/batch/types'
+import { type ImageProbe, probeImage } from '@/core/thumbnail'
 import type { BatchWorkerApi } from './batch.worker'
 
 type Remote = Comlink.Remote<BatchWorkerApi>
@@ -53,4 +54,11 @@ export function processInPool(file: Blob, options: BatchOptions, meta: ProcessMe
   if (!hasOffscreen) return processImage(file, options, meta)
   pool ??= new WorkerPool()
   return pool.run((w) => w.process(file, options, meta))
+}
+
+/** 读取尺寸并生成缩略图，与批量处理共用 Worker 池（顺带限制并发解码，防止一次拖入大量图片时内存暴涨） */
+export function probeInPool(file: Blob): Promise<ImageProbe> {
+  if (!hasOffscreen) return probeImage(file)
+  pool ??= new WorkerPool()
+  return pool.run((w) => w.probe(file))
 }

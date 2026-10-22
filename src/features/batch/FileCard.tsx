@@ -12,6 +12,7 @@ export function FileCard({ item, version, onCompare }: { item: BatchItem; versio
   const r = item.result
   const pct = r ? percentChange(item.file.size, r.blob.size) : 0
   const stale = r && r.version !== version
+  const src = r ? (r.thumb ?? r.url) : item.thumb
 
   return (
     <motion.div
@@ -27,7 +28,7 @@ export function FileCard({ item, version, onCompare }: { item: BatchItem; versio
       )}
     >
       <div className="checker relative aspect-[4/3] overflow-hidden rounded-xl">
-        <img src={r?.url ?? item.url} alt="" loading="lazy" className="h-full w-full object-cover" draggable={false} />
+        {src && <img src={src} alt="" decoding="async" className="h-full w-full object-cover" draggable={false} />}
         {item.status === 'processing' && (
           <div className="absolute inset-0 overflow-hidden bg-black/30 backdrop-blur-[2px]">
             <div className="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/30 to-transparent" />

@@ -4,13 +4,15 @@ import { type BatchOptions, defaultBatchOptions } from '@/core/batch/types'
 import { isImageFile } from '@/lib/assets'
 import { saveFiles, timestamp } from '@/lib/download'
 import { uid } from '@/lib/format'
-import { processInPool } from '@/workers/pool'
+import { probeInPool, processInPool } from '@/workers/pool'
 
 export type ItemStatus = 'idle' | 'processing' | 'done' | 'error'
 
 export interface BatchResult {
   blob: Blob
   url: string
+  /** 列表缩略图 object URL */
+  thumb?: string
   name: string
   width: number
   height: number
@@ -22,6 +24,8 @@ export interface BatchItem {
   id: string
   file: File
   url: string
+  /** 列表缩略图 object URL；生成失败时回退为原图 url */
+  thumb?: string
   width?: number
   height?: number
   status: ItemStatus
@@ -104,20 +108,16 @@ interface BatchState {
   downloadAll: () => Promise<void>
 }
 
-function revoke(item: BatchItem) {
-  URL.revokeObjectURL(item.url)
-  if (item.result) URL.revokeObjectURL(item.result.url)
+function revokeResult(r?: BatchResult) {
+  if (!r) return
+  URL.revokeObjectURL(r.url)
+  if (r.thumb) URL.revokeObjectURL(r.thumb)
 }
 
-async function readSize(file: File) {
-  try {
-    const b = await createImageBitmap(file)
-    const size = { width: b.width, height: b.height }
-    b.close()
-    return size
-  } catch {
-    return null
-  }
+function revoke(item: BatchItem) {
+  URL.revokeObjectURL(item.url)
+  if (item.thumb) URL.revokeObjectURL(item.thumb)
+  revokeResult(item.result)
 }
 
 export const useBatch = create<BatchState>((set, get) => {
@@ -139,8 +139,14 @@ export const useBatch = create<BatchState>((set, get) => {
       const added: BatchItem[] = imgs.map((file) => ({ id: uid(), file, url: URL.createObjectURL(file), status: 'idle' }))
       set((s) => ({ items: [...s.items, ...added], activeId: s.activeId ?? added[0].id }))
       added.forEach(async (it) => {
-        const size = await readSize(it.file)
-        if (size) update(it.id, size)
+        try {
+          const { width, height, thumb } = await probeInPool(it.file)
+          const url = URL.createObjectURL(thumb)
+          if (get().items.some((i) => i.id === it.id)) update(it.id, { width, height, thumb: url })
+          else URL.revokeObjectURL(url)
+        } catch {
+          update(it.id, { thumb: it.url })
+        }
       })
     },
 
@@ -177,11 +183,12 @@ export const useBatch = create<BatchState>((set, get) => {
           update(it.id, { status: 'processing', error: undefined })
           try {
             const index = get().items.findIndex((i) => i.id === it.id)
-            const r = await processInPool(it.file, options, { index, name: it.file.name })
+            const { thumb, ...r } = await processInPool(it.file, options, { index, name: it.file.name, thumb: true })
             const prev = get().items.find((i) => i.id === it.id)
             if (!prev) return
-            if (prev.result) URL.revokeObjectURL(prev.result.url)
-            update(it.id, { status: 'done', result: { ...r, url: URL.createObjectURL(r.blob), version } })
+            revokeResult(prev.result)
+            const result = { ...r, url: URL.createObjectURL(r.blob), thumb: thumb && URL.createObjectURL(thumb), version }
+            update(it.id, { status: 'done', result })
           } catch (e) {
             update(it.id, { status: 'error', error: e instanceof Error ? e.message : String(e) })
           } finally {

@@ -1,5 +1,6 @@
 import { createCanvas, decodeImage, getCtx, resample } from '../canvas'
 import { MIME_EXT, encodeCanvas } from '../encode'
+import { makeThumbnail } from '../thumbnail'
 import { renderFileName, stripExt } from './rename'
 import { planResize } from './resize'
 import type { BatchOptions, OutputFormat, ProcessMeta, ProcessResult } from './types'
@@ -34,12 +35,13 @@ export async function processImage(source: Blob, o: BatchOptions, meta: ProcessM
     drawWatermark(ctx, canvas.width, canvas.height, o.watermark, logo)
 
     const out = await encodeCanvas(canvas, type, o.output.quality / 100, o.output.targetKB)
+    const thumb = meta.thumb ? await makeThumbnail(canvas, canvas.width, canvas.height) : undefined
     const name = renderFileName(
       o.rename.template,
       { name: stripExt(meta.name), index: meta.index, width: out.width, height: out.height },
       MIME_EXT[type] ?? 'png',
     )
-    return { ...out, name }
+    return { ...out, name, thumb }
   } finally {
     bmp.close()
     logo?.close()
