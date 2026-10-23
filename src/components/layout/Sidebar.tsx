@@ -56,7 +56,7 @@ export function Sidebar() {
           target="_blank"
           rel="noopener noreferrer"
           title={m.legal.notice}
-          className="group flex items-center gap-2 rounded-lg px-2 py-1 text-[11px] text-muted transition-colors hover:bg-fg/[0.04] hover:text-fg"
+          className="group !mt-1 flex items-center gap-2 rounded-lg px-2 py-1 text-[11px] text-muted transition-colors hover:bg-fg/[0.04] hover:text-fg"
         >
           <CodeXml className="h-3.5 w-3.5" />
           {m.legal.openSource} · AGPL-3.0
