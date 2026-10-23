@@ -107,7 +107,12 @@ export default function SocialPage() {
                 const active = s.id === style.id
                 const text = t.styles[s.id as keyof typeof t.styles]
                 return (
-                  <button key={s.id} type="button" onClick={() => patch({ styleId: s.id })} className="group text-left">
+                  <button
+                    key={s.id}
+                    type="button"
+                    onClick={() => patch({ styleId: s.id })}
+                    className="group flex flex-col justify-start text-left"
+                  >
                     <span
                       className={cn(
                         'block overflow-hidden rounded-lg border transition-all',
