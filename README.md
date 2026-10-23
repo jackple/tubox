@@ -51,6 +51,12 @@ VITE_SITE_URL=https://tubox.example.com pnpm build   # 或写进 .env.production
 
 `pnpm dev` / `pnpm preview` 已内置回退，开发时无需配置。
 
+社交分享图（`og:image` / `twitter:image`，1200×630）每种语言一张，放在 `public/og/<语言>.png` 并提交到仓库。改了首页标语、工具名或品牌样式后用 `pnpm og:images` 重新生成（需要本机 Chrome，可用 `CHROME_PATH` 指定）。
+
+### 访问统计
+
+使用 Cloudflare Web Analytics（无 Cookie、不采集个人信息），由 Cloudflare Pages 在边缘自动注入 beacon，代码中无需接入；改用其它托管时需在 `index.html` 手动加上统计脚本。
+
 ## 技术栈
 
 Vite 6 · React 19 · TypeScript · Tailwind CSS 3 · Zustand · Framer Motion · Comlink（Web Worker）· MediaPipe Tasks Vision · JSZip · Geist 字体

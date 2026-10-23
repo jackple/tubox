@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { localeMeta, splitLocale } from '@/i18n/locales'
-import { absoluteUrl, alternates, fullTitle, pageSeo, structuredData } from '@/seo'
+import { absoluteUrl, alternates, fullTitle, ogImage, pageSeo, structuredData } from '@/seo'
 import { useLocale } from '@/stores/locale'
 
 const siteUrl = import.meta.env.VITE_SITE_URL as string | undefined
@@ -46,6 +46,7 @@ export function useSeo() {
     const page = pageSeo(m, locale, path)
     const title = fullTitle(page)
     const url = absoluteUrl(siteUrl, base, page.href)
+    const image = absoluteUrl(siteUrl, base, ogImage.href(locale))
 
     document.title = title
     meta('name', 'description', page.description)
@@ -55,8 +56,11 @@ export function useSeo() {
     meta('property', 'og:title', title)
     meta('property', 'og:description', page.description)
     meta('property', 'og:url', url)
+    meta('property', 'og:image', image)
+    meta('property', 'og:image:alt', image && page.siteName)
     meta('name', 'twitter:title', title)
     meta('name', 'twitter:description', page.description)
+    meta('name', 'twitter:image', image)
     upsert(
       'link[rel="canonical"]',
       () => {

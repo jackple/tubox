@@ -133,7 +133,7 @@ const messages: Messages = {
       "ID photos, identity documents, private albums — they shouldn't be uploaded to a stranger's server. Tubox moves the entire pipeline into your browser.",
     privacyPoints: [
       'All decoding, compression and AI inference happen in the browser',
-      'No servers, no accounts, no tracking',
+      'No accounts, no cookies, only anonymous visit stats',
       'Close the tab and everything is gone',
     ],
     searchSpecs: 'Search specs',

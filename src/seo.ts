@@ -42,6 +42,9 @@ export function pageSeo(m: Messages, locale: Locale, path: string): PageSeo {
   return { ...m.seo[p.key], locale, path: p.path, href: localizePath(p.path, locale), siteName: m.brand.site }
 }
 
+/** 社交分享图（og:image / twitter:image），每种语言一张，由 scripts/og-images.mjs 生成到 public/og/ */
+export const ogImage = { width: 1200, height: 630, href: (locale: Locale) => `/og/${locale}.png` }
+
 export const fullTitle = (page: PageSeo) => (page.path === '/' ? `${page.siteName} · ${page.title}` : `${page.title} - ${page.siteName}`)
 
 /** 拼接绝对地址；siteUrl 为空时返回 undefined（不输出 canonical / og:url / hreflang） */

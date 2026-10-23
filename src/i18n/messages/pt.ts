@@ -137,7 +137,7 @@ const messages: Messages = {
       'Fotos para documento, comprovantes de identidade, álbuns pessoais — nada disso deveria ir para o servidor de um desconhecido. O Tubox leva todo o processamento para o seu navegador.',
     privacyPoints: [
       'Toda a decodificação, compressão e inferência de IA acontece no navegador',
-      'Sem servidores, sem contas, sem rastreamento',
+      'Sem contas nem cookies, só estatísticas anônimas de visitas',
       'Feche a aba e tudo é apagado, sem deixar rastros',
     ],
     searchSpecs: 'Buscar formatos',

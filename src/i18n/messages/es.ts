@@ -137,7 +137,7 @@ const messages: Messages = {
       'Fotos carné, documentos de identidad, álbumes privados: no deberían subirse al servidor de un desconocido. Tubox lleva todo el proceso a tu navegador.',
     privacyPoints: [
       'La decodificación, la compresión y la IA se ejecutan en el navegador',
-      'Sin servidores, sin cuentas, sin rastreo',
+      'Sin cuentas ni cookies, solo estadísticas anónimas de visitas',
       'Cierra la pestaña y no queda ni rastro',
     ],
     searchSpecs: 'Buscar formatos',

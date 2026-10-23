@@ -137,7 +137,7 @@ const messages: Messages = {
       "Photos d'identité, pièces justificatives, albums privés : rien de tout cela ne devrait finir sur le serveur d'un inconnu. Tubox exécute tout le traitement dans votre navigateur.",
     privacyPoints: [
       "Décodage, compression et inférence IA s'exécutent dans le navigateur",
-      'Aucun serveur, aucun compte, aucun pistage',
+      'Aucun compte, aucun cookie, juste des statistiques de visite anonymes',
       "Fermez l'onglet et tout disparaît",
     ],
     searchSpecs: 'Rechercher un format',

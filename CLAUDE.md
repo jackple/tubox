@@ -22,6 +22,7 @@ pnpm build           # setup:models + 类型检查 + vite build 到 dist/（模�
 pnpm preview         # 预览构建产物
 pnpm format          # prettier 格式化 src/**/*.{ts,tsx,css}
 pnpm setup:models    # 把 MediaPipe wasm 与 .tflite 模型下载到 public/（自托管，已 gitignore）
+pnpm og:images       # 用本机 Chrome 按各语言文案重新生成社交分享图 public/og/<语言>.png（提交到仓库）
 pnpm build --base=/tubox/   # 部署到子路径，路由 basename 自动跟随 BASE_URL
 ```
 

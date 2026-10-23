@@ -136,7 +136,7 @@ const messages: Messages = {
       'Passbilder, Ausweisdokumente, private Alben – sie gehören nicht auf fremde Server. Tubox verlagert die gesamte Verarbeitung in deinen Browser.',
     privacyPoints: [
       'Dekodierung, Komprimierung und KI-Berechnung laufen im Browser',
-      'Keine Server, kein Konto, kein Tracking',
+      'Kein Konto, keine Cookies, nur anonyme Besuchsstatistik',
       'Tab schließen – und alles ist weg',
     ],
     searchSpecs: 'Formate suchen',

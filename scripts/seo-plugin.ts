@@ -3,7 +3,7 @@ import { dirname, join } from 'node:path'
 import type { Plugin } from 'vite'
 import { catalog } from '../src/i18n/catalog'
 import { type Locale, defaultLocale, localeMeta, locales, localizePath, splitLocale } from '../src/i18n/locales'
-import { absoluteUrl, alternates, fullTitle, pagePaths, pageSeo, type PageSeo, structuredData } from '../src/seo'
+import { absoluteUrl, alternates, fullTitle, ogImage, pagePaths, pageSeo, type PageSeo, structuredData } from '../src/seo'
 
 /**
  * 按语言 × 路由预渲染 SEO：
@@ -27,6 +27,8 @@ export function seoPlugin(siteUrl: string | undefined): Plugin {
   function renderHead(page: PageSeo) {
     const title = fullTitle(page)
     const url = absoluteUrl(siteUrl, base, page.href)
+    // 社交平台只认绝对地址，没有站点地址时不输出分享图
+    const image = absoluteUrl(siteUrl, base, ogImage.href(page.locale))
     const ld = JSON.stringify(structuredData(page, seoOf(page.locale, '/'), siteUrl, base)).replace(/</g, '\\u003c')
     return [
       `<title>${esc(title)}</title>`,
@@ -40,9 +42,15 @@ export function seoPlugin(siteUrl: string | undefined): Plugin {
       `<meta property="og:title" content="${esc(title)}" />`,
       `<meta property="og:description" content="${esc(page.description)}" />`,
       url && `<meta property="og:url" content="${esc(url)}" />`,
-      `<meta name="twitter:card" content="summary" />`,
+      image && `<meta property="og:image" content="${esc(image)}" />`,
+      image && `<meta property="og:image:type" content="image/png" />`,
+      image && `<meta property="og:image:width" content="${ogImage.width}" />`,
+      image && `<meta property="og:image:height" content="${ogImage.height}" />`,
+      image && `<meta property="og:image:alt" content="${esc(page.siteName)}" />`,
+      `<meta name="twitter:card" content="${image ? 'summary_large_image' : 'summary'}" />`,
       `<meta name="twitter:title" content="${esc(title)}" />`,
       `<meta name="twitter:description" content="${esc(page.description)}" />`,
+      image && `<meta name="twitter:image" content="${esc(image)}" />`,
       `<script type="application/ld+json" id="structured-data">${ld}</script>`,
     ]
       .filter(Boolean)

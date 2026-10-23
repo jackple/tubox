@@ -130,7 +130,7 @@ const messages: Messages = {
     privacyTitle1: '你的圖片，',
     privacyTitle2: '從不離開你的裝置。',
     privacyDesc: '證件照、身分證明、私人相簿——這些本來就不該上傳到陌生的伺服器。圖盒把整套處理流程搬進了瀏覽器。',
-    privacyPoints: ['所有解碼、壓縮與 AI 推論都在瀏覽器內完成', '沒有伺服器、沒有帳號、沒有追蹤', '關閉頁面即清除，不留任何痕跡'],
+    privacyPoints: ['所有解碼、壓縮與 AI 推論都在瀏覽器內完成', '沒有帳號、沒有 Cookie，只有匿名造訪統計', '關閉頁面即清除，不留任何痕跡'],
     searchSpecs: '搜尋規格',
   },
 
