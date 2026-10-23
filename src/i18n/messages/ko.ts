@@ -39,12 +39,20 @@ const messages: Messages = {
     'heic-unsupported': '이 브라우저는 아직 HEIC를 지원하지 않아요. 먼저 JPG로 변환해 주세요',
     'decode-failed': '이 이미지를 디코딩할 수 없어요',
     'model-load-failed': 'AI 모델을 불러오지 못했어요. 네트워크를 확인하거나 pnpm setup:models로 모델을 직접 호스팅하세요',
+    'segment-failed': '배경 제거에 실패했어요. 다른 이미지로 다시 시도해 주세요',
   },
 
   nav: {
     overview: '개요',
     privacyTitle: '개인정보 보호 켜짐',
     privacyDesc: '이미지는 이 기기를 벗어나지 않아요',
+  },
+
+  legal: {
+    openSource: '오픈 소스',
+    sourceCode: '소스 코드',
+    thirdParty: '서드파티 라이선스',
+    notice: 'AGPL-3.0 라이선스로 공개되며, "있는 그대로" 제공되고 어떠한 보증도 하지 않습니다.',
   },
 
   toolGroups: {
@@ -58,6 +66,11 @@ const messages: Messages = {
       title: '일괄 처리',
       desc: '크기 통일, 용량 압축, 워터마크, 포맷 변환을 멀티스레드로 빠르게 처리',
       chips: ['크기 통일', '스마트 압축', '워터마크', 'WebP / AVIF'],
+    },
+    cutout: {
+      title: 'AI 누끼',
+      desc: '인물·상품·동물 등 피사체를 자동으로 누끼. 투명·단색·흐림 배경을 지원해요',
+      chips: ['AI 누끼', '투명 PNG', '단색 배경', '배경 흐림'],
     },
     idphoto: {
       title: '증명사진',
@@ -112,7 +125,7 @@ const messages: Messages = {
     heroBefore: '',
     heroHighlight: '브라우저',
     heroAfter: '에서 바로',
-    heroDesc1: '일괄 압축, 증명사진, 콜라주까지 — 6가지 전문 도구가 모두 내 기기에서 실행돼요.',
+    heroDesc1: '일괄 압축, 증명사진, 콜라주까지 — 7가지 전문 도구가 모두 내 기기에서 실행돼요.',
     heroDesc2: '설치도, 업로드도 필요 없이 열면 바로 사용하세요.',
     start: '시작하기',
     makeIdPhoto: '증명사진 만들기',
@@ -125,7 +138,7 @@ const messages: Messages = {
     toolsTitle: '일상에 필요한 모든 것을 하나의 도구 상자로',
     toolsDesc: '쇼핑몰 상품 사진부터 비자 사진, 피드 9분할부터 SNS 표지까지.',
     soonTitle: '더 많은 도구 준비 중',
-    soonDesc: '스마트 누끼, GIF 만들기, EXIF 개인정보 삭제, 이미지 주석…',
+    soonDesc: 'GIF 만들기, EXIF 개인정보 삭제, 이미지 주석…',
     longCaptions: ['오늘 날씨 정말 좋다', '이제 출발하자', '바다에서 만나!'],
     privacyTitle1: '내 이미지는',
     privacyTitle2: '기기 밖으로 나가지 않아요.',
@@ -340,6 +353,45 @@ const messages: Messages = {
     sheetFile: '{spec}_{paper}_인화배치_{count}장',
   },
 
+  cutout: {
+    steps: {
+      model: 'AI 모델 불러오기',
+      segment: '피사체 인식 · 배경 제거',
+    },
+    dropTitle: '이미지를 업로드해 배경을 지우세요',
+    dropHint: '인물·상품·동물 모두 가능 · 이미지는 업로드되지 않아요',
+    tips: [
+      '피사체가 선명하고 화면 밖으로 잘리지 않은 이미지',
+      '배경과 색 대비가 클수록 경계가 깔끔해요',
+      '처음에는 약 100MB 모델을 내려받아요 (Wi-Fi 권장)',
+    ],
+    analyzing: '누끼 따는 중',
+    modelNote: '처음 사용할 때 약 100MB의 모델을 내려받으며, 이후에는 브라우저에 캐시돼요. WebGPU를 지원하는 브라우저에서 더 빨라요',
+    failed: '배경 제거 실패',
+    reselect: '이미지 다시 선택',
+    aiDone: '누끼 완료',
+    changePhoto: '이미지 변경',
+    holdCompare: '길게 눌러 원본 비교',
+    noSubject: '뚜렷한 피사체를 찾지 못했어요',
+    noSubjectDesc: '피사체가 더 선명하고 배경과 대비가 큰 이미지로 시도해 보세요',
+    bgTitle: '배경',
+    bgModes: {
+      none: '투명',
+      color: '단색',
+      blur: '흐림',
+    },
+    blurAmount: '흐림 정도',
+    edgeTitle: '경계',
+    shift: '축소 / 확장',
+    feather: '페더',
+    cropToSubject: '피사체에 맞춰 자르기',
+    cropPadding: '여백',
+    outputSize: '출력 크기',
+    jpgNoAlpha: 'JPG는 투명 배경을 지원하지 않아요',
+    download: '이미지 다운로드',
+    fileSuffix: '누끼',
+  },
+
   long: {
     fileName: '긴이미지',
     emptyTitle: '여러 이미지를 추가해 긴 이미지로 이어 붙이세요',
@@ -477,6 +529,21 @@ const messages: Messages = {
         '텍스트·로고 워터마크, 9방향 위치 지정과 대각선 바둑판 배치',
         'JPG / PNG / WebP / AVIF 상호 변환',
         '파일 이름 템플릿으로 일괄 변경, ZIP 한 번에 다운로드',
+      ],
+    },
+    cutout: {
+      name: 'AI 누끼',
+      title: '누끼 따기: 온라인 AI 배경 제거, 투명 배경 PNG 무료 만들기',
+      description:
+        '무료 온라인 AI 배경 제거: 인물·상품·동물 등 피사체를 자동으로 인식해 배경을 지우고 투명 배경 PNG로 저장해요. 흰색·파란색·빨간색 등 단색 배경으로 바꾸거나 원래 배경을 흐리게 해 피사체를 돋보이게 할 수도 있어요. 경계 축소·확장과 페더, 피사체에 맞춘 자동 자르기를 지원해요. 이미지는 브라우저에서 처리되며 업로드되지 않아요.',
+      keywords: ['누끼 따기', '배경 제거', '배경 지우기', '투명 배경', 'AI 누끼', '상품 누끼', '배경 흐림', '사진 배경 바꾸기'],
+      features: [
+        'AI가 피사체를 인식해 한 번에 배경 제거',
+        '인물·상품·동물·사물 모두 지원',
+        '투명 PNG / WebP로 저장',
+        '흰색·파란색·빨간색 등 단색 배경으로 바꾸거나 원래 배경을 흐리게',
+        '경계 축소·확장·페더, 피사체에 맞춘 자동 자르기',
+        '브라우저에서 처리, 업로드 없음',
       ],
     },
     idphoto: {

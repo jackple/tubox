@@ -12,6 +12,7 @@ type PageKey = keyof Messages['seo']
 export const pagePaths: { path: string; key: PageKey }[] = [
   { path: '/', key: 'home' },
   { path: '/batch', key: 'batch' },
+  { path: '/cutout', key: 'cutout' },
   { path: '/id-photo', key: 'idphoto' },
   { path: '/collage/long', key: 'long' },
   { path: '/collage/grid', key: 'grid' },

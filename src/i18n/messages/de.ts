@@ -39,12 +39,20 @@ const messages: Messages = {
     'heic-unsupported': 'HEIC wird von diesem Browser noch nicht unterstützt. Bitte zuerst in JPG umwandeln',
     'decode-failed': 'Dieses Bild kann nicht dekodiert werden',
     'model-load-failed': 'KI-Modelle konnten nicht geladen werden. Prüfe deine Verbindung oder hoste sie selbst mit pnpm setup:models',
+    'segment-failed': 'Hintergrund konnte nicht entfernt werden. Bitte versuche ein anderes Bild',
   },
 
   nav: {
     overview: 'Übersicht',
     privacyTitle: 'Datenschutz aktiv',
     privacyDesc: 'Bilder verlassen nie dieses Gerät',
+  },
+
+  legal: {
+    openSource: 'Open Source',
+    sourceCode: 'Quellcode',
+    thirdParty: 'Drittanbieter-Lizenzen',
+    notice: 'Lizenziert unter AGPL-3.0. Bereitgestellt „wie besehen“, ohne jegliche Gewährleistung.',
   },
 
   toolGroups: {
@@ -58,6 +66,11 @@ const messages: Messages = {
       title: 'Stapelverarbeitung',
       desc: 'Bilder parallel skalieren, komprimieren, mit Wasserzeichen versehen und konvertieren',
       chips: ['Skalieren', 'Smart-Komprimierung', 'Wasserzeichen', 'WebP / AVIF'],
+    },
+    cutout: {
+      title: 'Hintergrund entfernen',
+      desc: 'Personen, Produkte, Tiere und mehr per KI freistellen – transparenter, einfarbiger oder unscharfer Hintergrund',
+      chips: ['KI-Freistellung', 'Transparentes PNG', 'Farbhintergrund', 'Hintergrundunschärfe'],
     },
     idphoto: {
       title: 'Passbild',
@@ -115,7 +128,7 @@ const messages: Messages = {
     heroBefore: 'direkt im ',
     heroHighlight: 'Browser',
     heroAfter: '',
-    heroDesc1: 'Stapelkomprimierung, Passbilder, Collagen und Layouts – sechs Profi-Tools, die komplett auf deinem Gerät laufen.',
+    heroDesc1: 'Stapelkomprimierung, Passbilder, Collagen und Layouts – sieben Profi-Tools, die komplett auf deinem Gerät laufen.',
     heroDesc2: 'Nichts installieren, nichts hochladen. Einfach öffnen und loslegen.',
     start: 'Jetzt starten',
     makeIdPhoto: 'Passbild erstellen',
@@ -128,7 +141,7 @@ const messages: Messages = {
     toolsTitle: 'Eine Toolbox für den Alltag',
     toolsDesc: 'Von Produktfotos bis Visabildern, von 3×3-Rastern bis Social-Media-Covern.',
     soonTitle: 'Weitere Tools in Arbeit',
-    soonDesc: 'Hintergrund entfernen, GIF-Maker, EXIF-Daten löschen, Bildannotation …',
+    soonDesc: 'GIF-Maker, EXIF-Daten löschen, Bildannotation …',
     longCaptions: ['Was für ein schöner Tag', 'Lass uns losfahren', 'Wir sehen uns am Strand!'],
     privacyTitle1: 'Deine Bilder',
     privacyTitle2: 'verlassen nie dein Gerät.',
@@ -348,6 +361,46 @@ const messages: Messages = {
     sheetFile: '{spec}_{paper}_Bogen_{count}',
   },
 
+  cutout: {
+    steps: {
+      model: 'KI-Modell laden',
+      segment: 'Motiv erkennen · Hintergrund entfernen',
+    },
+    dropTitle: 'Bild hochladen, um den Hintergrund zu entfernen',
+    dropHint: 'Funktioniert mit Personen, Produkten und Tieren · Dein Bild wird nie hochgeladen',
+    tips: [
+      'Motiv gut erkennbar und vollständig im Bild',
+      'Je stärker der Kontrast zum Hintergrund, desto sauberer die Kanten',
+      'Beim ersten Mal wird ein ca. 100 MB großes Modell geladen – WLAN empfohlen',
+    ],
+    analyzing: 'Hintergrund wird entfernt',
+    modelNote:
+      'Beim ersten Mal wird ein ca. 100 MB großes Modell geladen und danach vom Browser zwischengespeichert. Mit WebGPU geht es schneller',
+    failed: 'Entfernen fehlgeschlagen',
+    reselect: 'Anderes Bild wählen',
+    aiDone: 'Hintergrund entfernt',
+    changePhoto: 'Bild ändern',
+    holdCompare: 'Zum Vergleichen gedrückt halten',
+    noSubject: 'Kein deutliches Motiv erkannt',
+    noSubjectDesc: 'Versuche ein Bild, auf dem sich das Motiv klarer vom Hintergrund abhebt',
+    bgTitle: 'Hintergrund',
+    bgModes: {
+      none: 'Transparent',
+      color: 'Farbe',
+      blur: 'Unschärfe',
+    },
+    blurAmount: 'Stärke der Unschärfe',
+    edgeTitle: 'Kanten',
+    shift: 'Verkleinern / Erweitern',
+    feather: 'Weiche Kante',
+    cropToSubject: 'Auf Motiv zuschneiden',
+    cropPadding: 'Rand',
+    outputSize: 'Ausgabegröße',
+    jpgNoAlpha: 'JPG unterstützt keine Transparenz',
+    download: 'Bild herunterladen',
+    fileSuffix: 'freigestellt',
+  },
+
   long: {
     fileName: 'langbild',
     emptyTitle: 'Bilder hinzufügen und zu einem Langbild verbinden',
@@ -492,6 +545,30 @@ const messages: Messages = {
         'Text- / Logo-Wasserzeichen mit 9 Positionen und diagonaler Kachelung',
         'Umwandlung zwischen JPG / PNG / WebP / AVIF',
         'Umbenennen per Dateinamen-Vorlage, alles als ZIP herunterladen',
+      ],
+    },
+    cutout: {
+      name: 'Hintergrund entfernen',
+      title: 'Hintergrund entfernen online: Bilder kostenlos per KI freistellen, transparentes PNG',
+      description:
+        'Kostenlos Hintergründe online entfernen: Die KI erkennt Personen, Produkte, Tiere und andere Motive, entfernt den Hintergrund und exportiert ein transparentes PNG – oder setzt einen weißen, blauen, roten bzw. beliebigen einfarbigen Hintergrund ein oder zeichnet den Originalhintergrund weich, damit das Motiv hervortritt. Kanten verkleinern / erweitern und weich zeichnen, automatischer Zuschnitt auf das Motiv. Bilder werden lokal im Browser verarbeitet und nie hochgeladen.',
+      keywords: [
+        'Hintergrund entfernen',
+        'Bild freistellen',
+        'transparenter Hintergrund',
+        'KI Freistellen',
+        'Produktfoto freistellen',
+        'Hintergrund unscharf machen',
+        'Foto Hintergrund ändern',
+        'PNG transparent',
+      ],
+      features: [
+        'KI erkennt das Motiv und entfernt den Hintergrund mit einem Klick',
+        'Für Personen, Produkte, Tiere und Gegenstände',
+        'Export als transparentes PNG / WebP',
+        'Weißer, blauer, roter oder beliebiger Farbhintergrund – oder weichgezeichneter Originalhintergrund',
+        'Kanten verkleinern / erweitern und weich zeichnen, Zuschnitt auf das Motiv',
+        'Lokale Verarbeitung im Browser, kein Upload',
       ],
     },
     idphoto: {

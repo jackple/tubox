@@ -1,6 +1,7 @@
 import type { ComponentType } from 'react'
 import {
   BatchGlyph,
+  CutoutGlyph,
   type GlyphProps,
   GridGlyph,
   IdPhotoGlyph,
@@ -11,7 +12,7 @@ import {
 
 export type ToolGroup = 'process' | 'photo' | 'layout'
 
-export type ToolId = 'batch' | 'idphoto' | 'long' | 'grid' | 'nine' | 'social'
+export type ToolId = 'batch' | 'cutout' | 'idphoto' | 'long' | 'grid' | 'nine' | 'social'
 
 /** 工具注册表；标题、描述、标签等文案见 i18n/messages 的 tools（按 id） */
 export interface Tool {
@@ -27,6 +28,7 @@ export const toolGroups: ToolGroup[] = ['process', 'photo', 'layout']
 
 export const tools: Tool[] = [
   { id: 'batch', group: 'process', path: '/batch', icon: BatchGlyph, en: 'Batch' },
+  { id: 'cutout', group: 'process', path: '/cutout', icon: CutoutGlyph, en: 'Cutout' },
   { id: 'idphoto', group: 'photo', path: '/id-photo', icon: IdPhotoGlyph, en: 'ID Photo' },
   { id: 'long', group: 'layout', path: '/collage/long', icon: LongImageGlyph, en: 'Long Image' },
   { id: 'grid', group: 'layout', path: '/collage/grid', icon: GridGlyph, en: 'Collage' },

@@ -39,12 +39,20 @@ const messages: Messages = {
     'heic-unsupported': 'Este navegador aún no admite HEIC. Conviértela primero a JPG',
     'decode-failed': 'No se puede decodificar esta imagen',
     'model-load-failed': 'No se pudieron cargar los modelos de IA. Revisa tu conexión o alójalos tú mismo con pnpm setup:models',
+    'segment-failed': 'No se pudo quitar el fondo. Prueba con otra imagen',
   },
 
   nav: {
     overview: 'Inicio',
     privacyTitle: 'Privacidad activada',
     privacyDesc: 'Las imágenes no salen de este dispositivo',
+  },
+
+  legal: {
+    openSource: 'Código abierto',
+    sourceCode: 'Código fuente',
+    thirdParty: 'Licencias de terceros',
+    notice: 'Con licencia AGPL-3.0. Se ofrece «tal cual», sin garantía de ningún tipo.',
   },
 
   toolGroups: {
@@ -58,6 +66,11 @@ const messages: Messages = {
       title: 'Procesamiento por lotes',
       desc: 'Redimensiona, comprime, añade marcas de agua y convierte formatos en paralelo con varios hilos',
       chips: ['Redimensionar', 'Compresión inteligente', 'Marca de agua', 'WebP / AVIF'],
+    },
+    cutout: {
+      title: 'Quitar fondo',
+      desc: 'Recorta personas, productos, animales y más con IA: fondo transparente, de color o desenfocado',
+      chips: ['Recorte con IA', 'PNG transparente', 'Fondo de color', 'Desenfoque de fondo'],
     },
     idphoto: {
       title: 'Foto carné',
@@ -116,7 +129,7 @@ const messages: Messages = {
     heroHighlight: 'navegador',
     heroAfter: '',
     heroDesc1:
-      'Compresión por lotes, fotos carné, collages y diseños: seis herramientas profesionales que funcionan por completo en tu dispositivo.',
+      'Compresión por lotes, fotos carné, collages y diseños: siete herramientas profesionales que funcionan por completo en tu dispositivo.',
     heroDesc2: 'Sin instalar nada, sin subir nada. Abre y empieza.',
     start: 'Empezar',
     makeIdPhoto: 'Hacer foto carné',
@@ -129,7 +142,7 @@ const messages: Messages = {
     toolsTitle: 'Una caja de herramientas para el día a día',
     toolsDesc: 'De fotos de producto a fotos de visado, de cuadrículas 3×3 a portadas para redes sociales.',
     soonTitle: 'Más herramientas en camino',
-    soonDesc: 'Quitar fondos, crear GIF, borrar datos EXIF, anotar imágenes…',
+    soonDesc: 'Crear GIF, borrar datos EXIF, anotar imágenes…',
     longCaptions: ['¡Qué día tan bonito!', 'Vámonos ya', '¡Nos vemos en la playa!'],
     privacyTitle1: 'Tus imágenes',
     privacyTitle2: 'nunca salen de tu dispositivo.',
@@ -346,6 +359,46 @@ const messages: Messages = {
     sheetFile: '{spec}_{paper}_hoja_{count}',
   },
 
+  cutout: {
+    steps: {
+      model: 'Cargando modelo de IA',
+      segment: 'Detectando sujeto · Quitando fondo',
+    },
+    dropTitle: 'Sube una imagen para quitarle el fondo',
+    dropHint: 'Personas, productos y animales · Tu imagen nunca se sube',
+    tips: [
+      'Sujeto nítido y completo dentro del encuadre',
+      'Cuanto más contraste con el fondo, más limpios los bordes',
+      'La primera vez se descarga un modelo de unos 100MB (mejor con Wi-Fi)',
+    ],
+    analyzing: 'Quitando fondo',
+    modelNote:
+      'La primera vez se descarga un modelo de unos 100MB; después el navegador lo guarda en caché. Es más rápido en navegadores con WebGPU',
+    failed: 'Error al quitar el fondo',
+    reselect: 'Elegir otra imagen',
+    aiDone: 'Fondo eliminado',
+    changePhoto: 'Cambiar imagen',
+    holdCompare: 'Mantén pulsado para comparar',
+    noSubject: 'No se detectó un sujeto claro',
+    noSubjectDesc: 'Prueba con una imagen donde el sujeto sea más nítido y contraste más con el fondo',
+    bgTitle: 'Fondo',
+    bgModes: {
+      none: 'Transparente',
+      color: 'Color',
+      blur: 'Desenfoque',
+    },
+    blurAmount: 'Intensidad del desenfoque',
+    edgeTitle: 'Bordes',
+    shift: 'Contraer / expandir',
+    feather: 'Difuminado',
+    cropToSubject: 'Recortar al sujeto',
+    cropPadding: 'Margen',
+    outputSize: 'Tamaño de salida',
+    jpgNoAlpha: 'JPG no admite transparencia',
+    download: 'Descargar imagen',
+    fileSuffix: 'sin-fondo',
+  },
+
   long: {
     fileName: 'imagen-larga',
     emptyTitle: 'Añade imágenes para unirlas en una imagen larga',
@@ -490,6 +543,30 @@ const messages: Messages = {
         'Marcas de agua de texto o logo con 9 posiciones y mosaico diagonal',
         'Convierte entre JPG / PNG / WebP / AVIF',
         'Renombra con plantillas y descarga todo en un ZIP',
+      ],
+    },
+    cutout: {
+      name: 'Quitar fondo',
+      title: 'Quitar el fondo de imágenes online: recorte con IA gratis, PNG transparente',
+      description:
+        'Quita el fondo de imágenes gratis y online: la IA detecta personas, productos, animales y otros sujetos, elimina el fondo y exporta un PNG transparente; o ponle un fondo blanco, azul, rojo o de cualquier color, o desenfoca el fondo original para destacar al sujeto. Contrae / expande y difumina los bordes, con recorte automático al sujeto. Las imágenes se procesan en tu navegador y nunca se suben.',
+      keywords: [
+        'quitar fondo',
+        'eliminar fondo de imagen',
+        'fondo transparente',
+        'recorte con IA',
+        'quitar fondo de producto',
+        'recortar imagen',
+        'desenfocar fondo',
+        'PNG transparente',
+      ],
+      features: [
+        'La IA detecta el sujeto y quita el fondo con un clic',
+        'Personas, productos, animales y objetos',
+        'Exporta PNG / WebP transparente',
+        'Fondo blanco, azul, rojo o de cualquier color, o desenfoque del fondo original',
+        'Contraer / expandir y difuminar bordes, recorte automático al sujeto',
+        'Procesado en tu navegador, sin subir nada',
       ],
     },
     idphoto: {

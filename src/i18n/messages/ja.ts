@@ -40,12 +40,20 @@ const messages: Messages = {
     'decode-failed': 'この画像をデコードできません',
     'model-load-failed':
       'AI モデルの読み込みに失敗しました。ネットワークを確認するか、pnpm setup:models でモデルをセルフホストしてください',
+    'segment-failed': '背景の削除に失敗しました。別の画像でお試しください',
   },
 
   nav: {
     overview: '概要',
     privacyTitle: 'プライバシー保護 ON',
     privacyDesc: '画像はこの端末から出ません',
+  },
+
+  legal: {
+    openSource: 'オープンソース',
+    sourceCode: 'ソースコード',
+    thirdParty: 'サードパーティライセンス',
+    notice: 'AGPL-3.0 ライセンスで公開しています。「現状のまま」提供され、いかなる保証もありません。',
   },
 
   toolGroups: {
@@ -59,6 +67,11 @@ const messages: Messages = {
       title: '一括処理',
       desc: 'サイズ統一・圧縮・透かし・形式変換をマルチスレッドで並列処理',
       chips: ['サイズ統一', 'スマート圧縮', '透かし', 'WebP / AVIF'],
+    },
+    cutout: {
+      title: 'AI 背景削除',
+      desc: '人物・商品・動物などの被写体をワンクリックで切り抜き。透過・単色・ぼかし背景に対応',
+      chips: ['AI 切り抜き', '透過 PNG', '単色背景', '背景ぼかし'],
     },
     idphoto: {
       title: '証明写真',
@@ -113,7 +126,7 @@ const messages: Messages = {
     heroBefore: '',
     heroHighlight: 'ブラウザ',
     heroAfter: 'だけで',
-    heroDesc1: '一括圧縮、証明写真、コラージュ、レイアウト——6 つのプロ向けツールがすべてあなたの端末上で動作します。',
+    heroDesc1: '一括圧縮、証明写真、コラージュ、レイアウト——7 つのプロ向けツールがすべてあなたの端末上で動作します。',
     heroDesc2: 'インストール不要、アップロード不要。開いてすぐ使えます。',
     start: '使ってみる',
     makeIdPhoto: '証明写真を作る',
@@ -126,7 +139,7 @@ const messages: Messages = {
     toolsTitle: '日常の画像作業をひとつのツールボックスで',
     toolsDesc: '商品写真からビザ写真まで、3×3 分割投稿から SNS のカバー画像まで。',
     soonTitle: '新しいツールを準備中',
-    soonDesc: '背景透過、GIF 作成、EXIF 情報の削除、画像への注釈……',
+    soonDesc: 'GIF 作成、EXIF 情報の削除、画像への注釈……',
     longCaptions: ['今日はいい天気', 'さあ出発しよう', '海で会おうね！'],
     privacyTitle1: 'あなたの画像は、',
     privacyTitle2: '端末から一切出ません。',
@@ -338,6 +351,45 @@ const messages: Messages = {
     sheetFile: '{spec}_{paper}_配置_{count}枚',
   },
 
+  cutout: {
+    steps: {
+      model: 'AI モデルを読み込み',
+      segment: '被写体を検出 · 背景を削除',
+    },
+    dropTitle: '画像をアップロードして背景を削除',
+    dropHint: '人物・商品・動物に対応 · 画像はアップロードされません',
+    tips: [
+      '被写体がはっきり写り、画面からはみ出していない画像',
+      '背景とのコントラストが高いほど境界がきれいに',
+      '初回は約 100MB のモデルをダウンロードします（Wi-Fi 推奨）',
+    ],
+    analyzing: '背景を削除中',
+    modelNote: '初回は約 100MB のモデルをダウンロードします（以降はブラウザにキャッシュ）。WebGPU 対応ブラウザではより高速です',
+    failed: '背景の削除に失敗しました',
+    reselect: '画像を選び直す',
+    aiDone: '背景削除が完了しました',
+    changePhoto: '画像を変更',
+    holdCompare: '長押しで元画像と比較',
+    noSubject: 'はっきりした被写体が見つかりませんでした',
+    noSubjectDesc: '被写体がより鮮明で、背景とのコントラストが高い画像でお試しください',
+    bgTitle: '背景',
+    bgModes: {
+      none: '透過',
+      color: '単色',
+      blur: 'ぼかし',
+    },
+    blurAmount: 'ぼかしの強さ',
+    edgeTitle: '境界',
+    shift: '縮小 / 拡張',
+    feather: 'フェザー',
+    cropToSubject: '被写体に合わせてトリミング',
+    cropPadding: '余白',
+    outputSize: '出力サイズ',
+    jpgNoAlpha: 'JPG は透過に対応していません',
+    download: '画像をダウンロード',
+    fileSuffix: '背景削除',
+  },
+
   long: {
     fileName: '長い画像',
     emptyTitle: '複数の画像を追加して 1 枚の長い画像に結合',
@@ -475,6 +527,21 @@ const messages: Messages = {
         '文字 / ロゴの透かし、9 方向の配置と斜めタイル配置で盗用防止',
         'JPG / PNG / WebP / AVIF の相互変換',
         'ファイル名テンプレートで一括リネーム、ZIP でまとめてダウンロード',
+      ],
+    },
+    cutout: {
+      name: 'AI 背景削除',
+      title: '背景透過・背景削除：オンラインで AI 切り抜き、透過 PNG を無料作成',
+      description:
+        '無料のオンライン背景削除ツール：AI が人物・商品・動物などの被写体を自動で認識して背景を削除し、透過 PNG で保存。白・青・赤などの単色背景への変更や、元の背景をぼかして被写体を際立たせることもできます。境界の縮小・拡張やフェザー、被写体に合わせた自動トリミングに対応。画像はブラウザ内で処理され、アップロードされません。',
+      keywords: ['背景透過', '背景削除', '切り抜き', 'AI 切り抜き', '透過 PNG', '商品画像 切り抜き', '背景ぼかし', '背景変更'],
+      features: [
+        'AI が被写体を認識し、ワンクリックで背景を削除',
+        '人物・商品・動物・物に対応',
+        '透過 PNG / WebP で書き出し',
+        '白・青・赤などの単色背景に変更、または元の背景をぼかす',
+        '境界の縮小・拡張・フェザー、被写体に合わせた自動トリミング',
+        'ブラウザ内で処理し、アップロードなし',
       ],
     },
     idphoto: {

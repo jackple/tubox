@@ -6,9 +6,10 @@ import { useLocalizedPath } from '@/i18n'
 import { locales } from '@/i18n/locales'
 import { useTheme } from '@/stores/theme'
 
-// 按页面拆包：MediaPipe 等重依赖只在进入证件照时加载
+// 按页面拆包：MediaPipe 等重依赖只在进入抠图 / 证件照时加载
 const HomePage = lazy(() => import('@/features/home/HomePage'))
 const BatchPage = lazy(() => import('@/features/batch/BatchPage'))
+const CutoutPage = lazy(() => import('@/features/cutout/CutoutPage'))
 const IdPhotoPage = lazy(() => import('@/features/idphoto/IdPhotoPage'))
 const LongImagePage = lazy(() => import('@/features/collage/LongImagePage'))
 const GridPage = lazy(() => import('@/features/collage/GridPage'))
@@ -19,6 +20,7 @@ function pageRoutes(): RouteObject[] {
   return [
     { index: true, element: <HomePage /> },
     { path: 'batch', element: <BatchPage /> },
+    { path: 'cutout', element: <CutoutPage /> },
     { path: 'id-photo', element: <IdPhotoPage /> },
     { path: 'collage/long', element: <LongImagePage /> },
     { path: 'collage/grid', element: <GridPage /> },

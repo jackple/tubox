@@ -10,7 +10,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 图盒 Tubox：纯前端图片处理工具箱（批量处理 / 证件照 / 长图 / 拼图 / 九宫格 / 社交排版）。**所有处理都在浏览器内完成，没有后端**，图片不上传。界面支持 10 种语言（见下文「多语言」），代码注释为中文。
 
-技术栈：Vite 6 · React 19 · TypeScript（strict）· Tailwind CSS 3 · Zustand · Framer Motion · Comlink · MediaPipe Tasks Vision · JSZip。包管理用 **pnpm**。
+技术栈：Vite 6 · React 19 · TypeScript（strict）· Tailwind CSS 3 · Zustand · Framer Motion · Comlink · MediaPipe Tasks Vision · @imgly/background-removal（onnxruntime-web）· JSZip。包管理用 **pnpm**。
 
 ## 常用命令
 
@@ -21,7 +21,7 @@ pnpm typecheck       # tsc --noEmit
 pnpm build           # setup:models + 类型检查 + vite build 到 dist/（模型随站点自托管）
 pnpm preview         # 预览构建产物
 pnpm format          # prettier 格式化 src/**/*.{ts,tsx,css}
-pnpm setup:models    # 把 MediaPipe wasm 与 .tflite 模型下载到 public/（自托管，已 gitignore）
+pnpm setup:models    # 把 MediaPipe wasm / .tflite 模型与 imgly 抠图模型下载到 public/（自托管，已 gitignore）
 pnpm og:images       # 用本机 Chrome 按各语言文案重新生成社交分享图 public/og/<语言>.png（提交到仓库）
 pnpm build --base=/tubox/   # 部署到子路径，路由 basename 自动跟随 BASE_URL
 ```
@@ -38,7 +38,7 @@ pnpm build --base=/tubox/   # 部署到子路径，路由 basename 自动跟随 
 - `src/stores/` —— Zustand，每个工具一个 store（模块级单例），切换页面状态不丢失。业务流程（加载、分析、导出）写在 store 的 action 里。
 - `src/features/` —— 页面组件，按工具分目录；`features/tools.ts` 是工具注册表（标题、路径、图标、分组），被 Sidebar / 首页 / `ToolLayout` 共用。
 - `src/components/layout/ToolLayout.tsx` —— 所有工具页的统一工作台布局：header + 左侧素材栏 + 中间舞台 + 右侧 inspector。
-- 路由在 `src/App.tsx`，每个页面 `lazy()` 拆包（MediaPipe 只在进入证件照时加载）。使用 History 路由，部署时需要服务器回退到 `index.html`（见 README）。
+- 路由在 `src/App.tsx`，每个页面 `lazy()` 拆包（MediaPipe / onnxruntime 只在进入证件照 / 抠图时加载）。使用 History 路由，部署时需要服务器回退到 `index.html`（见 README）。
 
 **新增工具**需同时改：`features/tools.ts`（注册）、`App.tsx`（路由）、`src/seo.ts` 的 `pagePaths`（构建时据此预渲染各语言该路由的 HTML 与 sitemap）、各语言文案的 `tools` 与 `seo`、`components/icons/ToolGlyphs.tsx`（图标）、对应 store 与 `core/` 实现。
 
@@ -79,6 +79,19 @@ pnpm build --base=/tubox/   # 部署到子路径，路由 basename 自动跟随 
 - `compose.ts`：`autoFrame` 根据规格的 `headRatio` / `topRatio` 自动构图，`composeIdPhoto` 合成成片；`printSheet.ts` 冲印排版；`specs.ts` 规格库与背景色。
 - 工作分辨率固定为 `ID_PHOTO_WORKING_SIZE`（长边 1600）。
 - `features/idphoto/useComposed.ts` 用 `useShallow` 订阅影响成片的字段再 `useMemo` 渲染。store 中的派生 getter（`spec()`、`render()` 等）每次返回新对象，**不要直接在 selector 里调用**，否则会导致无限重渲染；用 `resolveSpec` + `useMemo`。
+
+### AI 抠图（`core/cutout/` + `stores/cutout.ts` + `workers/cutout.ts`）
+
+- 基于 `@imgly/background-removal`（ISNet，onnxruntime-web 推理，**AGPL-3.0**，本项目因此开源）。`matte.ts` 的 `segmentSubject` 调用 `segmentForeground`，输入输出都用库内置的 `image/x-rgba8` 原始像素格式；WebGPU 失败自动回退 WASM。imgly 按配置缓存初始化 Promise（含失败），重试时通过 `fetchArgs.attempt` 换缓存键。
+- 推理在独立 Worker 中（`workers/cutout.worker.ts`，会话常驻），进度回调经 `Comlink.proxy` 作为**顶层参数**传入；不支持 OffscreenCanvas 时回退主线程。
+- 推理只在长边 `MATTE_SIZE`（1024，等于模型输入）的工作图上进行；`buildMatte` 做收缩/扩展、羽化并给出主体外接框；`compose.ts` 的 `composeCutout` 按源图区域合成（透明 / 纯色 / 原图虚化），预览限制长边 1600，导出按原图（长边上限 4096）。
+- 资源（`resources.json` + 4MB 分块的模型与 wasm）地址见 `config.ts` 的 `imglyAssets`：`VITE_MODEL_BASE/imgly/<版本>/` → 本地 `public/imgly/<版本>/`（`setup:models` 只下载 `IMGLY_MODEL` 与 onnxruntime，两处需保持一致）→ staticimgly.com CDN。
+- `vite.config.ts` 把 `onnxruntime-web` 别名到非 bundle 版本：wasm 由 imgly 以 blob URL 传入，否则 Vite 会多打包一份 24MB 的 wasm。
+
+### 开源许可（AGPL-3.0）
+
+- 因依赖 `@imgly/background-removal`，项目以 AGPL-3.0-only 发布（根目录 `LICENSE`）。界面必须保留许可声明与源代码入口：侧边栏底部与首页页脚（文案在 `legal`，地址为 `config.ts` 的 `SOURCE_URL`，可用 `VITE_SOURCE_URL` 覆盖）。
+- `scripts/licenses-plugin.ts` 在构建时汇总主包与 Worker 包中所有 npm 依赖的许可证，生成 `dist/third-party-licenses.txt`；新增运行时下载的模型时，在其中的 `MODELS` 登记。
 
 ### 资源生命周期
 

@@ -1,4 +1,5 @@
 declare const __MEDIAPIPE_VERSION__: string
+declare const __IMGLY_VERSION__: string
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '')
 const cdn = `https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${__MEDIAPIPE_VERSION__}/wasm`
@@ -22,6 +23,30 @@ export const visionAssets = {
     'https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/latest/blaze_face_short_range.tflite',
   ].filter(Boolean) as string[],
 }
+
+/**
+ * 通用抠图（@imgly/background-removal）的资源目录：resources.json + 分块的 ONNX 模型与 onnxruntime wasm。
+ * 必须是以 / 结尾的绝对地址；自托管目录带版本号，与库版本严格对应。
+ */
+export const imglyAssets = [
+  custom && `${custom}/imgly/${__IMGLY_VERSION__}/`,
+  `${base}/imgly/${__IMGLY_VERSION__}/`,
+  `https://staticimgly.com/@imgly/background-removal-data/${__IMGLY_VERSION__}/dist/`,
+]
+  .filter(Boolean)
+  .map((u) => new URL(u as string, location.href).href)
+
+/** 抠图模型：isnet_fp16 约 84MB，精度与体积的折中（另有 isnet_quint8 约 42MB / isnet 约 167MB） */
+export const IMGLY_MODEL = 'isnet_fp16'
+
+/**
+ * 本站源代码地址（AGPL-3.0 第 13 条：通过网络向用户提供服务时须提供对应源代码）。
+ * 部署修改版时请通过 VITE_SOURCE_URL 指向你自己的源码仓库。
+ */
+export const SOURCE_URL = (import.meta.env.VITE_SOURCE_URL as string | undefined) || 'https://github.com/jackple/tubox'
+
+/** 第三方许可证清单，构建时由 scripts/licenses-plugin.ts 生成 */
+export const THIRD_PARTY_LICENSES_URL = `${base}/third-party-licenses.txt`
 
 /** 证件照工作分辨率（长边），兼顾分割精度与速度 */
 export const ID_PHOTO_WORKING_SIZE = 1600

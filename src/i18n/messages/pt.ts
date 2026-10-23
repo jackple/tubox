@@ -39,12 +39,20 @@ const messages: Messages = {
     'heic-unsupported': 'Este navegador ainda não suporta HEIC. Converta para JPG primeiro',
     'decode-failed': 'Não foi possível decodificar esta imagem',
     'model-load-failed': 'Falha ao carregar os modelos de IA. Verifique sua conexão ou hospede-os com pnpm setup:models',
+    'segment-failed': 'Falha ao remover o fundo. Tente outra imagem',
   },
 
   nav: {
     overview: 'Visão geral',
     privacyTitle: 'Proteção de privacidade ativa',
     privacyDesc: 'As imagens nunca saem deste dispositivo',
+  },
+
+  legal: {
+    openSource: 'Código aberto',
+    sourceCode: 'Código-fonte',
+    thirdParty: 'Licenças de terceiros',
+    notice: 'Licenciado sob AGPL-3.0. Fornecido "no estado em que se encontra", sem garantia de qualquer tipo.',
   },
 
   toolGroups: {
@@ -58,6 +66,11 @@ const messages: Messages = {
       title: 'Processamento em lote',
       desc: 'Redimensione, comprima, aplique marca d’água e converta imagens em paralelo, com vários threads',
       chips: ['Redimensionar', 'Compressão inteligente', 'Marca d’água', 'WebP / AVIF'],
+    },
+    cutout: {
+      title: 'Remover fundo',
+      desc: 'Recorte pessoas, produtos, animais e mais com IA: fundo transparente, colorido ou desfocado',
+      chips: ['Recorte com IA', 'PNG transparente', 'Fundo colorido', 'Desfoque de fundo'],
     },
     idphoto: {
       title: 'Foto para documento',
@@ -116,7 +129,7 @@ const messages: Messages = {
     heroHighlight: 'navegador',
     heroAfter: '',
     heroDesc1:
-      'Compressão em lote, fotos para documento, colagens e layouts — seis ferramentas profissionais que rodam no seu dispositivo.',
+      'Compressão em lote, fotos para documento, colagens e layouts — sete ferramentas profissionais que rodam no seu dispositivo.',
     heroDesc2: 'Nada para instalar, nada para enviar. É só abrir e usar.',
     start: 'Começar',
     makeIdPhoto: 'Fazer foto para documento',
@@ -129,7 +142,7 @@ const messages: Messages = {
     toolsTitle: 'Uma caixa de ferramentas para o dia a dia',
     toolsDesc: 'De fotos de produto a fotos para visto, de grades 3×3 a capas para redes sociais.',
     soonTitle: 'Mais ferramentas a caminho',
-    soonDesc: 'Remoção de fundo, criador de GIF, limpeza de dados EXIF, anotação de imagens…',
+    soonDesc: 'Criador de GIF, limpeza de dados EXIF, anotação de imagens…',
     longCaptions: ['Que dia lindo', 'Bora sair', 'Te vejo na praia!'],
     privacyTitle1: 'Suas imagens',
     privacyTitle2: 'nunca saem do seu dispositivo.',
@@ -350,6 +363,46 @@ const messages: Messages = {
     sheetFile: '{spec}_{paper}_folha_{count}',
   },
 
+  cutout: {
+    steps: {
+      model: 'Carregando modelo de IA',
+      segment: 'Detectando o objeto · Removendo o fundo',
+    },
+    dropTitle: 'Envie uma imagem para remover o fundo',
+    dropHint: 'Pessoas, produtos e animais · Sua imagem nunca é enviada',
+    tips: [
+      'Objeto nítido e inteiro dentro do enquadramento',
+      'Quanto maior o contraste com o fundo, mais limpas as bordas',
+      'No primeiro uso é baixado um modelo de cerca de 100MB (use Wi-Fi)',
+    ],
+    analyzing: 'Removendo fundo',
+    modelNote:
+      'No primeiro uso é baixado um modelo de cerca de 100MB, que fica em cache no navegador. É mais rápido em navegadores com WebGPU',
+    failed: 'Falha ao remover o fundo',
+    reselect: 'Escolher outra imagem',
+    aiDone: 'Fundo removido',
+    changePhoto: 'Trocar imagem',
+    holdCompare: 'Segure para comparar',
+    noSubject: 'Nenhum objeto claro detectado',
+    noSubjectDesc: 'Tente uma imagem em que o objeto esteja mais nítido e se destaque do fundo',
+    bgTitle: 'Fundo',
+    bgModes: {
+      none: 'Transparente',
+      color: 'Cor',
+      blur: 'Desfoque',
+    },
+    blurAmount: 'Intensidade do desfoque',
+    edgeTitle: 'Bordas',
+    shift: 'Contrair / expandir',
+    feather: 'Suavização',
+    cropToSubject: 'Recortar no objeto',
+    cropPadding: 'Margem',
+    outputSize: 'Tamanho de saída',
+    jpgNoAlpha: 'JPG não suporta transparência',
+    download: 'Baixar imagem',
+    fileSuffix: 'sem-fundo',
+  },
+
   long: {
     fileName: 'imagem-longa',
     emptyTitle: 'Adicione imagens para juntar em uma imagem longa',
@@ -494,6 +547,30 @@ const messages: Messages = {
         'Marca d’água de texto / logo com 9 posições e repetição diagonal',
         'Converta entre JPG / PNG / WebP / AVIF',
         'Renomeie com modelos de nome e baixe tudo em um ZIP',
+      ],
+    },
+    cutout: {
+      name: 'Remover fundo',
+      title: 'Remover fundo de imagens online: recorte com IA grátis, PNG transparente',
+      description:
+        'Remova o fundo de imagens grátis e online: a IA detecta pessoas, produtos, animais e outros objetos, remove o fundo e exporta um PNG transparente — ou aplica um fundo branco, azul, vermelho ou de qualquer cor, ou desfoca o fundo original para destacar o objeto. Contraia / expanda e suavize as bordas, com recorte automático no objeto. As imagens são processadas no navegador e nunca são enviadas.',
+      keywords: [
+        'remover fundo',
+        'tirar fundo de imagem',
+        'fundo transparente',
+        'recorte com IA',
+        'remover fundo de produto',
+        'recortar imagem',
+        'desfocar fundo',
+        'PNG transparente',
+      ],
+      features: [
+        'A IA detecta o objeto e remove o fundo com um clique',
+        'Pessoas, produtos, animais e objetos',
+        'Exporta PNG / WebP transparente',
+        'Fundo branco, azul, vermelho ou de qualquer cor, ou desfoque do fundo original',
+        'Contrair / expandir e suavizar bordas, recorte automático no objeto',
+        'Processado no navegador, sem envio',
       ],
     },
     idphoto: {

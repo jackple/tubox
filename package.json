@@ -3,6 +3,12 @@
   "private": true,
   "version": "0.1.0",
   "description": "图盒 Tubox —— 纯前端图片处理工具箱",
+  "license": "AGPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jackple/tubox.git"
+  },
+  "homepage": "https://github.com/jackple/tubox",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -16,12 +22,14 @@
   "dependencies": {
     "@fontsource-variable/geist": "^5",
     "@fontsource-variable/geist-mono": "^5",
+    "@imgly/background-removal": "1.7.0",
     "@mediapipe/tasks-vision": "^0.10.20",
     "clsx": "^2.1.1",
     "comlink": "^4.4.2",
     "framer-motion": "^11.15.0",
     "jszip": "^3.10.1",
     "lucide-react": "^0.468.0",
+    "onnxruntime-web": "1.21.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^6.28.0",

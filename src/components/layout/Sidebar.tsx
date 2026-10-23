@@ -1,9 +1,10 @@
 import type { ComponentType, ReactNode } from 'react'
 import { NavLink } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Monitor, Moon, Sun } from 'lucide-react'
+import { ArrowUpRight, CodeXml, Monitor, Moon, Sun } from 'lucide-react'
 import { type GlyphProps, HomeGlyph } from '@/components/icons/ToolGlyphs'
 import { Segmented } from '@/components/ui/Segmented'
+import { SOURCE_URL } from '@/config'
 import { toolGroups, tools } from '@/features/tools'
 import { useLocalizedPath, useMessages } from '@/i18n'
 import { cn } from '@/lib/cn'
@@ -50,6 +51,17 @@ export function Sidebar() {
             <div className="text-[11px] text-muted">{m.nav.privacyDesc}</div>
           </div>
         </div>
+        <a
+          href={SOURCE_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          title={m.legal.notice}
+          className="group flex items-center gap-2 rounded-lg px-2 py-1 text-[11px] text-muted transition-colors hover:bg-fg/[0.04] hover:text-fg"
+        >
+          <CodeXml className="h-3.5 w-3.5" />
+          {m.legal.openSource} · AGPL-3.0
+          <ArrowUpRight className="ml-auto h-3 w-3 opacity-0 transition-opacity group-hover:opacity-100" />
+        </a>
         <LanguageSwitcher />
         <Segmented<ThemeMode>
           size="sm"

@@ -33,6 +33,16 @@ export const BatchGlyph = (p: GlyphProps) => (
   </Svg>
 )
 
+/** 人像抠图：虚线选区 + 人像 */
+export const CutoutGlyph = (p: GlyphProps) => (
+  <Svg {...p}>
+    <path className="g-tint" d="M6.5 21c.6-3.4 2.8-5.3 5.5-5.3s4.9 1.9 5.5 5.3z" />
+    <rect x="3" y="3" width="18" height="18" rx="3" strokeDasharray="2.6 2.4" />
+    <circle className="g-accent" cx="12" cy="10.2" r="3" />
+    <path d="M6.5 21c.6-3.4 2.8-5.3 5.5-5.3s4.9 1.9 5.5 5.3" />
+  </Svg>
+)
+
 /** 证件照：人像卡 */
 export const IdPhotoGlyph = (p: GlyphProps) => (
   <Svg {...p}>

@@ -33,7 +33,7 @@ const CJK_FONTS = {
   ko: "'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR'",
 }
 
-const TOOL_ORDER = ['batch', 'idphoto', 'long', 'grid', 'nine', 'social']
+const TOOL_ORDER = ['batch', 'cutout', 'idphoto', 'long', 'grid', 'nine', 'social']
 
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 

@@ -39,12 +39,20 @@ const messages: Messages = {
     'heic-unsupported': '瀏覽器尚不支援 HEIC，請先轉成 JPG',
     'decode-failed': '無法解碼此圖片',
     'model-load-failed': 'AI 模型載入失敗，請檢查網路，或執行 pnpm setup:models 自行託管模型',
+    'segment-failed': '去背失敗，請換一張圖片重試',
   },
 
   nav: {
     overview: '總覽',
     privacyTitle: '隱私保護已開啟',
     privacyDesc: '圖片不會離開此裝置',
+  },
+
+  legal: {
+    openSource: '開源',
+    sourceCode: '原始碼',
+    thirdParty: '第三方授權',
+    notice: '本站以 AGPL-3.0 授權開源，依「現狀」提供，不提供任何擔保。',
   },
 
   toolGroups: {
@@ -58,6 +66,11 @@ const messages: Messages = {
       title: '批次處理',
       desc: '統一尺寸、壓縮檔案、加浮水印、轉換格式，多執行緒平行處理',
       chips: ['統一尺寸', '智慧壓縮', '浮水印', 'WebP / AVIF'],
+    },
+    cutout: {
+      title: 'AI 去背',
+      desc: '一鍵去背人物、商品、動物等主體，透明背景、純色換底或背景模糊',
+      chips: ['智慧去背', '透明 PNG', '純色換底', '背景模糊'],
     },
     idphoto: {
       title: '證件照',
@@ -112,7 +125,7 @@ const messages: Messages = {
     heroBefore: '就在',
     heroHighlight: '瀏覽器',
     heroAfter: '裡',
-    heroDesc1: '批次壓縮、證件照、拼貼排版——六款專業工具，全部在你的裝置上執行。',
+    heroDesc1: '批次壓縮、證件照、拼貼排版——七款專業工具，全部在你的裝置上執行。',
     heroDesc2: '免安裝、免上傳，開啟即可使用。',
     start: '開始使用',
     makeIdPhoto: '製作證件照',
@@ -125,7 +138,7 @@ const messages: Messages = {
     toolsTitle: '一個工具箱，滿足日常所需',
     toolsDesc: '從電商修圖到簽證照片，從九宮格到小紅書封面。',
     soonTitle: '更多工具籌備中',
-    soonDesc: '智慧去背、GIF 製作、EXIF 隱私清除、圖片標註……',
+    soonDesc: 'GIF 製作、EXIF 隱私清除、圖片標註……',
     longCaptions: ['今天天氣真好', '我們出發吧', '海邊見！'],
     privacyTitle1: '你的圖片，',
     privacyTitle2: '從不離開你的裝置。',
@@ -332,6 +345,41 @@ const messages: Messages = {
     sheetFile: '{spec}_{paper}排版_{count}張',
   },
 
+  cutout: {
+    steps: {
+      model: '載入 AI 模型',
+      segment: '辨識主體 · 移除背景',
+    },
+    dropTitle: '上傳一張圖片開始去背',
+    dropHint: '人物、商品、動物都能去背 · 圖片不會上傳',
+    tips: ['主體清楚完整，盡量不要被畫面裁切', '主體與背景反差越大，邊緣越乾淨', '首次需下載約 100MB 模型，建議在 Wi-Fi 下使用'],
+    analyzing: '正在去背',
+    modelNote: '首次使用需下載約 100MB 模型，之後會由瀏覽器快取；支援 WebGPU 的瀏覽器速度更快',
+    failed: '去背失敗',
+    reselect: '重新選擇圖片',
+    aiDone: '去背完成',
+    changePhoto: '換圖片',
+    holdCompare: '按住對比原圖',
+    noSubject: '未辨識到明顯的主體',
+    noSubjectDesc: '可以換一張主體更清楚、與背景反差更大的圖片',
+    bgTitle: '背景',
+    bgModes: {
+      none: '透明',
+      color: '純色',
+      blur: '模糊',
+    },
+    blurAmount: '模糊程度',
+    edgeTitle: '邊緣',
+    shift: '收縮 / 擴展',
+    feather: '羽化',
+    cropToSubject: '裁切到主體',
+    cropPadding: '留白',
+    outputSize: '輸出尺寸',
+    jpgNoAlpha: 'JPG 不支援透明背景',
+    download: '下載圖片',
+    fileSuffix: '去背',
+  },
+
   long: {
     fileName: '長圖',
     emptyTitle: '新增多張圖片拼成長圖',
@@ -461,6 +509,21 @@ const messages: Messages = {
         '文字 / Logo 浮水印，九宮格定位與斜向平鋪防盜',
         'JPG / PNG / WebP / AVIF 格式互轉',
         '檔名範本批次重新命名，ZIP 一鍵打包下載',
+      ],
+    },
+    cutout: {
+      name: 'AI 去背',
+      title: 'AI 去背：線上一鍵移除圖片背景、透明背景 PNG',
+      description:
+        '免費線上 AI 去背：自動辨識人物、商品、動物等主體並移除背景，輸出透明背景 PNG，或換成白底、藍底、紅底等純色背景，也能模糊原背景突顯主體。支援邊緣收縮擴展、羽化，自動裁切到主體。圖片在瀏覽器本機處理，不會上傳。',
+      keywords: ['線上去背', 'AI 去背', '一鍵去背', '移除背景', '圖片去背', '透明背景', '商品去背', '人像去背'],
+      features: [
+        'AI 自動辨識主體，一鍵移除背景',
+        '人物、商品、動物、物品皆可去背',
+        '輸出透明背景 PNG / WebP',
+        '換白底、藍底、紅底等純色背景，或模糊原背景',
+        '邊緣收縮擴展、羽化，自動裁切到主體',
+        '圖片在瀏覽器本機處理，不會上傳',
       ],
     },
     idphoto: {

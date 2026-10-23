@@ -6,6 +6,7 @@ import { Portrait } from '@/components/common/Portrait'
 import { IconTile } from '@/components/layout/ToolIcon'
 import { Logo } from '@/components/layout/Logo'
 import { Button } from '@/components/ui/Button'
+import { SOURCE_URL, THIRD_PARTY_LICENSES_URL } from '@/config'
 import { gridTemplates } from '@/core/collage/templates'
 import { photoSpecs } from '@/core/idphoto/specs'
 import { type Tool, toolById, tools } from '@/features/tools'
@@ -21,6 +22,7 @@ const fadeUp = (delay = 0) => ({
 })
 
 export default function HomePage() {
+  const legal = useMessages().legal
   return (
     <div className="h-full overflow-y-auto overflow-x-hidden">
       <Hero />
@@ -30,7 +32,27 @@ export default function HomePage() {
       <footer className="border-t border-line">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-6 py-8 sm:flex-row">
           <Logo />
-          <p className="font-mono text-[11px] text-muted">© {new Date().getFullYear()} Tubox · Crafted for creators · 100% client-side</p>
+          <div className="space-y-1 text-center sm:text-right">
+            <p className="font-mono text-[11px] text-muted">
+              © {new Date().getFullYear()} Tubox contributors · Crafted for creators · 100% client-side
+            </p>
+            {/* AGPL-3.0：适当法律声明 + 源代码入口 */}
+            <p className="text-[11px] text-muted">
+              {legal.notice}{' '}
+              <a href={SOURCE_URL} target="_blank" rel="noopener noreferrer" className="underline-offset-2 hover:text-fg hover:underline">
+                {legal.sourceCode}
+              </a>
+              {' · '}
+              <a
+                href={THIRD_PARTY_LICENSES_URL}
+                target="_blank"
+                rel="noopener"
+                className="underline-offset-2 hover:text-fg hover:underline"
+              >
+                {legal.thirdParty}
+              </a>
+            </p>
+          </div>
         </div>
       </footer>
     </div>
@@ -140,11 +162,12 @@ function Tools() {
       <div className="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <ToolCard tool={toolById('batch')} className="lg:col-span-2" visual={<BatchVisual />} />
         <ToolCard tool={toolById('idphoto')} className="lg:row-span-2" visual={<IdVisual />} tall />
+        <ToolCard tool={toolById('cutout')} visual={<CutoutVisual />} />
         <ToolCard tool={toolById('long')} visual={<LongVisual />} />
         <ToolCard tool={toolById('grid')} visual={<GridVisual />} />
         <ToolCard tool={toolById('nine')} visual={<NineVisual />} />
         <ToolCard tool={toolById('social')} visual={<SocialVisual />} />
-        <div className="flex flex-col justify-end rounded-2xl border border-dashed border-fg/15 p-6">
+        <div className="flex flex-col justify-end rounded-2xl border border-dashed border-fg/15 p-6 lg:col-span-3">
           <div className="eyebrow">Coming soon</div>
           <div className="mt-3 text-[15px] font-semibold tracking-tight">{m.soonTitle}</div>
           <p className="mt-1.5 text-[13px] leading-relaxed text-muted">{m.soonDesc}</p>
@@ -256,6 +279,19 @@ function IdVisual() {
       <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap font-mono text-[10px] tracking-wider text-muted">
         25×35mm · 295×413px · 300DPI
       </div>
+    </div>
+  )
+}
+
+function CutoutVisual() {
+  return (
+    <div className="relative h-[150px] w-[150px] overflow-hidden rounded-lg shadow-stage transition-transform duration-500 group-hover:scale-105">
+      <div className="checker absolute inset-0" />
+      <div className="absolute inset-0 transition-[clip-path] duration-700 [clip-path:inset(0_50%_0_0)] group-hover:[clip-path:inset(0_88%_0_0)]">
+        <Scenery palette="ocean" />
+      </div>
+      <Portrait className="absolute bottom-0 left-1/2 w-[78%] -translate-x-1/2" />
+      <div className="absolute inset-y-0 left-1/2 w-px bg-white/90 shadow-[0_0_0_1px_rgb(0_0_0/0.08)] transition-[left] duration-700 group-hover:left-[12%]" />
     </div>
   )
 }

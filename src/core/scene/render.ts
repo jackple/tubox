@@ -146,9 +146,9 @@ function drawImageLayer(ctx: Ctx2D, l: ImageLayer) {
   }
 }
 
-type Box = [number, number, number, number]
+export type Box = [number, number, number, number]
 
-function drawBlurred(ctx: Ctx2D, img: Drawable, s: Box, d: Box, blur: number) {
+export function drawBlurred(ctx: Ctx2D, img: Drawable, s: Box, d: Box, blur: number) {
   if (supportsCanvasFilter()) {
     ctx.filter = `blur(${blur}px)`
     ctx.drawImage(img, ...s, ...d)

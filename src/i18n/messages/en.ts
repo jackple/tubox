@@ -39,12 +39,20 @@ const messages: Messages = {
     'heic-unsupported': 'HEIC is not supported by this browser yet. Please convert it to JPG first',
     'decode-failed': 'Unable to decode this image',
     'model-load-failed': 'Failed to load the AI models. Check your network or self-host them with pnpm setup:models',
+    'segment-failed': 'Background removal failed. Please try another image',
   },
 
   nav: {
     overview: 'Overview',
     privacyTitle: 'Privacy protection on',
     privacyDesc: 'Images never leave this device',
+  },
+
+  legal: {
+    openSource: 'Open source',
+    sourceCode: 'Source code',
+    thirdParty: 'Third-party licenses',
+    notice: 'Licensed under AGPL-3.0. Provided "as is", without warranty of any kind.',
   },
 
   toolGroups: {
@@ -58,6 +66,11 @@ const messages: Messages = {
       title: 'Batch Processing',
       desc: 'Resize, compress, watermark and convert images in parallel with multiple threads',
       chips: ['Resize', 'Smart compression', 'Watermark', 'WebP / AVIF'],
+    },
+    cutout: {
+      title: 'Background Remover',
+      desc: 'Cut out people, products, animals and more with AI — transparent, solid color or blurred backdrop',
+      chips: ['AI cutout', 'Transparent PNG', 'Solid color', 'Background blur'],
     },
     idphoto: {
       title: 'ID Photo',
@@ -112,7 +125,7 @@ const messages: Messages = {
     heroBefore: 'right in your ',
     heroHighlight: 'browser',
     heroAfter: '',
-    heroDesc1: 'Batch compression, ID photos, collages and layouts — six pro tools that run entirely on your device.',
+    heroDesc1: 'Batch compression, ID photos, collages and layouts — seven pro tools that run entirely on your device.',
     heroDesc2: 'Nothing to install, nothing to upload. Just open and go.',
     start: 'Get started',
     makeIdPhoto: 'Make an ID photo',
@@ -125,7 +138,7 @@ const messages: Messages = {
     toolsTitle: 'One toolbox for everyday needs',
     toolsDesc: 'From product shots to visa photos, from 3×3 grids to social media covers.',
     soonTitle: 'More tools on the way',
-    soonDesc: 'Background removal, GIF maker, EXIF privacy cleaner, image annotation…',
+    soonDesc: 'GIF maker, EXIF privacy cleaner, image annotation…',
     longCaptions: ['What a lovely day', "Let's head out", 'See you at the beach!'],
     privacyTitle1: 'Your images',
     privacyTitle2: 'never leave your device.',
@@ -341,6 +354,45 @@ const messages: Messages = {
     sheetFile: '{spec}_{paper}_sheet_{count}',
   },
 
+  cutout: {
+    steps: {
+      model: 'Load AI model',
+      segment: 'Detect subject · Remove background',
+    },
+    dropTitle: 'Upload an image to remove its background',
+    dropHint: 'Works on people, products and animals · Your image is never uploaded',
+    tips: [
+      'Keep the subject clear and fully in frame',
+      'More contrast with the background means cleaner edges',
+      'First use downloads a ~100MB model — Wi-Fi recommended',
+    ],
+    analyzing: 'Removing background',
+    modelNote: 'First use downloads a ~100MB model, cached by the browser afterwards. Browsers with WebGPU run faster',
+    failed: 'Background removal failed',
+    reselect: 'Choose another image',
+    aiDone: 'Background removed',
+    changePhoto: 'Change image',
+    holdCompare: 'Hold to compare',
+    noSubject: 'No clear subject detected',
+    noSubjectDesc: 'Try an image where the subject is clearer and stands out from the background',
+    bgTitle: 'Background',
+    bgModes: {
+      none: 'Transparent',
+      color: 'Color',
+      blur: 'Blur',
+    },
+    blurAmount: 'Blur amount',
+    edgeTitle: 'Edges',
+    shift: 'Shrink / expand',
+    feather: 'Feather',
+    cropToSubject: 'Crop to subject',
+    cropPadding: 'Padding',
+    outputSize: 'Output size',
+    jpgNoAlpha: 'JPG does not support transparency',
+    download: 'Download image',
+    fileSuffix: 'no-bg',
+  },
+
   long: {
     fileName: 'long-image',
     emptyTitle: 'Add images to stitch into a long image',
@@ -485,6 +537,30 @@ const messages: Messages = {
         'Text / logo watermarks with 9-point positioning and diagonal tiling',
         'Convert between JPG / PNG / WebP / AVIF',
         'Rename with filename templates, download everything as a ZIP',
+      ],
+    },
+    cutout: {
+      name: 'Background Remover',
+      title: 'Remove Background from Images Online: Free AI Background Remover, Transparent PNG',
+      description:
+        'Free online AI background remover: automatically detects people, products, animals and other subjects and removes the background, exporting a transparent PNG — or swap in white, blue, red or any solid color, or blur the original backdrop to make the subject pop. Shrink / expand and feather edges, and auto-crop to the subject. Images are processed locally in your browser and never uploaded.',
+      keywords: [
+        'remove background',
+        'background remover',
+        'transparent background',
+        'AI background removal',
+        'remove bg',
+        'product photo background',
+        'cut out image',
+        'blur background',
+      ],
+      features: [
+        'AI detects the subject and removes the background in one click',
+        'Works on people, products, animals and objects',
+        'Export transparent PNG / WebP',
+        'Swap in white, blue, red or any solid color, or blur the original background',
+        'Shrink / expand and feather edges, auto-crop to the subject',
+        'Processed locally in your browser, never uploaded',
       ],
     },
     idphoto: {

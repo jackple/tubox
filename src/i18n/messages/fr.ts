@@ -39,12 +39,20 @@ const messages: Messages = {
     'heic-unsupported': "Ce navigateur ne prend pas encore en charge le HEIC. Convertissez d'abord l'image en JPG",
     'decode-failed': 'Impossible de décoder cette image',
     'model-load-failed': 'Échec du chargement des modèles IA. Vérifiez votre connexion ou hébergez-les vous-même avec pnpm setup:models',
+    'segment-failed': "Échec de la suppression de l'arrière-plan. Essayez une autre image",
   },
 
   nav: {
     overview: "Vue d'ensemble",
     privacyTitle: 'Confidentialité activée',
     privacyDesc: 'Les images ne quittent jamais cet appareil',
+  },
+
+  legal: {
+    openSource: 'Open source',
+    sourceCode: 'Code source',
+    thirdParty: 'Licences tierces',
+    notice: 'Sous licence AGPL-3.0. Fourni « en l’état », sans aucune garantie.',
   },
 
   toolGroups: {
@@ -58,6 +66,11 @@ const messages: Messages = {
       title: 'Traitement par lots',
       desc: 'Redimensionnez, compressez, ajoutez un filigrane et convertissez vos images en parallèle',
       chips: ['Redimensionner', 'Compression intelligente', 'Filigrane', 'WebP / AVIF'],
+    },
+    cutout: {
+      title: "Suppression d'arrière-plan",
+      desc: 'Détourez personnes, produits, animaux et plus par IA : fond transparent, uni ou flouté',
+      chips: ['Détourage IA', 'PNG transparent', 'Fond uni', "Flou d'arrière-plan"],
     },
     idphoto: {
       title: "Photo d'identité",
@@ -116,7 +129,7 @@ const messages: Messages = {
     heroHighlight: 'navigateur',
     heroAfter: '',
     heroDesc1:
-      "Compression par lots, photos d'identité, collages et mises en page : six outils pro qui tournent entièrement sur votre appareil.",
+      "Compression par lots, photos d'identité, collages et mises en page : sept outils pro qui tournent entièrement sur votre appareil.",
     heroDesc2: "Rien à installer, rien à envoyer. Ouvrez et c'est parti.",
     start: 'Commencer',
     makeIdPhoto: "Créer une photo d'identité",
@@ -129,7 +142,7 @@ const messages: Messages = {
     toolsTitle: 'Une boîte à outils pour le quotidien',
     toolsDesc: 'Des photos produit aux photos de visa, des grilles 3×3 aux couvertures pour les réseaux sociaux.',
     soonTitle: "D'autres outils arrivent",
-    soonDesc: "Détourage, création de GIF, suppression des données EXIF, annotation d'images…",
+    soonDesc: "Création de GIF, suppression des données EXIF, annotation d'images…",
     longCaptions: ['Quelle belle journée', 'On y va ?', 'Rendez-vous à la plage !'],
     privacyTitle1: 'Vos images',
     privacyTitle2: 'ne quittent jamais votre appareil.',
@@ -350,6 +363,46 @@ const messages: Messages = {
     sheetFile: '{spec}_{paper}_planche_{count}',
   },
 
+  cutout: {
+    steps: {
+      model: 'Chargement du modèle IA',
+      segment: 'Détection du sujet · Suppression du fond',
+    },
+    dropTitle: 'Importez une image pour supprimer son arrière-plan',
+    dropHint: "Personnes, produits, animaux · Votre image n'est jamais envoyée",
+    tips: [
+      'Sujet bien visible et entièrement dans le cadre',
+      'Plus le contraste avec le fond est fort, plus les contours sont nets',
+      'La première utilisation télécharge un modèle d’environ 100 Mo (Wi-Fi conseillé)',
+    ],
+    analyzing: 'Suppression du fond',
+    modelNote:
+      'La première utilisation télécharge un modèle d’environ 100 Mo, mis ensuite en cache par le navigateur. Plus rapide avec les navigateurs compatibles WebGPU',
+    failed: 'Échec de la suppression du fond',
+    reselect: 'Choisir une autre image',
+    aiDone: 'Arrière-plan supprimé',
+    changePhoto: "Changer d'image",
+    holdCompare: 'Maintenir pour comparer',
+    noSubject: 'Aucun sujet net détecté',
+    noSubjectDesc: 'Essayez une image où le sujet est plus net et se détache mieux du fond',
+    bgTitle: 'Arrière-plan',
+    bgModes: {
+      none: 'Transparent',
+      color: 'Couleur',
+      blur: 'Flou',
+    },
+    blurAmount: 'Intensité du flou',
+    edgeTitle: 'Contours',
+    shift: 'Rétrécir / étendre',
+    feather: 'Adoucissement',
+    cropToSubject: 'Recadrer sur le sujet',
+    cropPadding: 'Marge',
+    outputSize: 'Taille de sortie',
+    jpgNoAlpha: 'Le JPG ne gère pas la transparence',
+    download: "Télécharger l'image",
+    fileSuffix: 'sans-fond',
+  },
+
   long: {
     fileName: 'image-longue',
     emptyTitle: 'Ajoutez des images à assembler en image longue',
@@ -495,6 +548,30 @@ const messages: Messages = {
         'Filigrane texte / logo, 9 positions et mosaïque en diagonale',
         'Conversion entre JPG / PNG / WebP / AVIF',
         'Renommage par modèle de nom, téléchargement groupé en ZIP',
+      ],
+    },
+    cutout: {
+      name: "Suppression d'arrière-plan",
+      title: "Supprimer l'arrière-plan d'une image en ligne : détourage IA gratuit, PNG transparent",
+      description:
+        "Suppression d'arrière-plan gratuite en ligne : l'IA détecte personnes, produits, animaux et autres sujets, retire le fond et exporte un PNG transparent — ou le remplace par du blanc, du bleu, du rouge ou toute autre couleur unie, ou floute le fond d'origine pour faire ressortir le sujet. Rétrécissement / extension et adoucissement des contours, recadrage automatique sur le sujet. Les images sont traitées localement dans le navigateur et ne sont jamais envoyées.",
+      keywords: [
+        'supprimer arrière-plan',
+        'détourer une image',
+        'fond transparent',
+        'détourage IA',
+        'enlever le fond',
+        'détourage produit',
+        'flouter arrière-plan',
+        'PNG transparent',
+      ],
+      features: [
+        "L'IA détecte le sujet et supprime le fond en un clic",
+        'Personnes, produits, animaux et objets',
+        'Export en PNG / WebP transparent',
+        "Fond blanc, bleu, rouge ou toute couleur unie, ou flou de l'arrière-plan d'origine",
+        'Rétrécissement / extension et adoucissement des contours, recadrage sur le sujet',
+        'Traitement local dans le navigateur, aucun envoi',
       ],
     },
     idphoto: {

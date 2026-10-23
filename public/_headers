@@ -4,6 +4,8 @@
   Cache-Control: public, max-age=31536000, immutable
 /mediapipe/*
   Cache-Control: public, max-age=31536000, immutable
+/imgly/*
+  Cache-Control: public, max-age=31536000, immutable
 
 # 模型文件名不含版本，缓存 30 天，到期后按 ETag 重新验证
 /models/*

@@ -46,12 +46,21 @@ const messages = {
     'heic-unsupported': '浏览器暂不支持 HEIC，请先转为 JPG',
     'decode-failed': '无法解码该图片',
     'model-load-failed': 'AI 模型加载失败，请检查网络或执行 pnpm setup:models 自托管模型',
+    'segment-failed': '抠图失败，请换一张图片重试',
   },
 
   nav: {
     overview: '概览',
     privacyTitle: '隐私保护已开启',
     privacyDesc: '图片不会离开此设备',
+  },
+
+  /** 开源许可声明（AGPL-3.0 要求的「适当法律声明」与源代码入口） */
+  legal: {
+    openSource: '开源',
+    sourceCode: '源代码',
+    thirdParty: '第三方许可',
+    notice: '本站以 AGPL-3.0 许可开源，按「原样」提供，不提供任何担保。',
   },
 
   toolGroups: {
@@ -65,6 +74,11 @@ const messages = {
       title: '批量处理',
       desc: '统一尺寸、压缩体积、添加水印、转换格式，多线程并行处理',
       chips: ['统一尺寸', '智能压缩', '水印', 'WebP / AVIF'],
+    },
+    cutout: {
+      title: 'AI 抠图',
+      desc: '一键抠出人物、商品、动物等主体，透明背景、纯色换底或背景虚化',
+      chips: ['智能抠图', '透明 PNG', '纯色换底', '背景虚化'],
     },
     idphoto: {
       title: '证件照',
@@ -120,7 +134,7 @@ const messages = {
     heroBefore: '就在',
     heroHighlight: '浏览器',
     heroAfter: '里',
-    heroDesc1: '批量压缩、证件照、拼图排版——六个专业工具，全部在你的设备上运行。',
+    heroDesc1: '批量压缩、证件照、拼图排版——七个专业工具，全部在你的设备上运行。',
     heroDesc2: '无需安装，无需上传，打开即用。',
     start: '开始使用',
     makeIdPhoto: '制作证件照',
@@ -133,7 +147,7 @@ const messages = {
     toolsTitle: '一个工具箱，覆盖日常所需',
     toolsDesc: '从电商修图到签证照片，从朋友圈九宫格到小红书封面。',
     soonTitle: '更多工具筹备中',
-    soonDesc: '智能抠图、GIF 制作、EXIF 隐私清除、图片标注……',
+    soonDesc: 'GIF 制作、EXIF 隐私清除、图片标注……',
     /** 卡片插画里的示意文字 */
     longCaptions: ['今天天气真好', '我们出发吧', '海边见！'],
     privacyTitle1: '你的图片，',
@@ -342,6 +356,41 @@ const messages = {
     sheetFile: '{spec}_{paper}排版_{count}张',
   },
 
+  cutout: {
+    steps: {
+      model: '加载 AI 模型',
+      segment: '识别主体 · 抠除背景',
+    },
+    dropTitle: '上传一张图片开始抠图',
+    dropHint: '人物、商品、动物都能抠 · 图片不会上传',
+    tips: ['主体清晰完整，尽量不要被画面裁切', '主体与背景反差越大，边缘越干净', '首次需下载约 100MB 模型，建议在 Wi-Fi 下使用'],
+    analyzing: '正在抠图',
+    modelNote: '首次使用需下载约 100MB 模型，之后会被浏览器缓存；支持 WebGPU 的浏览器速度更快',
+    failed: '抠图失败',
+    reselect: '重新选择图片',
+    aiDone: '抠图完成',
+    changePhoto: '换图片',
+    holdCompare: '按住对比原图',
+    noSubject: '未识别到明显的主体',
+    noSubjectDesc: '可以换一张主体更清晰、与背景反差更大的图片',
+    bgTitle: '背景',
+    bgModes: {
+      none: '透明',
+      color: '纯色',
+      blur: '虚化',
+    },
+    blurAmount: '虚化程度',
+    edgeTitle: '边缘',
+    shift: '收缩 / 扩展',
+    feather: '羽化',
+    cropToSubject: '裁剪到主体',
+    cropPadding: '留白',
+    outputSize: '输出尺寸',
+    jpgNoAlpha: 'JPG 不支持透明背景',
+    download: '下载图片',
+    fileSuffix: '抠图',
+  },
+
   long: {
     fileName: '长图',
     emptyTitle: '添加多张图片拼成长图',
@@ -464,6 +513,21 @@ const messages = {
         '文字 / Logo 水印，九宫格定位与斜向平铺防盗',
         'JPG / PNG / WebP / AVIF 格式互转',
         '文件名模板批量重命名，ZIP 一键打包下载',
+      ],
+    },
+    cutout: {
+      name: 'AI 抠图',
+      title: 'AI 抠图：在线一键去除图片背景、透明底 PNG',
+      description:
+        '免费在线 AI 抠图：自动识别人物、商品、动物等主体并去除背景，导出透明底 PNG，或换成白底、蓝底、红底等纯色背景，也可以虚化原背景突出主体。支持边缘收缩扩展、羽化，自动裁剪到主体。图片在浏览器本地处理，不上传服务器。',
+      keywords: ['在线抠图', 'AI 抠图', '一键抠图', '去除背景', '图片去背景', '透明背景', '商品抠图', '人像抠图'],
+      features: [
+        'AI 自动识别主体，一键去除背景',
+        '人物、商品、动物、物品均可抠图',
+        '导出透明底 PNG / WebP',
+        '换白底、蓝底、红底等纯色背景，或虚化原背景',
+        '边缘收缩扩展、羽化，自动裁剪到主体',
+        '图片在浏览器本地处理，不上传',
       ],
     },
     idphoto: {

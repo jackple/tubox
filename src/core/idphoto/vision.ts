@@ -6,7 +6,8 @@ import { visionAssets } from '@/config'
  * 不存在时回退到 CDN。GPU 委托失败自动降级 CPU。
  */
 
-async function firstAvailable(candidates: string[], probe: string): Promise<string> {
+/** 依次探测候选地址，返回第一个可用的；都不可用时返回最后一个（通常是 CDN） */
+export async function firstAvailable(candidates: string[], probe: string): Promise<string> {
   for (const url of candidates) {
     try {
       const res = await fetch(url + probe, { method: 'HEAD' })
