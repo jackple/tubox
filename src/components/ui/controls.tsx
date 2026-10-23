@@ -189,11 +189,11 @@ export function Section({ title, icon, enabled, onToggle, defaultOpen = true, ex
       <AnimatePresence initial={false}>
         {expanded && (
           <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
+            // 仅在展开/收起动画期间裁剪；静止时放开，避免首行选中项的外描边（ring）被裁掉
+            initial={{ height: 0, opacity: 0, overflow: 'hidden' }}
+            animate={{ height: 'auto', opacity: 1, transitionEnd: { overflow: 'visible' } }}
+            exit={{ height: 0, opacity: 0, overflow: 'hidden' }}
             transition={{ duration: 0.22, ease: [0.3, 0.7, 0.4, 1] }}
-            className="overflow-hidden"
           >
             <div className="space-y-4 px-5 pb-5">{children}</div>
           </motion.div>
