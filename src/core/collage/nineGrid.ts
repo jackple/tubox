@@ -19,8 +19,10 @@ export const sliceLayouts: SliceLayout[] = [
 
 export interface NineGridOptions {
   layoutId: string
-  /** 单格输出边长 */
+  /** 单格输出宽度 */
   tile: number
+  /** 单格高宽比：1 为方图，4/3 对应 Instagram 主页网格的 3:4 竖图 */
+  aspect: number
   focus: { x: number; y: number }
   zoom: number
 }
@@ -28,13 +30,14 @@ export interface NineGridOptions {
 export const defaultNineGridOptions: NineGridOptions = {
   layoutId: '3x3',
   tile: 1080,
+  aspect: 1,
   focus: { x: 0.5, y: 0.5 },
   zoom: 1,
 }
 
 export function buildCropScene(image: Drawable, layout: SliceLayout, o: NineGridOptions): Scene {
   const width = layout.cols * o.tile
-  const height = layout.rows * o.tile
+  const height = Math.round(layout.rows * o.tile * o.aspect)
   return {
     width,
     height,

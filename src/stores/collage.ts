@@ -7,6 +7,7 @@ import type { SocialContent } from '@/core/collage/social'
 import type { FontKind } from '@/core/fonts'
 import { fmt, getMessages, plural } from '@/i18n'
 import { type ImageAsset, disposeAsset, loadAssets } from '@/lib/assets'
+import { isChinese } from '@/i18n/locales'
 import { useLocale } from './locale'
 
 /* 每个拼图工具一个独立 store，切换页面时状态保留 */
@@ -80,7 +81,7 @@ export interface SocialOptions {
 export const useSocial = create<WithOptions<SocialOptions> & { setContent: (p: Partial<SocialContent>) => void }>((set, get) => ({
   ...assetList(set, get, 4),
   options: {
-    presetId: 'xhs',
+    presetId: isChinese(useLocale.getState().locale) ? 'xhs' : 'ig-post',
     styleId: 'cover',
     themeId: 'cream',
     font: 'sans',

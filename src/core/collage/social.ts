@@ -9,6 +9,8 @@ import { gridTemplates, layoutCells } from './templates'
 /** 显示名见 i18n/messages 的 social.presets */
 export interface SocialPreset {
   id: string
+  /** cn：国内平台；intl：海外平台。非中文界面优先展示海外平台 */
+  region: 'cn' | 'intl'
   /** 比例提示 */
   hint: string
   width: number
@@ -16,11 +18,17 @@ export interface SocialPreset {
 }
 
 export const socialPresets: SocialPreset[] = [
-  { id: 'xhs', hint: '3:4', width: 1242, height: 1656 },
-  { id: 'moments', hint: '1:1', width: 1080, height: 1080 },
-  { id: 'story', hint: '9:16', width: 1080, height: 1920 },
-  { id: 'weibo', hint: '16:9', width: 1920, height: 1080 },
-  { id: 'mp', hint: '2.35:1', width: 900, height: 383 },
+  { id: 'xhs', region: 'cn', hint: '3:4', width: 1242, height: 1656 },
+  { id: 'moments', region: 'cn', hint: '1:1', width: 1080, height: 1080 },
+  { id: 'story', region: 'cn', hint: '9:16', width: 1080, height: 1920 },
+  { id: 'weibo', region: 'cn', hint: '16:9', width: 1920, height: 1080 },
+  { id: 'mp', region: 'cn', hint: '2.35:1', width: 900, height: 383 },
+  { id: 'ig-post', region: 'intl', hint: '4:5', width: 1080, height: 1350 },
+  { id: 'ig-story', region: 'intl', hint: '9:16', width: 1080, height: 1920 },
+  { id: 'yt-thumb', region: 'intl', hint: '16:9', width: 1280, height: 720 },
+  { id: 'x-post', region: 'intl', hint: '16:9', width: 1600, height: 900 },
+  { id: 'fb-post', region: 'intl', hint: '1.91:1', width: 1200, height: 630 },
+  { id: 'pin', region: 'intl', hint: '2:3', width: 1000, height: 1500 },
 ]
 
 /* ───────────────────────── 主题配色 ───────────────────────── */

@@ -13,6 +13,13 @@ import { clamp } from '@/lib/format'
 import { useNineGrid } from '@/stores/collage'
 import { EmptyStage, ExportFooter, extOf } from './shared'
 
+/** 单张比例（高宽比）：Instagram 主页网格自 2025 年起按 3:4 显示 */
+const ASPECTS = [
+  { id: '1:1', v: 1 },
+  { id: '4:5', v: 5 / 4 },
+  { id: '3:4', v: 4 / 3 },
+]
+
 export default function NineGridPage() {
   const { images, add, clear, options: o, patch } = useNineGrid()
   const img = images[0]
@@ -99,6 +106,15 @@ export default function NineGridPage() {
               onChange={(v) => patch({ focus: { ...o.focus, y: v / 100 } })}
               format={(v) => `${v}%`}
             />
+            <div className="space-y-1.5">
+              <span className="label">{t.tileRatio}</span>
+              <Segmented
+                size="sm"
+                value={(ASPECTS.find((a) => Math.abs(a.v - o.aspect) < 1e-3) ?? ASPECTS[0]).id}
+                onChange={(id) => patch({ aspect: ASPECTS.find((a) => a.id === id)!.v, focus: { x: 0.5, y: 0.5 } })}
+                options={ASPECTS.map((a) => ({ value: a.id, label: a.id }))}
+              />
+            </div>
             <div className="space-y-1.5">
               <span className="label">{t.tileSize}</span>
               <Segmented

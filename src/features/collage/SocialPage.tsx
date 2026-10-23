@@ -12,11 +12,14 @@ import type { FontKind } from '@/core/fonts'
 import { paintToCss } from '@/core/scene/paint'
 import { exportScene } from '@/core/scene/render'
 import { useDebounced } from '@/hooks/useDebounced'
-import { fmt, label, plural, useMessages } from '@/i18n'
+import { fmt, label, plural, useMessages, useRouteLocale } from '@/i18n'
+import { isChinese } from '@/i18n/locales'
 import { cn } from '@/lib/cn'
 import { saveBlob, timestamp } from '@/lib/download'
 import { useSocial } from '@/stores/collage'
 import { ExportFooter, extOf } from './shared'
+
+const intlFirst = [...socialPresets].sort((a, b) => Number(a.region === 'cn') - Number(b.region === 'cn'))
 
 export default function SocialPage() {
   const { images, add, remove, move, clear, options: o, patch, setContent } = useSocial()
@@ -37,6 +40,8 @@ export default function SocialPage() {
   const needImages = style.images[0] > images.length
   const m = useMessages()
   const t = m.social
+  // 中文界面国内平台在前，其它语言海外平台在前
+  const ordered = isChinese(useRouteLocale()) ? socialPresets : intlFirst
   const styleName = t.styles[style.id as keyof typeof t.styles]?.name ?? style.id
 
   return (
@@ -64,7 +69,7 @@ export default function SocialPage() {
         >
           <Section title={t.canvasTitle} icon={<Ratio className="h-3.5 w-3.5" />}>
             <div className="grid grid-cols-5 gap-1.5">
-              {socialPresets.map((p) => {
+              {ordered.map((p) => {
                 const active = p.id === preset.id
                 const r = p.width / p.height
                 return (

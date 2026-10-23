@@ -1,10 +1,10 @@
 import { linear } from '../scene/paint'
 import type { Paint } from '../scene/types'
 
-export type SpecCategory = 'common' | 'cert' | 'visa' | 'exam'
+export type SpecCategory = 'common' | 'cert' | 'world' | 'visa' | 'exam'
 
 // 规格、分类、背景的显示名按 id 放在 i18n/messages（idphoto.specs / categories / backgrounds）
-export const specCategories: SpecCategory[] = ['common', 'cert', 'visa', 'exam']
+export const specCategories: SpecCategory[] = ['common', 'cert', 'world', 'visa', 'exam']
 
 export type BgKey = 'white' | 'blue' | 'red' | 'gray' | 'gradient'
 
@@ -38,6 +38,16 @@ export interface PhotoSpec {
 
 const CN: Pick<PhotoSpec, 'dpi' | 'headRatio' | 'topRatio'> = { dpi: 300, headRatio: [0.58, 0.68], topRatio: 0.1 }
 const VISA35x45: Pick<PhotoSpec, 'mm' | 'px' | 'dpi'> = { mm: [35, 45], px: [413, 531], dpi: 300 }
+/** ICAO 生物特征护照照片：35×45mm，头部（下巴到头顶）32-36mm */
+const ICAO: Pick<PhotoSpec, 'mm' | 'px' | 'dpi' | 'headRatio' | 'topRatio'> = { ...VISA35x45, headRatio: [0.71, 0.8], topRatio: 0.07 }
+/** 2×2 英寸（51×51mm），头部 1-1⅜ 英寸 */
+const INCH2: Pick<PhotoSpec, 'mm' | 'px' | 'dpi' | 'headRatio' | 'topRatio'> = {
+  mm: [51, 51],
+  px: [600, 600],
+  dpi: 300,
+  headRatio: [0.5, 0.69],
+  topRatio: 0.12,
+}
 
 export const photoSpecs: PhotoSpec[] = [
   // 常用
@@ -69,6 +79,17 @@ export const photoSpecs: PhotoSpec[] = [
     px: [295, 413],
     backgrounds: ['white', 'blue', 'gray', 'gradient'],
     ...CN,
+  },
+  // 巴西、俄罗斯、意大利等地常用的 3×4cm 证件照
+  {
+    id: 'photo-3x4',
+    category: 'common',
+    mm: [30, 40],
+    px: [354, 472],
+    backgrounds: ['white'],
+    dpi: 300,
+    headRatio: [0.6, 0.72],
+    topRatio: 0.09,
   },
 
   // 证件
@@ -103,6 +124,49 @@ export const photoSpecs: PhotoSpec[] = [
     dpi: 350,
     maxKB: 40,
     minKB: 9,
+  },
+
+  // 各国护照（以各国官方要求为准）
+  { id: 'passport-us', category: 'world', ...INCH2, backgrounds: ['white'], hot: true, note: '美国护照：2×2 英寸，头部 1-1⅜ 英寸' },
+  {
+    id: 'passport-uk',
+    category: 'world',
+    ...ICAO,
+    backgrounds: ['gray', 'white'],
+    headRatio: [0.64, 0.76],
+    topRatio: 0.08,
+    note: '浅灰或奶油色背景，头部 29-34mm',
+  },
+  {
+    id: 'passport-eu',
+    category: 'world',
+    ...ICAO,
+    backgrounds: ['white', 'gray'],
+    hot: true,
+    note: '欧盟各国护照 / 身份证通用 ICAO 生物特征规格',
+  },
+  {
+    id: 'passport-ca',
+    category: 'world',
+    mm: [50, 70],
+    px: [591, 827],
+    dpi: 300,
+    backgrounds: ['white'],
+    headRatio: [0.44, 0.51],
+    topRatio: 0.12,
+    note: '头部 31-36mm',
+  },
+  { id: 'passport-au', category: 'world', ...ICAO, backgrounds: ['white', 'gray'] },
+  { id: 'passport-in', category: 'world', ...INCH2, backgrounds: ['white'] },
+  { id: 'passport-jp', category: 'world', ...ICAO, backgrounds: ['white', 'gray'], topRatio: 0.09, note: '头顶到上边缘 4±2mm' },
+  { id: 'passport-kr', category: 'world', ...ICAO, backgrounds: ['white'], topRatio: 0.08 },
+  {
+    id: 'passport-ru',
+    category: 'world',
+    ...ICAO,
+    backgrounds: ['white'],
+    headRatio: [0.69, 0.8],
+    note: '俄罗斯国际护照（загранпаспорт）',
   },
 
   // 签证

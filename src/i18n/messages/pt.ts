@@ -61,8 +61,8 @@ const messages: Messages = {
     },
     idphoto: {
       title: 'Foto para documento',
-      desc: 'Fotos para passaporte, visto e inscrições, com troca de fundo por IA e enquadramento automático',
-      chips: ['Fundo com IA', '20+ formatos', 'Folha para impressão', 'Limite de tamanho'],
+      desc: 'Foto 3x4, passaportes de vários países, vistos e inscrições, com troca de fundo por IA e enquadramento automático',
+      chips: ['Fundo com IA', '30+ formatos', 'Folha para impressão', 'Limite de tamanho'],
     },
     long: {
       title: 'Imagem longa',
@@ -81,8 +81,8 @@ const messages: Messages = {
     },
     social: {
       title: 'Posts para redes',
-      desc: 'Capas e posts com modelos prontos para Xiaohongshu, WeChat e outras redes',
-      chips: ['Xiaohongshu', 'Momentos do WeChat', 'Artigos do WeChat'],
+      desc: 'Posts e capas com modelos prontos para Instagram, YouTube, X, Pinterest e outras redes',
+      chips: ['Instagram', 'YouTube', 'Pinterest', 'Xiaohongshu'],
     },
   },
 
@@ -161,6 +161,7 @@ const messages: Messages = {
       web: { name: 'Web', hint: 'Lado maior 1600 · WebP' },
       shop: { name: 'E-commerce', hint: '800×800 · Corte central' },
       xhs: { name: 'Xiaohongshu', hint: '1242×1656 · 3:4' },
+      ig: { name: 'Instagram', hint: '1080×1350 · 4:5' },
       mail: { name: 'E-mail', hint: '≤ 500KB cada' },
     },
     resizeTitle: 'Redimensionar',
@@ -227,6 +228,7 @@ const messages: Messages = {
     categories: {
       common: 'Comuns',
       cert: 'Documentos',
+      world: 'Passaportes',
       visa: 'Vistos',
       exam: 'Provas',
     },
@@ -237,10 +239,20 @@ const messages: Messages = {
       'big-one': '1 polegada grande',
       'small-two': '2 polegadas pequena',
       resume: 'Currículo',
+      'photo-3x4': 'Foto 3x4',
       idcard: 'Identidade chinesa',
-      passport: 'Passaporte / permissão HK e Macau',
+      passport: 'Passaporte chinês / permissão HK e Macau',
       driver: 'Carteira de motorista',
       social: 'Cartão da previdência (CN)',
+      'passport-us': 'Passaporte dos EUA',
+      'passport-uk': 'Passaporte do Reino Unido',
+      'passport-eu': 'Passaporte / RG da UE',
+      'passport-ca': 'Passaporte do Canadá',
+      'passport-au': 'Passaporte da Austrália',
+      'passport-in': 'Passaporte da Índia',
+      'passport-jp': 'Passaporte do Japão',
+      'passport-kr': 'Passaporte da Coreia',
+      'passport-ru': 'Passaporte da Rússia',
       'visa-us': 'Visto dos EUA',
       'visa-schengen': 'Visto Schengen',
       'visa-jp': 'Visto do Japão',
@@ -271,6 +283,8 @@ const messages: Messages = {
     customWidth: 'Largura',
     customHeight: 'Altura',
     customHint: 'A 300 DPI, 295×413 ≈ 1 polegada (2,5×3,5 cm).',
+    worldNote:
+      'As regras de foto para passaporte são definidas por cada órgão emissor — confira as exigências mais recentes. Alguns países aceitam foto digital online.',
     examNote:
       'As exigências de foto para provas podem mudar a cada ano. Siga o edital oficial; você pode ajustar o limite de tamanho à direita.',
     notFound: 'Nenhum formato encontrado para “{q}”',
@@ -377,7 +391,8 @@ const messages: Messages = {
     framingTitle: 'Enquadramento',
     posX: 'Posição horizontal',
     posY: 'Posição vertical',
-    tileSize: 'Tamanho de cada parte',
+    tileRatio: 'Proporção da parte',
+    tileSize: 'Largura da parte',
     emptyTitle: 'Escolha uma imagem para dividir em grade',
     emptyHint: 'Grades 3×3, 2×2, 3×2 e trípticos; arraste a imagem para enquadrar',
     drag: 'Arraste para enquadrar',
@@ -390,6 +405,12 @@ const messages: Messages = {
       story: 'Canais',
       weibo: 'Weibo',
       mp: 'Capa WeChat',
+      'ig-post': 'Instagram',
+      'ig-story': 'IG Stories',
+      'yt-thumb': 'YouTube',
+      'x-post': 'X',
+      'fb-post': 'Facebook',
+      pin: 'Pinterest',
     },
     themes: {
       cream: 'Creme',
@@ -479,10 +500,12 @@ const messages: Messages = {
       name: 'Foto para documento',
       title: 'Foto 3x4 online grátis: foto para passaporte e visto com IA',
       description:
-        'Faça foto para documento online grátis: passaporte, visto dos EUA, Schengen e 20+ formatos. Troque o fundo por branco ou azul com IA e imprima em 10×15 ou A4.',
+        'Faça foto 3x4 online grátis: foto para passaporte dos EUA, UE, Canadá e mais, visto americano e Schengen — 30+ formatos. Fundo branco com IA e impressão em A4.',
       keywords: [
         'foto 3x4 online',
+        'foto 3x4 grátis',
         'foto para passaporte',
+        'foto para passaporte online',
         'foto para visto americano',
         'foto para documento online',
         'trocar fundo de foto',
@@ -491,7 +514,8 @@ const messages: Messages = {
         'imprimir foto 3x4',
       ],
       features: [
-        '20+ formatos: 1 e 2 polegadas, passaporte, identidade, carteira de motorista e mais',
+        '30+ formatos: foto 3x4, 1 e 2 polegadas, identidade, carteira de motorista e mais',
+        'Passaportes: EUA, Reino Unido, UE, Canadá, Austrália, Índia, Japão, Coreia, Rússia',
         'Fotos para visto: EUA, Schengen, Japão, Coreia, Reino Unido, Canadá, Austrália',
         'Fotos para inscrição em provas com limite de tamanho de arquivo',
         'Recorte do retrato com IA e fundo branco / azul / vermelho / degradê',
@@ -523,7 +547,7 @@ const messages: Messages = {
       name: 'Colagem',
       title: 'Fazer colagem de fotos online grátis: modelos para 2 a 9 fotos',
       description:
-        'Faça colagem de fotos online grátis: 18 modelos para 2 a 9 fotos, 6 proporções como 1:1, 3:4 e 9:16, espaçamento, cantos e fundo personalizáveis. Sem upload.',
+        'Faça colagem de fotos online grátis: 18 modelos para 2 a 9 fotos, 7 proporções como 1:1, 4:5 e 9:16, espaçamento, cantos e fundo personalizáveis. Sem upload.',
       keywords: [
         'fazer colagem de fotos',
         'colagem de fotos online',
@@ -534,17 +558,18 @@ const messages: Messages = {
       ],
       features: [
         '18 modelos de colagem para 2 a 9 fotos',
-        '6 proporções de tela: 1:1, 3:4, 9:16 e mais',
+        '7 proporções de tela: 1:1, 3:4, 4:5 (Instagram), 9:16 e mais',
         'Espaçamento, cantos arredondados e fundo personalizáveis',
         'Modelos sugeridos pelo número de fotos',
       ],
     },
     nine: {
       name: 'Dividir em grade',
-      title: 'Dividir imagem em grade 3x3 online para o Instagram',
+      title: 'Grade para Instagram: dividir imagem em 3x3 online grátis',
       description:
-        'Divida imagem em grade online grátis: corte uma foto em 3×3, 2×2, 3×2 ou tríptico para o feed do Instagram, enquadre e baixe as partes em ZIP. Sem upload.',
+        'Crie grade para Instagram grátis: divida uma foto em 3×3, 2×2, 3×2 ou tríptico, com partes 1:1, 4:5 ou 3:4 para o perfil, e baixe tudo em ZIP. Sem upload.',
       keywords: [
+        'grade para instagram',
         'dividir imagem em grade',
         'dividir foto em 9 partes',
         'grade 3x3 instagram',
@@ -554,6 +579,7 @@ const messages: Messages = {
       ],
       features: [
         'Grades 3×3 / 2×2 / 3×2 e trípticos horizontais / verticais',
+        'Partes 1:1, 4:5 ou 3:4 para combinar com a grade do perfil do Instagram',
         'Arraste para ajustar o enquadramento',
         'Prévia dos espaços entre as fotos no feed',
         'Partes numeradas na ordem de publicação, download em ZIP com um clique',
@@ -561,18 +587,21 @@ const messages: Messages = {
     },
     social: {
       name: 'Posts para redes',
-      title: 'Criar capa para redes sociais online: modelos de post grátis',
+      title: 'Criar post para Instagram e thumbnail do YouTube online grátis',
       description:
-        'Crie capas e posts para redes sociais grátis: Xiaohongshu, WeChat e Weibo, com 6 layouts, 6 paletas de cores e 2 fontes — é só digitar o texto. Sem upload.',
+        'Crie posts e Stories do Instagram, thumbnails do YouTube e imagens para X, Facebook e Pinterest, além de capas Xiaohongshu e WeChat. 6 layouts. Sem upload.',
       keywords: [
+        'criar post para instagram',
+        'modelo de post para instagram',
+        'criar thumbnail para youtube',
         'criar capa para post',
         'modelo de post para redes sociais',
-        'capa Xiaohongshu',
-        'capa artigo WeChat',
+        'criar pin pinterest',
         'imagem com texto online',
-        'criar capa online',
+        'capa Xiaohongshu',
       ],
       features: [
+        'Instagram 4:5 / Stories 9:16, thumbnail do YouTube 16:9, X 16:9, Facebook 1.91:1, Pinterest 2:3',
         'Xiaohongshu 3:4, Momentos 1:1, Canais 9:16, Weibo 16:9, capa WeChat 2.35:1',
         '6 layouts: capa, polaroid, revista, cartão, mosaico e frase',
         '6 paletas de cores × 2 fontes',

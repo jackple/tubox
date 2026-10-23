@@ -9,7 +9,9 @@ import { buildPrintSheet, papers } from '@/core/idphoto/printSheet'
 import { type BgKey, type PhotoSpec, backgrounds, findSpec } from '@/core/idphoto/specs'
 import type { Paint } from '@/core/scene/types'
 import { type Messages, fmt, getMessages, label } from '@/i18n'
+import type { Locale } from '@/i18n/locales'
 import { saveBlob } from '@/lib/download'
+import { useLocale } from './locale'
 
 export type IdStatus = 'empty' | AnalyzeStep | 'error'
 
@@ -56,6 +58,20 @@ interface IdPhotoState {
 
 export const CUSTOM_ID = 'custom'
 
+/** 各语言的默认规格：首次进入证件照时按界面语言选择最常用的一项 */
+const defaultSpec: Record<Locale, string> = {
+  'zh-CN': 'one-inch',
+  'zh-TW': 'one-inch',
+  en: 'passport-us',
+  ja: 'passport-jp',
+  ko: 'passport-kr',
+  es: 'passport-eu',
+  fr: 'passport-eu',
+  de: 'passport-eu',
+  pt: 'photo-3x4',
+  ru: 'passport-ru',
+}
+
 /** 规格显示名（含自定义规格） */
 export const specName = (m: Messages, id: string) => (id === CUSTOM_ID ? m.common.custom : label(m.idphoto.specs, id))
 
@@ -80,12 +96,15 @@ export const useIdPhoto = create<IdPhotoState>((set, get) => {
     set({ framing: autoFrame(analysis, get().spec(), get().size()), adjust: { ...get().adjust, zoom: 1, dx: 0, dy: 0, rotate: 0 } })
   }
 
+  const initial = findSpec(defaultSpec[useLocale.getState().locale])
+
   return {
-    specId: 'one-inch',
+    specId: initial.id,
     customPx: [413, 579],
-    bg: { kind: 'preset', key: 'blue' },
+    // 一寸等国内规格默认蓝底，其余取规格的首选背景
+    bg: { kind: 'preset', key: initial.backgrounds.includes('blue') ? 'blue' : initial.backgrounds[0] },
     removeBg: true,
-    maxKB: null,
+    maxKB: initial.maxKB ?? null,
     paperId: papers[0].id,
     showGuides: true,
 

@@ -8,7 +8,8 @@ import { Segmented } from '@/components/ui/Segmented'
 import { supportsEncode } from '@/core/canvas'
 import { renameTokens, renderFileName } from '@/core/batch/rename'
 import type { Anchor, OutputFormat, ResizeMode } from '@/core/batch/types'
-import { fmt, label, plural, useMessages } from '@/i18n'
+import { fmt, label, plural, useMessages, useRouteLocale } from '@/i18n'
+import { isChinese } from '@/i18n/locales'
 import { cn } from '@/lib/cn'
 import { batchPresets, useBatch } from '@/stores/batch'
 import { LivePreview } from './LivePreview'
@@ -22,6 +23,8 @@ export function BatchInspector() {
   const stale = items.some((i) => !i.result || i.result.version !== version)
   const m = useMessages()
   const t = m.batch
+  const zh = isChinese(useRouteLocale())
+  const presets = zh ? batchPresets : [...batchPresets.filter((p) => !p.region), ...batchPresets.filter((p) => p.region)]
 
   return (
     <Inspector
@@ -42,7 +45,7 @@ export function BatchInspector() {
         <div>
           <div className="label mb-2">{t.presetsTitle}</div>
           <div className="flex flex-wrap gap-1.5">
-            {batchPresets.map((p) => (
+            {presets.map((p) => (
               <Chip key={p.id} onClick={() => applyPreset(p)}>
                 <span title={t.presets[p.id].hint}>{t.presets[p.id].name}</span>
               </Chip>

@@ -17,6 +17,7 @@ import { BackgroundField, EmptyStage, ExportFooter, extOf } from './shared'
 const RATIOS: { label: string; v: [number, number] }[] = [
   { label: '1:1', v: [1, 1] },
   { label: '3:4', v: [3, 4] },
+  { label: '4:5', v: [4, 5] },
   { label: '4:3', v: [4, 3] },
   { label: '9:16', v: [9, 16] },
   { label: '16:9', v: [16, 9] },

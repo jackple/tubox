@@ -3,7 +3,9 @@ import { motion } from 'framer-motion'
 import { Check, Download, Grid2x2, Lock, Printer, RotateCcw, Search, ZoomIn } from 'lucide-react'
 import { Portrait } from '@/components/common/Portrait'
 import { IdPhotoGlyph } from '@/components/icons/ToolGlyphs'
-import { useMessages } from '@/i18n'
+import { findSpec } from '@/core/idphoto/specs'
+import { label, useMessages, useRouteLocale } from '@/i18n'
+import { isChinese } from '@/i18n/locales'
 import { cn } from '@/lib/cn'
 
 const BGS = [
@@ -13,20 +15,17 @@ const BGS = [
   { key: 'gray', c: '#EEEEEE' },
 ] as const
 
-const SPECS = [
-  ['one-inch', '295×413'],
-  ['two-inch', '413×579'],
-  ['visa-us', '600×600'],
-  ['visa-schengen', '413×531'],
-  ['exam-teacher', '295×413'],
-  ['exam-cet', '144×192'],
-] as const
+// 中文界面展示国内常用规格，其它语言展示各国护照
+const SPECS_CN = ['one-inch', 'two-inch', 'visa-us', 'visa-schengen', 'exam-teacher', 'exam-cet']
+const SPECS_INTL = ['passport-eu', 'passport-us', 'passport-uk', 'visa-schengen', 'passport-ca', 'photo-3x4']
 
 /** 首页产品图：用真实组件风格搭建的「证件照编辑器」，背景色会自动轮播 */
 export function ProductShot() {
   const [bg, setBg] = useState(0)
   const m = useMessages()
   const t = m.idphoto
+  const specs = (isChinese(useRouteLocale()) ? SPECS_CN : SPECS_INTL).map(findSpec)
+  const px = (i: number) => `${specs[i].px[0]}×${specs[i].px[1]}`
   useEffect(() => {
     const t = setInterval(() => setBg((i) => (i + 1) % BGS.length), 2600)
     return () => clearInterval(t)
@@ -62,9 +61,9 @@ export function ProductShot() {
               <div className="mb-2 flex h-8 items-center gap-2 rounded-md border border-line px-2.5 text-[11px] text-muted">
                 <Search className="h-3.5 w-3.5" /> {m.home.searchSpecs}
               </div>
-              {SPECS.map(([id, px], i) => (
+              {specs.map((s, i) => (
                 <div
-                  key={id}
+                  key={s.id}
                   className={cn(
                     'flex items-center gap-2.5 rounded-lg px-2 py-1.5',
                     i === 0 && 'border border-line bg-panel shadow-[var(--highlight),0_1px_3px_rgb(0_0_0/0.08),0_0_0_1px_rgb(var(--fg))]',
@@ -77,8 +76,8 @@ export function ProductShot() {
                     <Portrait className="absolute bottom-0 left-1/2 w-[92%] -translate-x-1/2" />
                   </span>
                   <div className="leading-tight">
-                    <div className="text-[12px] font-medium">{t.specs[id]}</div>
-                    <div className="font-mono text-[10px] text-muted">{px}</div>
+                    <div className="text-[12px] font-medium">{label(t.specs, s.id)}</div>
+                    <div className="font-mono text-[10px] text-muted">{px(i)}</div>
                   </div>
                 </div>
               ))}
@@ -90,7 +89,8 @@ export function ProductShot() {
                 <motion.div
                   animate={{ backgroundColor: BGS[bg].c }}
                   transition={{ duration: 0.6 }}
-                  className="relative aspect-[25/35] w-[188px] overflow-hidden rounded-[2px] shadow-stage"
+                  className="relative w-[188px] overflow-hidden rounded-[2px] shadow-stage"
+                  style={{ aspectRatio: `${specs[0].px[0]} / ${specs[0].px[1]}` }}
                 >
                   <Portrait className="absolute bottom-0 left-1/2 w-[94%] -translate-x-1/2" shirt="#1F2937" />
                   <div className="absolute inset-x-0 top-[10%] border-t border-dashed border-cyan-400/90" />
@@ -161,7 +161,7 @@ export function ProductShot() {
               <div className="flex-1 p-4">
                 <div className="divide-y divide-line rounded-lg border border-line">
                   {[
-                    [t.pxSize, '295×413'],
+                    [t.pxSize, px(0)],
                     [t.bgColor, t.backgrounds[BGS[bg].key]],
                     [t.fileSize, '38 KB'],
                   ].map(([k, v]) => (

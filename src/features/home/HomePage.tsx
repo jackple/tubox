@@ -6,7 +6,9 @@ import { Portrait } from '@/components/common/Portrait'
 import { IconTile } from '@/components/layout/ToolIcon'
 import { Logo } from '@/components/layout/Logo'
 import { Button } from '@/components/ui/Button'
-import { type Tool, toolById } from '@/features/tools'
+import { gridTemplates } from '@/core/collage/templates'
+import { photoSpecs } from '@/core/idphoto/specs'
+import { type Tool, toolById, tools } from '@/features/tools'
 import { useLocalizedPath, useMessages } from '@/i18n'
 import { cn } from '@/lib/cn'
 import { ProductShot } from './ProductShot'
@@ -104,9 +106,9 @@ function Hero() {
 function Stats() {
   const s = useMessages().home.stats
   const items = [
-    ['6', s.tools],
-    ['23', s.specs],
-    ['18', s.templates],
+    [String(tools.length), s.tools],
+    [String(photoSpecs.length), s.specs],
+    [String(gridTemplates.length), s.templates],
     ['0', s.upload],
   ]
   return (

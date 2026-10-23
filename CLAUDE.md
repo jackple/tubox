@@ -2,6 +2,10 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## 沟通语言
+
+- **回答一律使用中文**(包括代码注释、提交说明、需求沟通)
+
 ## 项目概述
 
 图盒 Tubox：纯前端图片处理工具箱（批量处理 / 证件照 / 长图 / 拼图 / 九宫格 / 社交排版）。**所有处理都在浏览器内完成，没有后端**，图片不上传。界面支持 10 种语言（见下文「多语言」），代码注释为中文。

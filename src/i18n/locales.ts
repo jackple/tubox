@@ -53,6 +53,9 @@ export function localizePath(path: string, locale: Locale): string {
   return path === '/' ? `/${prefix}` : `/${prefix}${path}`
 }
 
+/** 中文界面优先展示国内平台与规格，其它语言优先展示国际内容 */
+export const isChinese = (l: Locale) => l.startsWith('zh')
+
 /** 把浏览器语言（navigator.languages）匹配到支持的语言 */
 export function matchLocale(langs: readonly string[]): Locale | null {
   for (const raw of langs) {

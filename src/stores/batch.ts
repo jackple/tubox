@@ -36,13 +36,16 @@ export interface BatchItem {
 
 /** 名称与说明见 i18n/messages 的 batch.presets */
 export interface BatchPreset {
-  id: 'wechat' | 'web' | 'shop' | 'xhs' | 'mail'
+  id: 'wechat' | 'web' | 'shop' | 'xhs' | 'ig' | 'mail'
+  /** cn：国内平台；非中文界面把这类预设排在后面 */
+  region?: 'cn'
   apply: (o: BatchOptions) => BatchOptions
 }
 
 export const batchPresets: BatchPreset[] = [
   {
     id: 'wechat',
+    region: 'cn',
     apply: (o) => ({
       ...o,
       resize: { ...o.resize, enabled: true, mode: 'long', width: 1920 },
@@ -67,9 +70,18 @@ export const batchPresets: BatchPreset[] = [
   },
   {
     id: 'xhs',
+    region: 'cn',
     apply: (o) => ({
       ...o,
       resize: { ...o.resize, enabled: true, mode: 'cover', width: 1242, height: 1656, noEnlarge: false },
+      output: { ...o.output, format: 'image/jpeg', quality: 90, targetKB: null },
+    }),
+  },
+  {
+    id: 'ig',
+    apply: (o) => ({
+      ...o,
+      resize: { ...o.resize, enabled: true, mode: 'cover', width: 1080, height: 1350, noEnlarge: false },
       output: { ...o.output, format: 'image/jpeg', quality: 90, targetKB: null },
     }),
   },

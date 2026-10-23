@@ -3,7 +3,8 @@ import { Flame, Search } from 'lucide-react'
 import { Portrait } from '@/components/common/Portrait'
 import { Field, NumberInput } from '@/components/ui/controls'
 import { backgrounds, photoSpecs, type SpecCategory, specCategories, specSizeLabel } from '@/core/idphoto/specs'
-import { fmt, useMessages } from '@/i18n'
+import { fmt, useMessages, useRouteLocale } from '@/i18n'
+import { isChinese } from '@/i18n/locales'
 import { cn } from '@/lib/cn'
 import { CUSTOM_ID, specName, useIdPhoto } from '@/stores/idphoto'
 
@@ -17,6 +18,10 @@ export function SpecPicker() {
   const [q, setQ] = useState('')
   const m = useMessages()
   const t = m.idphoto
+  // 非中文界面把各国护照放在最前
+  const categories: SpecCategory[] = isChinese(useRouteLocale())
+    ? specCategories
+    : ['world', ...specCategories.filter((c) => c !== 'world')]
 
   const list = useMemo(() => {
     const kw = q.trim().toLowerCase()
@@ -32,7 +37,7 @@ export function SpecPicker() {
         </div>
         {!q && (
           <div className="flex flex-wrap gap-1">
-            {[...specCategories, 'custom' as const].map((c) => (
+            {[...categories, 'custom' as const].map((c) => (
               <button
                 key={c}
                 type="button"
@@ -67,6 +72,9 @@ export function SpecPicker() {
           </div>
         ) : (
           <>
+            {tab === 'world' && !q && (
+              <p className="mx-1 mb-2 rounded-lg bg-subtle px-3 py-2 text-[11px] leading-relaxed text-muted">{t.worldNote}</p>
+            )}
             {tab === 'exam' && !q && (
               <p className="mx-1 mb-2 rounded-lg bg-warning/10 px-3 py-2 text-[11px] leading-relaxed text-warning">{t.examNote}</p>
             )}
