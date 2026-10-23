@@ -1,16 +1,16 @@
 import { type AnyCanvas, createCanvas, getCtx } from '../canvas'
 import type { PhotoSpec } from './specs'
 
+/** 显示名见 i18n/messages 的 idphoto.papers */
 export interface Paper {
   id: string
-  name: string
   mm: [number, number]
 }
 
 export const papers: Paper[] = [
-  { id: '6in', name: '6 寸', mm: [152, 102] },
-  { id: '5in', name: '5 寸', mm: [127, 89] },
-  { id: 'a4', name: 'A4', mm: [297, 210] },
+  { id: '6in', mm: [152, 102] },
+  { id: '5in', mm: [127, 89] },
+  { id: 'a4', mm: [297, 210] },
 ]
 
 const PRINT_DPI = 300

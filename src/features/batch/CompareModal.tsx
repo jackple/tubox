@@ -4,11 +4,13 @@ import { Download, X } from 'lucide-react'
 import { CompareSlider } from '@/components/common/CompareSlider'
 import { Button } from '@/components/ui/Button'
 import { saveBlob } from '@/lib/download'
+import { useMessages } from '@/i18n'
 import { formatBytes, percentChange } from '@/lib/format'
 import { useBatch } from '@/stores/batch'
 
 export function CompareModal({ id, onClose }: { id: string | null; onClose: () => void }) {
   const item = useBatch((s) => s.items.find((i) => i.id === id))
+  const m = useMessages()
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
@@ -45,7 +47,7 @@ export function CompareModal({ id, onClose }: { id: string | null; onClose: () =
                 </div>
               </div>
               <Button size="sm" onClick={() => saveBlob(r.blob, r.name)}>
-                <Download className="h-4 w-4" /> 下载
+                <Download className="h-4 w-4" /> {m.common.download}
               </Button>
               <Button size="icon" variant="ghost" onClick={onClose}>
                 <X className="h-4 w-4" />

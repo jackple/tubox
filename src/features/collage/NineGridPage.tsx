@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/Button'
 import { Section, Slider, Switch } from '@/components/ui/controls'
 import { Segmented } from '@/components/ui/Segmented'
 import { type SliceLayout, buildCropScene, coverOverflow, sliceLayouts, sliceScene } from '@/core/collage/nineGrid'
+import { label, plural, useMessages } from '@/i18n'
 import { cn } from '@/lib/cn'
 import { saveFiles, timestamp } from '@/lib/download'
 import { clamp } from '@/lib/format'
@@ -18,6 +19,8 @@ export default function NineGridPage() {
   const layout = sliceLayouts.find((l) => l.id === o.layoutId) ?? sliceLayouts[0]
   const [gapPreview, setGapPreview] = useState(true)
   const fileInput = useRef<HTMLInputElement>(null)
+  const m = useMessages()
+  const t = m.nine
 
   const replace = async (files: File[]) => {
     clear()
@@ -33,7 +36,7 @@ export default function NineGridPage() {
       actions={
         img && (
           <Button variant="ghost" size="sm" onClick={() => fileInput.current?.click()}>
-            <ImagePlus className="h-4 w-4" /> 更换图片
+            <ImagePlus className="h-4 w-4" /> {t.replace}
           </Button>
         )
       }
@@ -42,20 +45,20 @@ export default function NineGridPage() {
           footer={
             <ExportFooter
               disabled={!scene}
-              label={`导出 ${layout.cols * layout.rows} 张切图`}
-              note="按 1 → N 的顺序发布即可还原完整画面"
+              label={plural(t.export, layout.cols * layout.rows)}
+              note={t.exportNote}
               onExport={async (type) => {
                 if (!scene) return
                 const blobs = await sliceScene(scene, layout, type, 0.95)
                 await saveFiles(
                   blobs.map((blob, i) => ({ blob, name: `${i + 1}.${extOf(type)}` })),
-                  `${layout.name}-${timestamp()}.zip`,
+                  `${label(t.layouts, layout.id)}-${timestamp()}.zip`,
                 )
               }}
             />
           }
         >
-          <Section title="切图方式" icon={<Grid3x3 className="h-3.5 w-3.5" />}>
+          <Section title={t.layoutTitle} icon={<Grid3x3 className="h-3.5 w-3.5" />}>
             <div className="grid grid-cols-5 gap-2">
               {sliceLayouts.map((l) => (
                 <LayoutThumb
@@ -67,13 +70,13 @@ export default function NineGridPage() {
               ))}
             </div>
             <label className="flex items-center justify-between text-[13px]">
-              朋友圈间隙预览
+              {t.gapPreview}
               <Switch checked={gapPreview} onChange={setGapPreview} />
             </label>
           </Section>
-          <Section title="取景" icon={<Crop className="h-3.5 w-3.5" />}>
+          <Section title={t.framingTitle} icon={<Crop className="h-3.5 w-3.5" />}>
             <Slider
-              label="缩放"
+              label={m.common.zoom}
               value={Math.round(o.zoom * 100)}
               min={100}
               max={300}
@@ -81,7 +84,7 @@ export default function NineGridPage() {
               format={(v) => `${v}%`}
             />
             <Slider
-              label="水平位置"
+              label={t.posX}
               value={Math.round(o.focus.x * 100)}
               min={0}
               max={100}
@@ -89,7 +92,7 @@ export default function NineGridPage() {
               format={(v) => `${v}%`}
             />
             <Slider
-              label="垂直位置"
+              label={t.posY}
               value={Math.round(o.focus.y * 100)}
               min={0}
               max={100}
@@ -97,7 +100,7 @@ export default function NineGridPage() {
               format={(v) => `${v}%`}
             />
             <div className="space-y-1.5">
-              <span className="label">单张尺寸</span>
+              <span className="label">{t.tileSize}</span>
               <Segmented
                 size="sm"
                 value={String(o.tile)}
@@ -122,12 +125,7 @@ export default function NineGridPage() {
           )}
         />
       ) : (
-        <EmptyStage
-          onFiles={replace}
-          multiple={false}
-          title="选择一张图片切成九宫格"
-          hint="支持九宫格、四宫格、六宫格与三连图，拖动画面调整取景"
-        />
+        <EmptyStage onFiles={replace} multiple={false} title={t.emptyTitle} hint={t.emptyHint} />
       )}
       <input
         ref={fileInput}
@@ -161,6 +159,7 @@ function PanOverlay({
   const { options: o, patch } = useNineGrid()
   const start = useRef<{ x: number; y: number; fx: number; fy: number } | null>(null)
   const line = gap ? 6 : 1
+  const drag = useMessages().nine.drag
 
   return (
     <div
@@ -206,13 +205,14 @@ function PanOverlay({
         ))}
       </div>
       <div className="pointer-events-none absolute bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-black/55 px-3 py-1 text-[11px] text-white opacity-0 backdrop-blur transition group-hover:opacity-100">
-        <Move className="h-3 w-3" /> 拖动调整取景
+        <Move className="h-3 w-3" /> {drag}
       </div>
     </div>
   )
 }
 
 function LayoutThumb({ l, active, onClick }: { l: SliceLayout; active: boolean; onClick: () => void }) {
+  const name = label(useMessages().nine.layouts, l.id)
   return (
     <button type="button" onClick={onClick} className="group flex flex-col items-center gap-1.5">
       <span
@@ -227,7 +227,7 @@ function LayoutThumb({ l, active, onClick }: { l: SliceLayout; active: boolean; 
           ))}
         </span>
       </span>
-      <span className={cn('text-[11px] font-medium', active ? 'text-fg' : 'text-muted')}>{l.name}</span>
+      <span className={cn('text-[11px] font-medium', active ? 'text-fg' : 'text-muted')}>{name}</span>
     </button>
   )
 }

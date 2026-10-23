@@ -3,6 +3,8 @@
  * 有 OffscreenCanvas 时优先使用（Worker 中只有它），否则回退到 <canvas>。
  */
 
+import { coreError } from './errors'
+
 export type AnyCanvas = OffscreenCanvas | HTMLCanvasElement
 export type Ctx2D = OffscreenCanvasRenderingContext2D | CanvasRenderingContext2D
 export type Drawable = ImageBitmap | AnyCanvas
@@ -34,7 +36,7 @@ export function createCanvas(w: number, h: number): AnyCanvas {
 
 export function getCtx(c: AnyCanvas, opts?: CanvasRenderingContext2DSettings): Ctx2D {
   const ctx = (isOffscreen(c) ? c.getContext('2d', opts) : c.getContext('2d', opts)) as Ctx2D | null
-  if (!ctx) throw new Error('当前环境不支持 Canvas 2D')
+  if (!ctx) throw coreError('canvas-unsupported')
   ctx.imageSmoothingEnabled = true
   ctx.imageSmoothingQuality = 'high'
   return ctx
@@ -42,7 +44,7 @@ export function getCtx(c: AnyCanvas, opts?: CanvasRenderingContext2DSettings): C
 
 export function canvasToBlob(c: AnyCanvas, type: string, quality?: number): Promise<Blob> {
   if (isOffscreen(c)) return c.convertToBlob({ type, quality })
-  return new Promise((resolve, reject) => c.toBlob((b) => (b ? resolve(b) : reject(new Error('图片编码失败'))), type, quality))
+  return new Promise((resolve, reject) => c.toBlob((b) => (b ? resolve(b) : reject(coreError('encode-failed'))), type, quality))
 }
 
 /** 解码图片并自动应用 EXIF 方向 */
@@ -53,7 +55,7 @@ export async function decodeImage(blob: Blob): Promise<ImageBitmap> {
     try {
       return await createImageBitmap(blob)
     } catch {
-      throw new Error(/hei[cf]/i.test(blob.type) ? '浏览器暂不支持 HEIC，请先转为 JPG' : '无法解码该图片')
+      throw coreError(/hei[cf]/i.test(blob.type) ? 'heic-unsupported' : 'decode-failed')
     }
   }
 }

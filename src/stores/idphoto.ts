@@ -8,6 +8,7 @@ import { type Adjust, type Framing, autoFrame, composeIdPhoto, cutoutPerson, def
 import { buildPrintSheet, papers } from '@/core/idphoto/printSheet'
 import { type BgKey, type PhotoSpec, backgrounds, findSpec } from '@/core/idphoto/specs'
 import type { Paint } from '@/core/scene/types'
+import { type Messages, fmt, getMessages, label } from '@/i18n'
 import { saveBlob } from '@/lib/download'
 
 export type IdStatus = 'empty' | AnalyzeStep | 'error'
@@ -55,12 +56,14 @@ interface IdPhotoState {
 
 export const CUSTOM_ID = 'custom'
 
+/** 规格显示名（含自定义规格） */
+export const specName = (m: Messages, id: string) => (id === CUSTOM_ID ? m.common.custom : label(m.idphoto.specs, id))
+
 /** 纯函数解析规格；组件里请配合 useMemo 使用，避免选择器每次返回新对象 */
 export function resolveSpec(specId: string, customPx: [number, number]): PhotoSpec {
   if (specId !== CUSTOM_ID) return findSpec(specId)
   return {
     id: CUSTOM_ID,
-    name: '自定义',
     category: 'common',
     px: customPx,
     dpi: 300,
@@ -143,8 +146,9 @@ export const useIdPhoto = create<IdPhotoState>((set, get) => {
 
         const analysis = await analyzePortrait(source, (status) => set({ status }))
         const person = analysis.mask ? cutoutPerson(source, analysis.mask) : null
-        if (!analysis.face) toast.warning('未检测到人脸', { description: '已按默认位置构图，可拖动画面手动调整' })
-        if (!person) toast.warning('人像分割不可用', { description: '将保留原始背景' })
+        const m = getMessages().idphoto
+        if (!analysis.face) toast.warning(m.noFace, { description: m.noFaceDesc })
+        if (!person) toast.warning(m.noMask, { description: m.noMaskDesc })
         set({ analysis, person, removeBg: !!person, adjust: defaultAdjust })
         reframe()
       } catch (e) {
@@ -163,7 +167,7 @@ export const useIdPhoto = create<IdPhotoState>((set, get) => {
       const spec = get().spec()
       const { blob } = await encodeCanvas(canvas, 'image/jpeg', 0.95, get().maxKB)
       const out = await withJpegDpi(blob, spec.dpi)
-      saveBlob(out, `${spec.name}_${spec.px[0]}x${spec.px[1]}.jpg`)
+      saveBlob(out, `${specName(getMessages(), spec.id)}_${spec.px[0]}x${spec.px[1]}.jpg`)
     },
 
     exportSheet: async () => {
@@ -172,9 +176,15 @@ export const useIdPhoto = create<IdPhotoState>((set, get) => {
       const spec = get().spec()
       const paper = papers.find((p) => p.id === get().paperId) ?? papers[0]
       const sheet = buildPrintSheet(canvas, spec, paper)
-      if (!sheet.count) return void toast.error('该相纸放不下此规格的照片')
+      const m = getMessages()
+      if (!sheet.count) return void toast.error(m.idphoto.paperTooSmall)
       const { blob } = await encodeCanvas(sheet.canvas, 'image/jpeg', 0.95)
-      saveBlob(await withJpegDpi(blob, 300), `${spec.name}_${paper.name.replace(' ', '')}排版_${sheet.count}张.jpg`)
+      const name = fmt(m.idphoto.sheetFile, {
+        spec: specName(m, spec.id),
+        paper: label(m.idphoto.papers, paper.id).replace(/\s+/g, ''),
+        count: sheet.count,
+      })
+      saveBlob(await withJpegDpi(blob, 300), `${name}.jpg`)
     },
   }
 })

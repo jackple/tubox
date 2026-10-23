@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- 标题、描述、OG、结构化数据由 scripts/seo-plugin.ts 按路由注入，数据见 src/seo.ts -->
+    <!-- 标题、描述、OG、hreflang、结构化数据与 <html lang> 由 scripts/seo-plugin.ts 按语言 × 路由注入，文案见 src/i18n/messages 的 seo -->
     <!-- seo:head -->
     <style>
       /* 预渲染的静态正文只给不执行 JS 的爬虫看，有 JS 时隐藏，避免挂载前闪现 */

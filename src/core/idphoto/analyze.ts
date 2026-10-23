@@ -1,4 +1,5 @@
 import { type AnyCanvas, createCanvas, getCtx } from '../canvas'
+import { coreError } from '../errors'
 import { getFaceDetector, getSegmenter } from './vision'
 
 export interface Point {
@@ -41,7 +42,7 @@ export async function analyzePortrait(img: ImageBitmap, onStep?: (s: AnalyzeStep
 
   onStep?.('model')
   const [segmenter, detector] = await Promise.all([getSegmenter().catch(() => null), getFaceDetector().catch(() => null)])
-  if (!segmenter && !detector) throw new Error('AI 模型加载失败，请检查网络或执行 pnpm setup:models 自托管模型')
+  if (!segmenter && !detector) throw coreError('model-load-failed')
 
   onStep?.('segment')
   const mask = segmenter ? buildMask(segmenter.segment(img), W, H) : null

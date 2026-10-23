@@ -3,27 +3,30 @@ import { motion } from 'framer-motion'
 import { Check, Download, Grid2x2, Lock, Printer, RotateCcw, Search, ZoomIn } from 'lucide-react'
 import { Portrait } from '@/components/common/Portrait'
 import { IdPhotoGlyph } from '@/components/icons/ToolGlyphs'
+import { useMessages } from '@/i18n'
 import { cn } from '@/lib/cn'
 
 const BGS = [
-  { name: '蓝色', c: '#438EDB' },
-  { name: '白色', c: '#FFFFFF' },
-  { name: '红色', c: '#E5322D' },
-  { name: '浅灰', c: '#EEEEEE' },
-]
+  { key: 'blue', c: '#438EDB' },
+  { key: 'white', c: '#FFFFFF' },
+  { key: 'red', c: '#E5322D' },
+  { key: 'gray', c: '#EEEEEE' },
+] as const
 
 const SPECS = [
-  ['一寸', '295×413'],
-  ['二寸', '413×579'],
-  ['美国签证', '600×600'],
-  ['申根签证', '413×531'],
-  ['教师资格证', '295×413'],
-  ['英语四六级', '144×192'],
-]
+  ['one-inch', '295×413'],
+  ['two-inch', '413×579'],
+  ['visa-us', '600×600'],
+  ['visa-schengen', '413×531'],
+  ['exam-teacher', '295×413'],
+  ['exam-cet', '144×192'],
+] as const
 
 /** 首页产品图：用真实组件风格搭建的「证件照编辑器」，背景色会自动轮播 */
 export function ProductShot() {
   const [bg, setBg] = useState(0)
+  const m = useMessages()
+  const t = m.idphoto
   useEffect(() => {
     const t = setInterval(() => setBg((i) => (i + 1) % BGS.length), 2600)
     return () => clearInterval(t)
@@ -57,11 +60,11 @@ export function ProductShot() {
             {/* 规格列表 */}
             <aside className="hidden flex-col gap-1 border-r border-line p-3 md:flex">
               <div className="mb-2 flex h-8 items-center gap-2 rounded-md border border-line px-2.5 text-[11px] text-muted">
-                <Search className="h-3.5 w-3.5" /> 搜索规格
+                <Search className="h-3.5 w-3.5" /> {m.home.searchSpecs}
               </div>
-              {SPECS.map(([n, px], i) => (
+              {SPECS.map(([id, px], i) => (
                 <div
-                  key={n}
+                  key={id}
                   className={cn(
                     'flex items-center gap-2.5 rounded-lg px-2 py-1.5',
                     i === 0 && 'border border-line bg-panel shadow-[var(--highlight),0_1px_3px_rgb(0_0_0/0.08),0_0_0_1px_rgb(var(--fg))]',
@@ -74,7 +77,7 @@ export function ProductShot() {
                     <Portrait className="absolute bottom-0 left-1/2 w-[92%] -translate-x-1/2" />
                   </span>
                   <div className="leading-tight">
-                    <div className="text-[12px] font-medium">{n}</div>
+                    <div className="text-[12px] font-medium">{t.specs[id]}</div>
                     <div className="font-mono text-[10px] text-muted">{px}</div>
                   </div>
                 </div>
@@ -98,10 +101,10 @@ export function ProductShot() {
                   <span className="grid h-3.5 w-3.5 place-items-center rounded-full bg-success text-white">
                     <Check className="h-2.5 w-2.5" strokeWidth={3} />
                   </span>
-                  头部比例 <b className="font-mono font-medium">63%</b>
+                  {t.headRatio} <b className="font-mono font-medium">63%</b>
                 </div>
                 <div className="absolute -left-24 bottom-12 hidden items-center gap-1.5 rounded-full border border-line bg-panel/90 px-2.5 py-1 text-[11px] shadow-soft backdrop-blur sm:flex">
-                  <IdPhotoGlyph className="h-3.5 w-3.5" /> AI 换底
+                  <IdPhotoGlyph className="h-3.5 w-3.5" /> {m.tools.idphoto.chips[0]}
                 </div>
               </div>
               <div className="absolute bottom-4 flex items-center gap-1 rounded-xl border border-line bg-panel/90 p-1 text-[11px] text-muted shadow-soft backdrop-blur">
@@ -110,10 +113,10 @@ export function ProductShot() {
                 </span>
                 <span className="h-4 w-px bg-line" />
                 <span className="flex items-center gap-1 px-2 py-1">
-                  <RotateCcw className="h-3.5 w-3.5" /> 自动构图
+                  <RotateCcw className="h-3.5 w-3.5" /> {t.autoFrame}
                 </span>
                 <span className="flex items-center gap-1 rounded-md bg-fg/[0.06] px-2 py-1 text-fg">
-                  <Grid2x2 className="h-3.5 w-3.5" /> 参考线
+                  <Grid2x2 className="h-3.5 w-3.5" /> {t.guides}
                 </span>
               </div>
             </div>
@@ -121,7 +124,7 @@ export function ProductShot() {
             {/* 检查器 */}
             <aside className="hidden flex-col border-l border-line md:flex">
               <div className="space-y-2.5 border-b border-line p-4">
-                <div className="text-[12px] font-medium">背景颜色</div>
+                <div className="text-[12px] font-medium">{t.bgTitle}</div>
                 <div className="flex gap-2">
                   {BGS.map((b, i) => (
                     <span
@@ -137,13 +140,13 @@ export function ProductShot() {
               </div>
               <div className="space-y-3 border-b border-line p-4">
                 {[
-                  ['缩放', 62],
-                  ['旋转', 50],
-                ].map(([l, v]) => (
+                  [m.common.zoom, 62, '100%'],
+                  [m.common.rotate, 50, '0°'],
+                ].map(([l, v, value]) => (
                   <div key={l} className="space-y-1.5">
                     <div className="flex justify-between text-[11px] text-muted">
                       {l}
-                      <span className="font-mono">{l === '缩放' ? '100%' : '0°'}</span>
+                      <span className="font-mono">{value}</span>
                     </div>
                     <div className="relative h-1 rounded-full bg-line">
                       <div className="h-full rounded-full bg-fg" style={{ width: `${v}%` }} />
@@ -158,9 +161,9 @@ export function ProductShot() {
               <div className="flex-1 p-4">
                 <div className="divide-y divide-line rounded-lg border border-line">
                   {[
-                    ['像素尺寸', '295×413'],
-                    ['背景颜色', BGS[bg].name],
-                    ['文件体积', '38 KB'],
+                    [t.pxSize, '295×413'],
+                    [t.bgColor, t.backgrounds[BGS[bg].key]],
+                    [t.fileSize, '38 KB'],
                   ].map(([k, v]) => (
                     <div key={k} className="flex items-center gap-2 px-2.5 py-1.5 text-[11px]">
                       <span className="grid h-3.5 w-3.5 place-items-center rounded-full bg-success text-white">
@@ -174,10 +177,10 @@ export function ProductShot() {
               </div>
               <div className="grid grid-cols-2 gap-2 border-t border-line p-3">
                 <span className="flex h-8 items-center justify-center gap-1.5 rounded-lg border border-line text-[11px] font-medium">
-                  <Printer className="h-3.5 w-3.5" /> 冲印排版
+                  <Printer className="h-3.5 w-3.5" /> {t.print}
                 </span>
                 <span className="flex h-8 items-center justify-center gap-1.5 rounded-lg bg-fg text-[11px] font-medium text-bg">
-                  <Download className="h-3.5 w-3.5" /> 下载
+                  <Download className="h-3.5 w-3.5" /> {m.common.download}
                 </span>
               </div>
             </aside>

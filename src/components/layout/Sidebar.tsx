@@ -5,30 +5,34 @@ import { Monitor, Moon, Sun } from 'lucide-react'
 import { type GlyphProps, HomeGlyph } from '@/components/icons/ToolGlyphs'
 import { Segmented } from '@/components/ui/Segmented'
 import { toolGroups, tools } from '@/features/tools'
+import { useLocalizedPath, useMessages } from '@/i18n'
 import { cn } from '@/lib/cn'
 import { type ThemeMode, useTheme } from '@/stores/theme'
+import { LanguageSwitcher } from './LanguageSwitcher'
 import { Logo } from './Logo'
 
 export function Sidebar() {
   const { mode, setMode } = useTheme()
+  const m = useMessages()
+  const to = useLocalizedPath()
   return (
     <aside className="relative hidden w-[240px] shrink-0 flex-col border-r border-line bg-panel/60 backdrop-blur-xl lg:flex">
       <div className="flex h-16 items-center px-5">
-        <NavLink to="/">
+        <NavLink to={to('/')}>
           <Logo />
         </NavLink>
       </div>
 
       <nav className="flex-1 space-y-6 overflow-y-auto px-3 pb-4 pt-3">
-        <NavItem to="/" end label="概览" icon={HomeGlyph} />
+        <NavItem to={to('/')} end label={m.nav.overview} icon={HomeGlyph} />
         {toolGroups.map((g) => (
-          <div key={g.id}>
-            <div className="eyebrow mb-2 px-3 !text-[10px]">{g.title}</div>
+          <div key={g}>
+            <div className="eyebrow mb-2 px-3 !text-[10px]">{m.toolGroups[g]}</div>
             <div className="space-y-px">
               {tools
-                .filter((t) => t.group === g.id)
+                .filter((t) => t.group === g)
                 .map((t) => (
-                  <NavItem key={t.id} to={t.path} label={t.title} icon={t.icon} />
+                  <NavItem key={t.id} to={to(t.path)} label={m.tools[t.id].title} icon={t.icon} />
                 ))}
             </div>
           </div>
@@ -42,18 +46,19 @@ export function Sidebar() {
             <span className="relative inline-flex h-2 w-2 rounded-full bg-success" />
           </span>
           <div className="min-w-0 leading-tight">
-            <div className="text-[12px] font-medium">隐私保护已开启</div>
-            <div className="text-[11px] text-muted">图片不会离开此设备</div>
+            <div className="text-[12px] font-medium">{m.nav.privacyTitle}</div>
+            <div className="text-[11px] text-muted">{m.nav.privacyDesc}</div>
           </div>
         </div>
+        <LanguageSwitcher />
         <Segmented<ThemeMode>
           size="sm"
           value={mode}
           onChange={setMode}
           options={[
-            { value: 'light', label: <Sun className="h-3.5 w-3.5" /> },
-            { value: 'dark', label: <Moon className="h-3.5 w-3.5" /> },
-            { value: 'system', label: <Monitor className="h-3.5 w-3.5" /> },
+            { value: 'light', label: <Sun className="h-3.5 w-3.5" aria-label={m.common.themeLight} /> },
+            { value: 'dark', label: <Moon className="h-3.5 w-3.5" aria-label={m.common.themeDark} /> },
+            { value: 'system', label: <Monitor className="h-3.5 w-3.5" aria-label={m.common.themeSystem} /> },
           ]}
         />
       </div>

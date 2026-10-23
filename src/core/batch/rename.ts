@@ -5,11 +5,12 @@ export interface NameVars {
   height: number
 }
 
+/** 显示名见 i18n/messages 的 batch.renameTokens */
 export const renameTokens = [
-  { token: '{name}', label: '原文件名' },
-  { token: '{index:3}', label: '序号 001' },
-  { token: '{w}x{h}', label: '尺寸' },
-  { token: '{date}', label: '日期' },
+  { id: 'name', token: '{name}' },
+  { id: 'index', token: '{index:3}' },
+  { id: 'size', token: '{w}x{h}' },
+  { id: 'date', token: '{date}' },
 ]
 
 /**

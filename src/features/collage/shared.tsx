@@ -8,6 +8,7 @@ import { Field } from '@/components/ui/controls'
 import { Segmented } from '@/components/ui/Segmented'
 import { linear, paintToCss } from '@/core/scene/paint'
 import type { Paint } from '@/core/scene/types'
+import { errorMessage, useMessages } from '@/i18n'
 
 export const bgPresets: Paint[] = [
   '#FFFFFF',
@@ -22,10 +23,11 @@ export const bgPresets: Paint[] = [
 
 const key = (p: Paint) => (typeof p === 'string' ? p.toLowerCase() : JSON.stringify(p))
 
-export function BackgroundField({ value, onChange, label = '背景' }: { value: Paint; onChange: (p: Paint) => void; label?: string }) {
+export function BackgroundField({ value, onChange, label }: { value: Paint; onChange: (p: Paint) => void; label?: string }) {
+  const m = useMessages()
   const active = bgPresets.find((p) => key(p) === key(value))
   return (
-    <Field label={label}>
+    <Field label={label ?? m.common.background}>
       <ColorSwatches
         size="sm"
         swatches={bgPresets.map((p) => ({ id: key(p), css: paintToCss(p) }))}
@@ -43,7 +45,7 @@ export type ExportType = 'image/jpeg' | 'image/png'
 export function ExportFooter({
   disabled,
   onExport,
-  label = '导出图片',
+  label,
   note,
 }: {
   disabled?: boolean
@@ -53,6 +55,7 @@ export function ExportFooter({
 }) {
   const [type, setType] = useState<ExportType>('image/jpeg')
   const [busy, setBusy] = useState(false)
+  const m = useMessages()
   return (
     <div className="space-y-2.5">
       {note && <p className="text-center text-[11px] text-muted">{note}</p>}
@@ -77,14 +80,14 @@ export function ExportFooter({
             try {
               await onExport(type)
             } catch (e) {
-              toast.error('导出失败', { description: e instanceof Error ? e.message : String(e) })
+              toast.error(m.common.exportFailed, { description: errorMessage(e) })
             } finally {
               setBusy(false)
             }
           }}
         >
           {!busy && <Download className="h-4 w-4" />}
-          {label}
+          {label ?? m.common.exportImage}
         </Button>
       </div>
     </div>

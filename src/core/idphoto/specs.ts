@@ -3,26 +3,21 @@ import type { Paint } from '../scene/types'
 
 export type SpecCategory = 'common' | 'cert' | 'visa' | 'exam'
 
-export const specCategories: { id: SpecCategory; name: string }[] = [
-  { id: 'common', name: '常用尺寸' },
-  { id: 'cert', name: '证件' },
-  { id: 'visa', name: '签证' },
-  { id: 'exam', name: '考试报名' },
-]
+// 规格、分类、背景的显示名按 id 放在 i18n/messages（idphoto.specs / categories / backgrounds）
+export const specCategories: SpecCategory[] = ['common', 'cert', 'visa', 'exam']
 
 export type BgKey = 'white' | 'blue' | 'red' | 'gray' | 'gradient'
 
-export const backgrounds: Record<BgKey, { name: string; paint: Paint; swatch: string }> = {
-  white: { name: '白色', paint: '#FFFFFF', swatch: '#FFFFFF' },
-  blue: { name: '蓝色', paint: '#438EDB', swatch: '#438EDB' },
-  red: { name: '红色', paint: '#FF0000', swatch: '#FF0000' },
-  gray: { name: '浅灰', paint: '#EEEEEE', swatch: '#EEEEEE' },
-  gradient: { name: '渐变蓝', paint: linear(180, '#2E6CC0', '#A9CBF0'), swatch: 'linear-gradient(180deg,#2E6CC0,#A9CBF0)' },
+export const backgrounds: Record<BgKey, { paint: Paint; swatch: string }> = {
+  white: { paint: '#FFFFFF', swatch: '#FFFFFF' },
+  blue: { paint: '#438EDB', swatch: '#438EDB' },
+  red: { paint: '#FF0000', swatch: '#FF0000' },
+  gray: { paint: '#EEEEEE', swatch: '#EEEEEE' },
+  gradient: { paint: linear(180, '#2E6CC0', '#A9CBF0'), swatch: 'linear-gradient(180deg,#2E6CC0,#A9CBF0)' },
 }
 
 export interface PhotoSpec {
   id: string
-  name: string
   category: SpecCategory
   /** 物理尺寸（毫米，宽×高） */
   mm?: [number, number]
@@ -36,6 +31,7 @@ export interface PhotoSpec {
   headRatio: [number, number]
   /** 头顶到上边缘占照片高度的比例 */
   topRatio: number
+  /** 内部备注（规格来源 / 注意事项），不在界面显示 */
   note?: string
   hot?: boolean
 }
@@ -47,7 +43,6 @@ export const photoSpecs: PhotoSpec[] = [
   // 常用
   {
     id: 'one-inch',
-    name: '一寸',
     category: 'common',
     mm: [25, 35],
     px: [295, 413],
@@ -57,7 +52,6 @@ export const photoSpecs: PhotoSpec[] = [
   },
   {
     id: 'two-inch',
-    name: '二寸',
     category: 'common',
     mm: [35, 49],
     px: [413, 579],
@@ -65,12 +59,11 @@ export const photoSpecs: PhotoSpec[] = [
     hot: true,
     ...CN,
   },
-  { id: 'small-one', name: '小一寸', category: 'common', mm: [22, 32], px: [260, 378], backgrounds: ['white', 'blue', 'red'], ...CN },
-  { id: 'big-one', name: '大一寸', category: 'common', mm: [33, 48], px: [390, 567], backgrounds: ['white', 'blue', 'red'], ...CN },
-  { id: 'small-two', name: '小二寸', category: 'common', mm: [35, 45], px: [413, 531], backgrounds: ['white', 'blue', 'red'], ...CN },
+  { id: 'small-one', category: 'common', mm: [22, 32], px: [260, 378], backgrounds: ['white', 'blue', 'red'], ...CN },
+  { id: 'big-one', category: 'common', mm: [33, 48], px: [390, 567], backgrounds: ['white', 'blue', 'red'], ...CN },
+  { id: 'small-two', category: 'common', mm: [35, 45], px: [413, 531], backgrounds: ['white', 'blue', 'red'], ...CN },
   {
     id: 'resume',
-    name: '简历照',
     category: 'common',
     mm: [25, 35],
     px: [295, 413],
@@ -81,7 +74,6 @@ export const photoSpecs: PhotoSpec[] = [
   // 证件
   {
     id: 'idcard',
-    name: '身份证',
     category: 'cert',
     mm: [26, 32],
     px: [358, 441],
@@ -92,7 +84,6 @@ export const photoSpecs: PhotoSpec[] = [
   },
   {
     id: 'passport',
-    name: '护照 / 港澳通行证',
     category: 'cert',
     mm: [33, 48],
     px: [390, 567],
@@ -101,10 +92,9 @@ export const photoSpecs: PhotoSpec[] = [
     headRatio: [0.58, 0.69],
     note: '出入境证件照以出入境管理机构要求为准',
   },
-  { id: 'driver', name: '驾驶证', category: 'cert', mm: [22, 32], px: [260, 378], backgrounds: ['white'], ...CN },
+  { id: 'driver', category: 'cert', mm: [22, 32], px: [260, 378], backgrounds: ['white'], ...CN },
   {
     id: 'social',
-    name: '社保卡',
     category: 'cert',
     mm: [26, 32],
     px: [358, 441],
@@ -118,7 +108,6 @@ export const photoSpecs: PhotoSpec[] = [
   // 签证
   {
     id: 'visa-us',
-    name: '美国签证',
     category: 'visa',
     mm: [51, 51],
     px: [600, 600],
@@ -132,7 +121,6 @@ export const photoSpecs: PhotoSpec[] = [
   },
   {
     id: 'visa-schengen',
-    name: '申根签证',
     category: 'visa',
     ...VISA35x45,
     backgrounds: ['white', 'gray'],
@@ -142,7 +130,6 @@ export const photoSpecs: PhotoSpec[] = [
   },
   {
     id: 'visa-jp',
-    name: '日本签证',
     category: 'visa',
     mm: [45, 45],
     px: [531, 531],
@@ -151,20 +138,18 @@ export const photoSpecs: PhotoSpec[] = [
     headRatio: [0.6, 0.72],
     topRatio: 0.1,
   },
-  { id: 'visa-kr', name: '韩国签证', category: 'visa', ...VISA35x45, backgrounds: ['white'], headRatio: [0.71, 0.8], topRatio: 0.07 },
+  { id: 'visa-kr', category: 'visa', ...VISA35x45, backgrounds: ['white'], headRatio: [0.71, 0.8], topRatio: 0.07 },
   {
     id: 'visa-uk',
-    name: '英国签证',
     category: 'visa',
     ...VISA35x45,
     backgrounds: ['gray', 'white'],
     headRatio: [0.64, 0.76],
     topRatio: 0.08,
   },
-  { id: 'visa-ca', name: '加拿大签证', category: 'visa', ...VISA35x45, backgrounds: ['white'], headRatio: [0.69, 0.8], topRatio: 0.07 },
+  { id: 'visa-ca', category: 'visa', ...VISA35x45, backgrounds: ['white'], headRatio: [0.69, 0.8], topRatio: 0.07 },
   {
     id: 'visa-au',
-    name: '澳大利亚签证',
     category: 'visa',
     ...VISA35x45,
     backgrounds: ['white', 'gray'],
@@ -173,12 +158,11 @@ export const photoSpecs: PhotoSpec[] = [
   },
 
   // 考试（各年份要求可能调整，务必以报名公告为准）
-  { id: 'exam-gk', name: '国家公务员考试', category: 'exam', px: [295, 413], backgrounds: ['white', 'blue'], maxKB: 100, ...CN, hot: true },
-  { id: 'exam-teacher', name: '教师资格证', category: 'exam', px: [295, 413], backgrounds: ['white'], maxKB: 200, ...CN },
-  { id: 'exam-cet', name: '英语四六级', category: 'exam', px: [144, 192], backgrounds: ['white', 'blue'], maxKB: 50, ...CN },
+  { id: 'exam-gk', category: 'exam', px: [295, 413], backgrounds: ['white', 'blue'], maxKB: 100, ...CN, hot: true },
+  { id: 'exam-teacher', category: 'exam', px: [295, 413], backgrounds: ['white'], maxKB: 200, ...CN },
+  { id: 'exam-cet', category: 'exam', px: [144, 192], backgrounds: ['white', 'blue'], maxKB: 50, ...CN },
   {
     id: 'exam-ncre',
-    name: '计算机等级考试',
     category: 'exam',
     px: [144, 192],
     backgrounds: ['white', 'blue'],
@@ -186,8 +170,8 @@ export const photoSpecs: PhotoSpec[] = [
     maxKB: 200,
     ...CN,
   },
-  { id: 'exam-kaoyan', name: '研究生考试', category: 'exam', px: [150, 200], backgrounds: ['white', 'blue'], maxKB: 100, ...CN },
-  { id: 'exam-pth', name: '普通话水平测试', category: 'exam', px: [390, 567], backgrounds: ['white', 'blue'], maxKB: 200, ...CN },
+  { id: 'exam-kaoyan', category: 'exam', px: [150, 200], backgrounds: ['white', 'blue'], maxKB: 100, ...CN },
+  { id: 'exam-pth', category: 'exam', px: [390, 567], backgrounds: ['white', 'blue'], maxKB: 200, ...CN },
 ]
 
 export const findSpec = (id: string) => photoSpecs.find((s) => s.id === id) ?? photoSpecs[0]

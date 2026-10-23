@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { toast } from 'sonner'
 import { type BatchOptions, defaultBatchOptions } from '@/core/batch/types'
+import { fmt, getMessages, plural } from '@/i18n'
 import { isImageFile } from '@/lib/assets'
 import { saveFiles, timestamp } from '@/lib/download'
 import { uid } from '@/lib/format'
@@ -33,18 +34,15 @@ export interface BatchItem {
   error?: string
 }
 
+/** 名称与说明见 i18n/messages 的 batch.presets */
 export interface BatchPreset {
-  id: string
-  name: string
-  hint: string
+  id: 'wechat' | 'web' | 'shop' | 'xhs' | 'mail'
   apply: (o: BatchOptions) => BatchOptions
 }
 
 export const batchPresets: BatchPreset[] = [
   {
     id: 'wechat',
-    name: '微信发图',
-    hint: '长边 1920 · JPG 80',
     apply: (o) => ({
       ...o,
       resize: { ...o.resize, enabled: true, mode: 'long', width: 1920 },
@@ -53,8 +51,6 @@ export const batchPresets: BatchPreset[] = [
   },
   {
     id: 'web',
-    name: '网页优化',
-    hint: '长边 1600 · WebP',
     apply: (o) => ({
       ...o,
       resize: { ...o.resize, enabled: true, mode: 'long', width: 1600 },
@@ -63,8 +59,6 @@ export const batchPresets: BatchPreset[] = [
   },
   {
     id: 'shop',
-    name: '电商主图',
-    hint: '800×800 · 居中裁切',
     apply: (o) => ({
       ...o,
       resize: { ...o.resize, enabled: true, mode: 'cover', width: 800, height: 800, noEnlarge: false },
@@ -73,8 +67,6 @@ export const batchPresets: BatchPreset[] = [
   },
   {
     id: 'xhs',
-    name: '小红书',
-    hint: '1242×1656 · 3:4',
     apply: (o) => ({
       ...o,
       resize: { ...o.resize, enabled: true, mode: 'cover', width: 1242, height: 1656, noEnlarge: false },
@@ -83,8 +75,6 @@ export const batchPresets: BatchPreset[] = [
   },
   {
     id: 'mail',
-    name: '附件瘦身',
-    hint: '每张 ≤ 500KB',
     apply: (o) => ({ ...o, output: { ...o.output, format: 'image/jpeg', quality: 85, targetKB: 500 } }),
   },
 ]
@@ -134,7 +124,7 @@ export const useBatch = create<BatchState>((set, get) => {
 
     addFiles: (files) => {
       const imgs = files.filter(isImageFile)
-      if (imgs.length < files.length) toast.warning(`已忽略 ${files.length - imgs.length} 个非图片文件`)
+      if (imgs.length < files.length) toast.warning(plural(getMessages().batch.ignored, files.length - imgs.length))
       if (!imgs.length) return
       const added: BatchItem[] = imgs.map((file) => ({ id: uid(), file, url: URL.createObjectURL(file), status: 'idle' }))
       set((s) => ({ items: [...s.items, ...added], activeId: s.activeId ?? added[0].id }))
@@ -200,13 +190,14 @@ export const useBatch = create<BatchState>((set, get) => {
       set({ running: false })
       const failed = get().items.filter((i) => i.status === 'error').length
       const secs = ((performance.now() - t0) / 1000).toFixed(1)
-      if (failed) toast.error(`${failed} 张处理失败`, { description: '可悬停查看失败原因' })
-      else toast.success(`已处理 ${todo.length} 张图片`, { description: `耗时 ${secs}s` })
+      const m = getMessages().batch
+      if (failed) toast.error(plural(m.failedToast, failed), { description: m.failedDesc })
+      else toast.success(plural(m.doneToast, todo.length), { description: fmt(m.doneDesc, { secs }) })
     },
 
     downloadAll: async () => {
       const files = get().items.flatMap((i) => (i.result ? [{ name: i.result.name, blob: i.result.blob }] : []))
-      if (!files.length) return void toast.info('请先开始处理')
+      if (!files.length) return void toast.info(getMessages().batch.runFirst)
       await saveFiles(files, `tubox-batch-${timestamp()}.zip`)
     },
   }

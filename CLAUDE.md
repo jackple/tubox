@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 项目概述
 
-图盒 Tubox：纯前端图片处理工具箱（批量处理 / 证件照 / 长图 / 拼图 / 九宫格 / 社交排版）。**所有处理都在浏览器内完成，没有后端**，图片不上传。UI 文案、注释、toast 均为中文。
+图盒 Tubox：纯前端图片处理工具箱（批量处理 / 证件照 / 长图 / 拼图 / 九宫格 / 社交排版）。**所有处理都在浏览器内完成，没有后端**，图片不上传。界面支持 10 种语言（见下文「多语言」），代码注释为中文。
 
 技术栈：Vite 6 · React 19 · TypeScript（strict）· Tailwind CSS 3 · Zustand · Framer Motion · Comlink · MediaPipe Tasks Vision · JSZip。包管理用 **pnpm**。
 
@@ -35,7 +35,15 @@ pnpm build --base=/tubox/   # 部署到子路径，路由 basename 自动跟随 
 - `src/components/layout/ToolLayout.tsx` —— 所有工具页的统一工作台布局：header + 左侧素材栏 + 中间舞台 + 右侧 inspector。
 - 路由在 `src/App.tsx`，每个页面 `lazy()` 拆包（MediaPipe 只在进入证件照时加载）。使用 History 路由，部署时需要服务器回退到 `index.html`（见 README）。
 
-**新增工具**需同时改：`features/tools.ts`（注册）、`App.tsx`（路由）、`src/seo.ts`（SEO 文案，构建时据此预渲染该路由的 HTML 与 sitemap）、`components/icons/ToolGlyphs.tsx`（图标）、对应 store 与 `core/` 实现。
+**新增工具**需同时改：`features/tools.ts`（注册）、`App.tsx`（路由）、`src/seo.ts` 的 `pagePaths`（构建时据此预渲染各语言该路由的 HTML 与 sitemap）、各语言文案的 `tools` 与 `seo`、`components/icons/ToolGlyphs.tsx`（图标）、对应 store 与 `core/` 实现。
+
+### 多语言（`src/i18n/`）
+
+- **不要在组件、store、core 中硬编码界面文案**。文案在 `i18n/messages/`：`zh-CN.ts` 为源语言，`Messages = typeof zhCN`，其余语言 `const messages: Messages`，缺键即类型错误——新增文案要同时补齐所有语言文件。
+- 组件用 `useMessages()`，store / toast 等非组件代码用 `getMessages()`；插值 `fmt(s, vars)`（`{name}` 占位符）；数量相关文案在源语言中用 `p({ other })` 标记，调用 `plural(msg, count)`（按 `Intl.PluralRules`，俄语需 one/few/many）；需要把占位符渲染为元素用 `rich()` + `pluralTemplate()`。
+- `core/` 保持无文案：数据只带 id（规格、模板、配色、相纸等），显示名在文案中按 id 查（`label(table, id)`）；错误抛 `coreError(code)`（`core/errors.ts`），UI 用 `errorMessage(e)` 翻译。
+- 语言由 URL 决定：默认简体中文无前缀，其余为 `/en/...`、`/zh-tw/...`（`i18n/locales.ts` 的 `splitLocale` / `localizePath`）。站内链接一律用 `useLocalizedPath()` 包装路径。`stores/locale.ts` 按需加载语言包；`main.tsx` 在首屏前调用 `initLocale()`（可能按偏好 / 浏览器语言改写 URL），`AppShell` 随路由切换语言。
+- `i18n/locales.ts`、`i18n/format.ts`、`i18n/messages/*`、`src/seo.ts` 会在构建时被 `scripts/seo-plugin.ts`（Node）导入，只能用相对路径导入，不能用 `@/`。`i18n/catalog.ts` 静态汇总全部语言，仅供构建时使用。
 
 ### Canvas 抽象（`core/canvas.ts`）
 
@@ -77,4 +85,4 @@ Safari 不支持 `ctx.filter`，模糊与调色都有手写回退，改动渲染
 
 ### 样式与主题
 
-颜色全部是 CSS 变量 token（`src/styles/index.css` 中 `:root` / `.dark`），在 `tailwind.config.ts` 映射为 `bg` / `panel` / `subtle` / `line` / `fg` / `muted` / `brand` / `accent` 等。使用这些语义类名，不要硬编码颜色。暗色模式为 `class` 策略，由 `stores/theme.ts` 切换 `<html>` 上的 `dark` 类。设计语言：中性墨色 + 单一鸢尾紫（brand），颜色只用于选中/焦点/品牌细节。通用 UI 组件在 `components/ui/`，类名合并用 `lib/cn.ts`。
+颜色全部是 CSS 变量 token（`src/styles/index.css` 中 `:root` / `.dark`），在 `tailwind.config.ts` 映射为 `bg` / `panel` / `subtle` / `line` / `fg` / `muted` / `brand` / `accent` 等。使用这些语义类名，不要硬编码颜色。暗色模式为 `class` 策略，由 `stores/theme.ts` 切换 `<html>` 上的 `dark` 类。设计语言：中性墨色 + 单一鸢尾紫（brand），颜色只用于选中/焦点/品牌细节。通用 UI 组件在 `components/ui/`，类名合并用 `lib/cn.ts`。界面字体 `font-sans` 指向 CSS 变量 `--font-sans`，按 `<html lang>` 切换简繁中日韩的 CJK 字体栈。

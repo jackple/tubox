@@ -5,7 +5,9 @@ import { type LongImageOptions, defaultLongImageOptions } from '@/core/collage/l
 import { type NineGridOptions, defaultNineGridOptions } from '@/core/collage/nineGrid'
 import type { SocialContent } from '@/core/collage/social'
 import type { FontKind } from '@/core/fonts'
+import { fmt, getMessages, plural } from '@/i18n'
 import { type ImageAsset, disposeAsset, loadAssets } from '@/lib/assets'
+import { useLocale } from './locale'
 
 /* 每个拼图工具一个独立 store，切换页面时状态保留 */
 
@@ -22,10 +24,11 @@ function assetList<T extends AssetList>(set: StoreApi<T>['setState'], get: Store
     images: [],
     add: async (files) => {
       const room = max - get().images.length
-      if (room <= 0) return void toast.warning(`最多添加 ${max} 张图片`)
+      const m = getMessages().assets
+      if (room <= 0) return void toast.warning(fmt(m.max, { max }))
       const { ok, failed } = await loadAssets(files.slice(0, room))
-      if (failed) toast.error(`${failed} 张图片无法读取`)
-      if (files.length > room) toast.warning(`已达上限，仅添加前 ${room} 张`)
+      if (failed) toast.error(plural(m.unreadable, failed))
+      if (files.length > room) toast.warning(plural(m.truncated, room))
       set({ images: [...get().images, ...ok] } as Partial<T>)
     },
     remove: (id) => {
@@ -81,8 +84,17 @@ export const useSocial = create<WithOptions<SocialOptions> & { setContent: (p: P
     styleId: 'cover',
     themeId: 'cream',
     font: 'sans',
-    content: { title: '周末去海边\n吹吹风', subtitle: '一份超详细的城市漫游攻略，收藏起来慢慢看', tag: '旅行日记', footer: '@图盒' },
+    content: { ...getMessages().social.sample },
   },
   patch: (p) => set((s) => ({ options: { ...s.options, ...p } })),
   setContent: (p) => set((s) => ({ options: { ...s.options, content: { ...s.options.content, ...p } } })),
 }))
+
+// 切换语言时，若示例文案未被修改，则换成新语言的示例
+useLocale.subscribe((s, prev) => {
+  if (!s.messages || !prev.messages || s.messages === prev.messages) return
+  const content = useSocial.getState().options.content
+  const old = prev.messages.social.sample
+  if ((Object.keys(old) as (keyof SocialContent)[]).every((k) => content[k] === old[k]))
+    useSocial.getState().setContent(s.messages.social.sample)
+})

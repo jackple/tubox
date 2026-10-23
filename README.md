@@ -1,6 +1,6 @@
 # 图盒 Tubox
 
-纯前端图片处理工具箱，所有处理都在浏览器内完成，图片不会上传。
+纯前端图片处理工具箱，所有处理都在浏览器内完成，图片不会上传。界面支持简体中文、繁體中文、English、日本語、한국어、Español、Français、Deutsch、Português、Русский。
 
 | 模块 | 能力 |
 | --- | --- |
@@ -28,16 +28,22 @@ pnpm build      # 自动执行 setup:models + 类型检查 + 打包到 dist/（�
 
 ### 部署
 
-使用 History 路由（`/batch`、`/collage/grid`）。构建时会为每个路由预渲染一份带独立标题 / 描述 / 结构化数据的 HTML（`dist/batch.html`、`dist/collage/grid.html`…），静态托管需要：先按 `路径.html` 查找，找不到再回退到 `index.html`：
+使用 History 路由（`/batch`、`/collage/grid`），其它语言加前缀（`/en/batch`、`/zh-tw/collage/grid`，各语言首页为 `/en`、`/ja`…）。构建时会为每个语言的每个路由预渲染一份带独立标题 / 描述 / 结构化数据的 HTML（`dist/batch.html`、`dist/en/collage/grid.html`、`dist/en.html`…），静态托管需要：先按 `路径.html` 查找，找不到再回退到 `index.html`：
 
 - **Nginx**：`location / { try_files $uri $uri.html /index.html; }`
 - **Vercel**：`vercel.json` → `{ "cleanUrls": true, "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }] }`
 - **Netlify / Cloudflare Pages**：自动按 `路径.html` 匹配；再在 `public/_redirects` 加 `/*  /index.html  200` 兜底
 - **部署在子路径**：`pnpm build --base=/tubox/`，路由 basename 会自动跟随
 
+### 多语言
+
+- 文案在 `src/i18n/messages/`：`zh-CN.ts` 是源语言，其结构即 `Messages` 类型，其它语言文件缺键会类型报错；运行时按语言拆包按需加载。
+- 语言由 URL 决定。访问不带前缀的地址时，按「用户上次的选择 → 浏览器语言」自动跳到对应语言（爬虫不跳转）；侧边栏 / 顶栏可切换语言并记住选择。
+- 新增语言：在 `src/i18n/locales.ts` 登记，在 `messages/` 下添加同名文件，并加入 `src/i18n/catalog.ts`。
+
 ### SEO
 
-各页面的标题、描述、关键词、功能要点集中在 `src/seo.ts`，构建时由 `scripts/seo-plugin.ts` 写入每个路由的 HTML（含给百度等不执行 JS 的爬虫看的静态正文），站内跳转时由 `useSeo` 同步更新。构建前设置站点地址，才会输出 canonical、`og:url` 与 `sitemap.xml`：
+各页面的标题、描述、关键词、功能要点在各语言文案的 `seo` 中（逻辑在 `src/seo.ts`），构建时由 `scripts/seo-plugin.ts` 写入每个语言 × 路由的 HTML（含给百度等不执行 JS 的爬虫看的静态正文、`<html lang>`），站内跳转时由 `useSeo` 同步更新。构建前设置站点地址，才会输出 canonical、`og:url`、hreflang 与 `sitemap.xml`：
 
 ```bash
 VITE_SITE_URL=https://tubox.example.com pnpm build   # 或写进 .env.production
@@ -68,6 +74,7 @@ src/
 │   ├── layout/            #   AppShell / Sidebar / ToolLayout（标题栏 + 素材栏 + 舞台 + 检查器）
 │   └── common/            #   Dropzone / CompareSlider / ScenePreview / SceneThumb / ImageStrip
 ├── features/              # 页面：home / batch / idphoto / collage
+├── i18n/                  # 多语言：语言表与路由前缀、插值 / 复数、各语言文案（含 SEO）
 ├── hooks/  lib/           # 通用 hooks 与工具函数
 └── config.ts              # 模型与 wasm 地址（自托管优先，CDN 回退）
 ```

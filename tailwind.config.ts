@@ -21,7 +21,8 @@ export default {
         danger: token('danger'),
       },
       fontFamily: {
-        sans: ['"Geist Variable"', '"PingFang SC"', '"HarmonyOS Sans SC"', '"Microsoft YaHei"', 'system-ui', 'sans-serif'],
+        // 按语言切换的字体栈见 src/styles/index.css 的 --font-sans
+        sans: ['var(--font-sans)'],
         mono: ['"Geist Mono Variable"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },
       borderRadius: { '4xl': '2rem' },

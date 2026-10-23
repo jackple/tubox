@@ -2,19 +2,19 @@ import { type Drawable, canvasToBlob, createCanvas, getCtx } from '../canvas'
 import { renderScene } from '../scene/render'
 import type { Scene } from '../scene/types'
 
+/** 显示名见 i18n/messages 的 nine.layouts */
 export interface SliceLayout {
   id: string
-  name: string
   cols: number
   rows: number
 }
 
 export const sliceLayouts: SliceLayout[] = [
-  { id: '3x3', name: '九宫格', cols: 3, rows: 3 },
-  { id: '2x2', name: '四宫格', cols: 2, rows: 2 },
-  { id: '3x2', name: '六宫格', cols: 3, rows: 2 },
-  { id: '3x1', name: '横三连', cols: 3, rows: 1 },
-  { id: '1x3', name: '竖三连', cols: 1, rows: 3 },
+  { id: '3x3', cols: 3, rows: 3 },
+  { id: '2x2', cols: 2, rows: 2 },
+  { id: '3x2', cols: 3, rows: 2 },
+  { id: '3x1', cols: 3, rows: 1 },
+  { id: '1x3', cols: 1, rows: 3 },
 ]
 
 export interface NineGridOptions {

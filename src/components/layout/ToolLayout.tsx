@@ -1,11 +1,12 @@
 import type { ReactNode } from 'react'
 import { motion } from 'framer-motion'
-import { toolById } from '@/features/tools'
+import { type ToolId, toolById } from '@/features/tools'
+import { useMessages, useRouteLocale } from '@/i18n'
 import { cn } from '@/lib/cn'
 import { ToolIcon } from './ToolIcon'
 
 interface Props {
-  toolId: string
+  toolId: ToolId
   /** 标题栏右侧操作 */
   actions?: ReactNode
   /** 左侧素材栏 */
@@ -26,16 +27,19 @@ interface Props {
  */
 export function ToolLayout({ toolId, actions, left, inspector, children, stageClassName }: Props) {
   const tool = toolById(toolId)
+  const text = useMessages().tools[toolId]
+  // 英文界面下装饰性英文名与标题重复，不再显示
+  const showEn = useRouteLocale() !== 'en'
   return (
     <div className="flex h-full flex-col">
       <header className="flex h-16 shrink-0 items-center gap-3.5 border-b border-line bg-panel/70 px-5 backdrop-blur-xl">
         <ToolIcon tool={tool} />
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
-            <h1 className="text-[15px] font-semibold leading-tight tracking-tight">{tool.title}</h1>
-            <span className="eyebrow hidden !text-[10px] sm:inline">{tool.en}</span>
+            <h1 className="text-[15px] font-semibold leading-tight tracking-tight">{text.title}</h1>
+            {showEn && <span className="eyebrow hidden !text-[10px] sm:inline">{tool.en}</span>}
           </div>
-          <p className="mt-0.5 hidden truncate text-[12px] text-muted sm:block">{tool.desc}</p>
+          <p className="mt-0.5 hidden truncate text-[12px] text-muted sm:block">{text.desc}</p>
         </div>
         <div className="flex items-center gap-2">{actions}</div>
       </header>

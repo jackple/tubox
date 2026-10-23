@@ -4,43 +4,33 @@ import { Check, CircleAlert, Grid2x2, ImagePlus, Loader2, RotateCcw, ZoomIn, Zoo
 import { Dropzone } from '@/components/common/Dropzone'
 import { Button } from '@/components/ui/Button'
 import { useElementSize } from '@/hooks/useElementSize'
+import { errorMessage, useMessages } from '@/i18n'
 import { cn } from '@/lib/cn'
 import { clamp } from '@/lib/format'
-import { resolveSpec, useIdPhoto } from '@/stores/idphoto'
+import { resolveSpec, specName, useIdPhoto } from '@/stores/idphoto'
 import { useComposed } from './useComposed'
 
-const STEPS = [
-  { id: 'model', label: '加载 AI 模型' },
-  { id: 'segment', label: '人像分割 · 抠除背景' },
-  { id: 'face', label: '人脸定位 · 自动构图' },
-] as const
-
-const TIPS = ['正面免冠，双眼平视镜头', '光线均匀，避免面部阴影', '背景尽量简洁，衣服与背景色区分开']
+const STEPS = ['model', 'segment', 'face'] as const
 
 export function IdStage() {
   const { status, error, load, sourceName } = useIdPhoto()
+  const t = useMessages().idphoto
 
   if (status === 'empty')
     return (
       <div className="absolute inset-0 grid place-items-center p-6">
         <div className="w-full max-w-[560px]">
-          <Dropzone
-            onFiles={(f) => load(f[0])}
-            multiple={false}
-            className="aspect-[4/3] w-full"
-            title="上传一张正面人像照片"
-            hint="自动抠图换底、按规格智能构图 · 照片不会上传"
-          />
+          <Dropzone onFiles={(f) => load(f[0])} multiple={false} className="aspect-[4/3] w-full" title={t.dropTitle} hint={t.dropHint} />
           <div className="mt-5 grid grid-cols-3 gap-3">
-            {TIPS.map((t, i) => (
+            {t.tips.map((tip, i) => (
               <div
-                key={t}
+                key={tip}
                 className="flex items-start gap-2 rounded-xl border border-line/70 bg-panel/70 p-3 text-[12px] leading-relaxed text-muted"
               >
                 <span className="mt-px grid h-4 w-4 shrink-0 place-items-center rounded-full bg-fg font-mono text-[10px] font-semibold text-bg">
                   {i + 1}
                 </span>
-                {t}
+                {tip}
               </div>
             ))}
           </div>
@@ -53,9 +43,9 @@ export function IdStage() {
       <div className="absolute inset-0 grid place-items-center p-6">
         <div className="panel max-w-sm p-6 text-center">
           <CircleAlert className="mx-auto h-8 w-8 text-danger" />
-          <div className="mt-3 font-semibold">处理失败</div>
-          <p className="mt-1 text-[13px] text-muted">{error}</p>
-          <Dropzone onFiles={(f) => load(f[0])} multiple={false} compact className="mt-5" title="重新选择照片" hint={sourceName} />
+          <div className="mt-3 font-semibold">{t.failed}</div>
+          <p className="mt-1 text-[13px] text-muted">{error && errorMessage(error)}</p>
+          <Dropzone onFiles={(f) => load(f[0])} multiple={false} compact className="mt-5" title={t.reselect} hint={sourceName} />
         </div>
       </div>
     )
@@ -66,19 +56,17 @@ export function IdStage() {
 
 function Analyzing() {
   const status = useIdPhoto((s) => s.status)
-  const idx = STEPS.findIndex((s) => s.id === status)
+  const idx = STEPS.findIndex((s) => s === status)
+  const t = useMessages().idphoto
   return (
     <div className="absolute inset-0 grid place-items-center p-6">
       <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="panel w-[300px] p-5">
         <div className="flex items-center gap-2 text-[14px] font-semibold">
-          <Loader2 className="h-4 w-4 animate-spin text-muted" /> 正在智能处理
+          <Loader2 className="h-4 w-4 animate-spin text-muted" /> {t.analyzing}
         </div>
         <div className="mt-4 space-y-3">
           {STEPS.map((s, i) => (
-            <div
-              key={s.id}
-              className={cn('flex items-center gap-2.5 text-[13px] transition-colors', i <= idx ? 'text-fg' : 'text-muted/60')}
-            >
+            <div key={s} className={cn('flex items-center gap-2.5 text-[13px] transition-colors', i <= idx ? 'text-fg' : 'text-muted/60')}>
               <span
                 className={cn(
                   'grid h-5 w-5 place-items-center rounded-full',
@@ -87,11 +75,11 @@ function Analyzing() {
               >
                 {i < idx ? <Check className="h-3 w-3" strokeWidth={3} /> : i === idx ? <Loader2 className="h-3 w-3 animate-spin" /> : null}
               </span>
-              {s.label}
+              {t.steps[s]}
             </div>
           ))}
         </div>
-        <p className="mt-4 text-[11px] text-muted">首次使用需下载约 16MB 模型，之后会被浏览器缓存</p>
+        <p className="mt-4 text-[11px] text-muted">{t.modelNote}</p>
       </motion.div>
     </div>
   )
@@ -104,6 +92,8 @@ function Editor() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [boxRef, box] = useElementSize<HTMLDivElement>()
   const fileInput = useRef<HTMLInputElement>(null)
+  const m = useMessages()
+  const t = m.idphoto
 
   const [W, H] = spec.px
   const maxH = Math.max(160, Math.min(box.height - 40, 560))
@@ -177,39 +167,39 @@ function Editor() {
                   strokeDasharray={`${H / 80} ${H / 120}`}
                 />
                 <text x={W - H / 60} y={top - H / 80} textAnchor="end" fontSize={H / 32} fill="#0891b2" fontWeight={600}>
-                  头顶
+                  {t.guideTop}
                 </text>
                 <text x={W - H / 60} y={top + hMax * H - H / 80} textAnchor="end" fontSize={H / 32} fill="#0891b2" fontWeight={600}>
-                  下巴区间
+                  {t.guideChin}
                 </text>
               </motion.svg>
             )}
           </AnimatePresence>
           <div className="absolute -bottom-7 left-0 right-0 text-center text-[11px] tabular-nums text-muted">
-            {spec.name} · {W}×{H}px
+            {specName(m, spec.id)} · {W}×{H}px
           </div>
         </div>
       </div>
 
       <div className="flex shrink-0 justify-center pb-5 pt-8">
         <div className="flex items-center gap-1 rounded-2xl border border-line/80 bg-panel/90 p-1.5 shadow-soft backdrop-blur">
-          <Button size="icon" variant="ghost" title="缩小" onClick={() => setAdjust({ zoom: clamp(adjust.zoom / 1.08, 0.4, 3) })}>
+          <Button size="icon" variant="ghost" title={t.zoomOut} onClick={() => setAdjust({ zoom: clamp(adjust.zoom / 1.08, 0.4, 3) })}>
             <ZoomOut className="h-4 w-4" />
           </Button>
           <span className="w-12 text-center text-[12px] font-medium tabular-nums">{Math.round(adjust.zoom * 100)}%</span>
-          <Button size="icon" variant="ghost" title="放大" onClick={() => setAdjust({ zoom: clamp(adjust.zoom * 1.08, 0.4, 3) })}>
+          <Button size="icon" variant="ghost" title={t.zoomIn} onClick={() => setAdjust({ zoom: clamp(adjust.zoom * 1.08, 0.4, 3) })}>
             <ZoomIn className="h-4 w-4" />
           </Button>
           <span className="mx-1 h-5 w-px bg-line" />
           <Button size="sm" variant="ghost" onClick={resetFraming}>
-            <RotateCcw className="h-3.5 w-3.5" /> 自动构图
+            <RotateCcw className="h-3.5 w-3.5" /> {t.autoFrame}
           </Button>
           <Button size="sm" variant={showGuides ? 'soft' : 'ghost'} onClick={toggleGuides}>
-            <Grid2x2 className="h-3.5 w-3.5" /> 参考线
+            <Grid2x2 className="h-3.5 w-3.5" /> {t.guides}
           </Button>
           <span className="mx-1 h-5 w-px bg-line" />
           <Button size="sm" variant="ghost" onClick={() => fileInput.current?.click()}>
-            <ImagePlus className="h-3.5 w-3.5" /> 换照片
+            <ImagePlus className="h-3.5 w-3.5" /> {t.changePhoto}
           </Button>
           <input
             ref={fileInput}

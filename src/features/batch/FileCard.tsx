@@ -3,6 +3,7 @@ import { CircleAlert, Columns2, Download, X } from 'lucide-react'
 import { Badge } from '@/components/ui/controls'
 import { cn } from '@/lib/cn'
 import { saveBlob } from '@/lib/download'
+import { errorMessage, useMessages } from '@/i18n'
 import { formatBytes, percentChange } from '@/lib/format'
 import { type BatchItem, useBatch } from '@/stores/batch'
 
@@ -13,6 +14,7 @@ export function FileCard({ item, version, onCompare }: { item: BatchItem; versio
   const pct = r ? percentChange(item.file.size, r.blob.size) : 0
   const stale = r && r.version !== version
   const src = r ? (r.thumb ?? r.url) : item.thumb
+  const m = useMessages()
 
   return (
     <motion.div
@@ -32,21 +34,21 @@ export function FileCard({ item, version, onCompare }: { item: BatchItem; versio
         {item.status === 'processing' && (
           <div className="absolute inset-0 overflow-hidden bg-black/30 backdrop-blur-[2px]">
             <div className="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/30 to-transparent" />
-            <div className="absolute inset-0 grid place-items-center text-[12px] font-semibold text-white">处理中…</div>
+            <div className="absolute inset-0 grid place-items-center text-[12px] font-semibold text-white">{m.batch.processing}</div>
           </div>
         )}
         <div className="absolute right-1.5 top-1.5 flex gap-1 opacity-0 transition group-hover:opacity-100">
           {r && (
             <>
-              <IconBtn title="对比" onClick={onCompare}>
+              <IconBtn title={m.common.compare} onClick={onCompare}>
                 <Columns2 className="h-3.5 w-3.5" />
               </IconBtn>
-              <IconBtn title="下载" onClick={() => saveBlob(r.blob, r.name)}>
+              <IconBtn title={m.common.download} onClick={() => saveBlob(r.blob, r.name)}>
                 <Download className="h-3.5 w-3.5" />
               </IconBtn>
             </>
           )}
-          <IconBtn title="移除" onClick={() => remove(item.id)}>
+          <IconBtn title={m.common.remove} onClick={() => remove(item.id)}>
             <X className="h-3.5 w-3.5" />
           </IconBtn>
         </div>
@@ -58,8 +60,8 @@ export function FileCard({ item, version, onCompare }: { item: BatchItem; versio
         </div>
         <div className="mt-1 flex items-center gap-1.5 text-[11px] tabular-nums text-muted">
           {item.status === 'error' ? (
-            <span className="flex items-center gap-1 text-danger" title={item.error}>
-              <CircleAlert className="h-3.5 w-3.5" /> 失败
+            <span className="flex items-center gap-1 text-danger" title={item.error && errorMessage(item.error)}>
+              <CircleAlert className="h-3.5 w-3.5" /> {m.batch.failed}
             </span>
           ) : r ? (
             <>
@@ -67,7 +69,7 @@ export function FileCard({ item, version, onCompare }: { item: BatchItem; versio
                 {formatBytes(r.blob.size)} · {r.width}×{r.height}
               </span>
               <Badge tone={stale ? 'neutral' : pct <= 0 ? 'success' : 'warning'} className="ml-auto">
-                {stale ? '待更新' : `${pct > 0 ? '+' : ''}${pct}%`}
+                {stale ? m.batch.stale : `${pct > 0 ? '+' : ''}${pct}%`}
               </Badge>
             </>
           ) : (

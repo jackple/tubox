@@ -8,6 +8,7 @@ import { Chip, Field, Section, Slider } from '@/components/ui/controls'
 import { buildGrid, gridSize } from '@/core/collage/grid'
 import { type GridTemplate, gridTemplates } from '@/core/collage/templates'
 import { exportScene } from '@/core/scene/render'
+import { plural, useMessages } from '@/i18n'
 import { cn } from '@/lib/cn'
 import { saveBlob, timestamp } from '@/lib/download'
 import { useGrid } from '@/stores/collage'
@@ -38,6 +39,7 @@ export default function GridPage() {
   const bitmaps = useMemo(() => images.map((i) => i.bitmap), [images])
   const scene = useMemo(() => buildGrid(bitmaps, template, o), [bitmaps, template, o])
   const [W, H] = gridSize(o.ratio)
+  const m = useMessages()
 
   return (
     <ToolLayout
@@ -45,7 +47,7 @@ export default function GridPage() {
       actions={
         images.length > 0 && (
           <Button variant="ghost" size="sm" onClick={clear}>
-            <Trash2 className="h-4 w-4" /> 清空
+            <Trash2 className="h-4 w-4" /> {m.common.clear}
           </Button>
         )
       }
@@ -57,12 +59,15 @@ export default function GridPage() {
               disabled={!images.length}
               note={`${W} × ${H} px`}
               onExport={async (type) =>
-                saveBlob(await exportScene(buildGrid(bitmaps, template, o, false), type, 0.92), `拼图-${timestamp()}.${extOf(type)}`)
+                saveBlob(
+                  await exportScene(buildGrid(bitmaps, template, o, false), type, 0.92),
+                  `${m.grid.fileName}-${timestamp()}.${extOf(type)}`,
+                )
               }
             />
           }
         >
-          <Section title="布局模板" icon={<LayoutTemplate className="h-3.5 w-3.5" />}>
+          <Section title={m.grid.templateTitle} icon={<LayoutTemplate className="h-3.5 w-3.5" />}>
             <div className="grid grid-cols-4 gap-2">
               {gridTemplates.map((t) => (
                 <TemplateThumb
@@ -74,7 +79,7 @@ export default function GridPage() {
                 />
               ))}
             </div>
-            <Field label="画布比例">
+            <Field label={m.grid.ratio}>
               <div className="flex flex-wrap gap-1.5">
                 {RATIOS.map((r) => (
                   <Chip key={r.label} active={o.ratio[0] === r.v[0] && o.ratio[1] === r.v[1]} onClick={() => patch({ ratio: r.v })}>
@@ -84,37 +89,41 @@ export default function GridPage() {
               </div>
             </Field>
           </Section>
-          <Section title="样式" icon={<Paintbrush className="h-3.5 w-3.5" />}>
-            <Slider label="间距" value={o.gap} min={0} max={100} onChange={(gap) => patch({ gap })} format={(v) => `${v}px`} />
+          <Section title={m.common.style} icon={<Paintbrush className="h-3.5 w-3.5" />}>
+            <Slider label={m.common.gap} value={o.gap} min={0} max={100} onChange={(gap) => patch({ gap })} format={(v) => `${v}px`} />
             <Slider
-              label="外边距"
+              label={m.common.padding}
               value={o.padding}
               min={0}
               max={160}
               onChange={(padding) => patch({ padding })}
               format={(v) => `${v}px`}
             />
-            <Slider label="圆角" value={o.radius} min={0} max={120} onChange={(radius) => patch({ radius })} format={(v) => `${v}px`} />
+            <Slider
+              label={m.common.radius}
+              value={o.radius}
+              min={0}
+              max={120}
+              onChange={(radius) => patch({ radius })}
+              format={(v) => `${v}px`}
+            />
             <BackgroundField value={o.background} onChange={(background) => patch({ background })} />
           </Section>
         </Inspector>
       }
     >
-      {images.length ? (
-        <ScenePreview scene={scene} />
-      ) : (
-        <EmptyStage onFiles={add} title="选择 2-9 张图片开始拼图" hint="根据图片数量自动推荐模板，可拖拽调整顺序" />
-      )}
+      {images.length ? <ScenePreview scene={scene} /> : <EmptyStage onFiles={add} title={m.grid.emptyTitle} hint={m.grid.emptyHint} />}
     </ToolLayout>
   )
 }
 
 function TemplateThumb({ t, active, dim, onClick }: { t: GridTemplate; active: boolean; dim: boolean; onClick: () => void }) {
+  const m = useMessages()
   return (
     <button
       type="button"
       onClick={onClick}
-      title={`${t.count} 张`}
+      title={plural(m.grid.count, t.count)}
       className={cn(
         'relative aspect-square rounded-lg border p-1.5 transition-all',
         active ? 'border-fg bg-fg/[0.03] ring-1 ring-fg' : 'border-line hover:border-fg/20',

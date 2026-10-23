@@ -8,6 +8,7 @@ import { Chip, Field, NumberInput, Section, Slider } from '@/components/ui/contr
 import { Segmented } from '@/components/ui/Segmented'
 import { buildLongImage } from '@/core/collage/longImage'
 import { exportScene } from '@/core/scene/render'
+import { useMessages } from '@/i18n'
 import { saveBlob, timestamp } from '@/lib/download'
 import { useLongImage } from '@/stores/collage'
 import { BackgroundField, EmptyStage, ExportFooter, extOf } from './shared'
@@ -15,6 +16,8 @@ import { BackgroundField, EmptyStage, ExportFooter, extOf } from './shared'
 export default function LongImagePage() {
   const { images, add, remove, move, clear, options: o, patch } = useLongImage()
   const vertical = o.direction === 'vertical'
+  const m = useMessages()
+  const t = m.long
 
   const built = useMemo(
     () =>
@@ -32,7 +35,7 @@ export default function LongImagePage() {
       actions={
         images.length > 0 && (
           <Button variant="ghost" size="sm" onClick={clear}>
-            <Trash2 className="h-4 w-4" /> 清空
+            <Trash2 className="h-4 w-4" /> {m.common.clear}
           </Button>
         )
       }
@@ -42,12 +45,14 @@ export default function LongImagePage() {
           footer={
             <ExportFooter
               disabled={!images.length}
-              note={`${Math.round(scene.width * exportScale)} × ${Math.round(scene.height * exportScale)} px${exportScale < 1 ? '（已按浏览器上限缩放）' : ''}`}
-              onExport={async (type) => saveBlob(await exportScene(scene, type, 0.92, exportScale), `长图-${timestamp()}.${extOf(type)}`)}
+              note={`${Math.round(scene.width * exportScale)} × ${Math.round(scene.height * exportScale)} px${exportScale < 1 ? t.scaled : ''}`}
+              onExport={async (type) =>
+                saveBlob(await exportScene(scene, type, 0.92, exportScale), `${t.fileName}-${timestamp()}.${extOf(type)}`)
+              }
             />
           }
         >
-          <Section title="拼接方式" icon={<Rows3 className="h-3.5 w-3.5" />}>
+          <Section title={t.modeTitle} icon={<Rows3 className="h-3.5 w-3.5" />}>
             <Segmented
               value={o.mode === 'subtitle' ? 'subtitle' : o.direction}
               onChange={(v) =>
@@ -59,7 +64,7 @@ export default function LongImagePage() {
                   label: (
                     <>
                       <ArrowUpDown className="h-3.5 w-3.5" />
-                      竖向
+                      {t.vertical}
                     </>
                   ),
                 },
@@ -68,7 +73,7 @@ export default function LongImagePage() {
                   label: (
                     <>
                       <ArrowLeftRight className="h-3.5 w-3.5" />
-                      横向
+                      {t.horizontal}
                     </>
                   ),
                 },
@@ -77,7 +82,7 @@ export default function LongImagePage() {
                   label: (
                     <>
                       <Clapperboard className="h-3.5 w-3.5" />
-                      字幕
+                      {t.subtitle}
                     </>
                   ),
                 },
@@ -86,10 +91,10 @@ export default function LongImagePage() {
             {o.mode === 'subtitle' && (
               <>
                 <p className="rounded-lg border border-line bg-subtle/60 px-3 py-2 text-[12px] leading-relaxed text-muted">
-                  首张保留完整画面，其余仅保留底部字幕条，适合拼接电影截图。
+                  {t.subtitleNote}
                 </p>
                 <Slider
-                  label="字幕条高度"
+                  label={t.subtitleHeight}
                   value={o.subtitleRatio}
                   min={6}
                   max={40}
@@ -98,7 +103,7 @@ export default function LongImagePage() {
                 />
               </>
             )}
-            <Field label={vertical ? '输出宽度' : '输出高度'}>
+            <Field label={vertical ? t.outWidth : t.outHeight}>
               <NumberInput value={o.size} min={200} max={8000} suffix="px" onChange={(v) => patch({ size: v ?? 1080 })} />
             </Field>
             <div className="flex flex-wrap gap-1.5">
@@ -109,19 +114,26 @@ export default function LongImagePage() {
               ))}
             </div>
           </Section>
-          <Section title="样式">
+          <Section title={m.common.style}>
             {o.mode !== 'subtitle' && (
-              <Slider label="图片间距" value={o.gap} min={0} max={80} onChange={(gap) => patch({ gap })} format={(v) => `${v}px`} />
+              <Slider label={t.imageGap} value={o.gap} min={0} max={80} onChange={(gap) => patch({ gap })} format={(v) => `${v}px`} />
             )}
             <Slider
-              label="外边距"
+              label={m.common.padding}
               value={o.padding}
               min={0}
               max={120}
               onChange={(padding) => patch({ padding })}
               format={(v) => `${v}px`}
             />
-            <Slider label="圆角" value={o.radius} min={0} max={60} onChange={(radius) => patch({ radius })} format={(v) => `${v}px`} />
+            <Slider
+              label={m.common.radius}
+              value={o.radius}
+              min={0}
+              max={60}
+              onChange={(radius) => patch({ radius })}
+              format={(v) => `${v}px`}
+            />
             <BackgroundField value={o.background} onChange={(background) => patch({ background })} />
           </Section>
         </Inspector>
@@ -130,7 +142,7 @@ export default function LongImagePage() {
       {images.length ? (
         <ScenePreview scene={scene} fit={vertical ? 'width' : 'contain'} />
       ) : (
-        <EmptyStage onFiles={add} title="添加多张图片拼成长图" hint="聊天记录截图、电影字幕、教程步骤图都适用" />
+        <EmptyStage onFiles={add} title={t.emptyTitle} hint={t.emptyHint} />
       )}
     </ToolLayout>
   )

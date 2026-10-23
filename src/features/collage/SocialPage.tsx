@@ -12,6 +12,7 @@ import type { FontKind } from '@/core/fonts'
 import { paintToCss } from '@/core/scene/paint'
 import { exportScene } from '@/core/scene/render'
 import { useDebounced } from '@/hooks/useDebounced'
+import { fmt, label, plural, useMessages } from '@/i18n'
 import { cn } from '@/lib/cn'
 import { saveBlob, timestamp } from '@/lib/download'
 import { useSocial } from '@/stores/collage'
@@ -34,6 +35,9 @@ export default function SocialPage() {
   const thumbs = useMemo(() => socialStyles.map((s) => ({ style: s, scene: s.build(thumbCtx) })), [thumbCtx])
 
   const needImages = style.images[0] > images.length
+  const m = useMessages()
+  const t = m.social
+  const styleName = t.styles[style.id as keyof typeof t.styles]?.name ?? style.id
 
   return (
     <ToolLayout
@@ -41,7 +45,7 @@ export default function SocialPage() {
       actions={
         images.length > 0 && (
           <Button variant="ghost" size="sm" onClick={clear}>
-            <Trash2 className="h-4 w-4" /> 清空图片
+            <Trash2 className="h-4 w-4" /> {m.common.clearImages}
           </Button>
         )
       }
@@ -51,14 +55,14 @@ export default function SocialPage() {
           footer={
             <ExportFooter
               disabled={needImages}
-              note={needImages ? `「${style.name}」需要至少 ${style.images[0]} 张图片` : `${preset.width} × ${preset.height} px`}
+              note={needImages ? plural(t.needImages, style.images[0], { style: styleName }) : `${preset.width} × ${preset.height} px`}
               onExport={async (type) =>
-                saveBlob(await exportScene(scene, type, 0.94), `${preset.name}-${style.name}-${timestamp()}.${extOf(type)}`)
+                saveBlob(await exportScene(scene, type, 0.94), `${label(t.presets, preset.id)}-${styleName}-${timestamp()}.${extOf(type)}`)
               }
             />
           }
         >
-          <Section title="画布规格" icon={<Ratio className="h-3.5 w-3.5" />}>
+          <Section title={t.canvasTitle} icon={<Ratio className="h-3.5 w-3.5" />}>
             <div className="grid grid-cols-5 gap-1.5">
               {socialPresets.map((p) => {
                 const active = p.id === preset.id
@@ -82,7 +86,7 @@ export default function SocialPage() {
                       />
                     </span>
                     <span className={cn('text-center text-[10px] font-medium leading-tight', active ? 'text-fg' : 'text-muted')}>
-                      {p.name}
+                      {label(t.presets, p.id)}
                       <br />
                       <span className="opacity-70">{p.hint}</span>
                     </span>
@@ -92,10 +96,11 @@ export default function SocialPage() {
             </div>
           </Section>
 
-          <Section title="版式" icon={<Shapes className="h-3.5 w-3.5" />}>
+          <Section title={t.styleTitle} icon={<Shapes className="h-3.5 w-3.5" />}>
             <div className="grid grid-cols-3 gap-2.5">
               {thumbs.map(({ style: s, scene: sc }) => {
                 const active = s.id === style.id
+                const text = t.styles[s.id as keyof typeof t.styles]
                 return (
                   <button key={s.id} type="button" onClick={() => patch({ styleId: s.id })} className="group text-left">
                     <span
@@ -107,24 +112,24 @@ export default function SocialPage() {
                       <SceneThumb scene={sc} width={88} className="mx-auto" />
                     </span>
                     <span className={cn('mt-1.5 block text-[12px] font-medium', active ? 'font-semibold text-fg' : 'text-fg')}>
-                      {s.name}
+                      {text?.name ?? s.id}
                     </span>
-                    <span className="block text-[10px] text-muted">{s.desc}</span>
+                    <span className="block text-[10px] text-muted">{text?.desc}</span>
                   </button>
                 )
               })}
             </div>
           </Section>
 
-          <Section title="文字内容" icon={<Type className="h-3.5 w-3.5" />}>
-            <Field label="标题">
+          <Section title={t.contentTitle} icon={<Type className="h-3.5 w-3.5" />}>
+            <Field label={t.title}>
               <textarea
                 className="input h-auto min-h-[60px] resize-none py-2"
                 value={o.content.title}
                 onChange={(e) => setContent({ title: e.target.value })}
               />
             </Field>
-            <Field label="副标题">
+            <Field label={t.subtitle}>
               <textarea
                 className="input h-auto min-h-[52px] resize-none py-2"
                 value={o.content.subtitle}
@@ -132,47 +137,47 @@ export default function SocialPage() {
               />
             </Field>
             <div className="grid grid-cols-2 gap-2">
-              <Field label="标签">
+              <Field label={t.tag}>
                 <Input value={o.content.tag} onChange={(e) => setContent({ tag: e.target.value })} />
               </Field>
-              <Field label="署名">
+              <Field label={t.footer}>
                 <Input value={o.content.footer} onChange={(e) => setContent({ footer: e.target.value })} />
               </Field>
             </div>
-            <Field label="字体">
+            <Field label={t.font}>
               <Segmented<FontKind>
                 size="sm"
                 value={o.font}
                 onChange={(font) => patch({ font })}
                 options={[
-                  { value: 'sans', label: '黑体 · 现代' },
-                  { value: 'serif', label: '宋体 · 文艺' },
+                  { value: 'sans', label: t.fontSans },
+                  { value: 'serif', label: t.fontSerif },
                 ]}
               />
             </Field>
           </Section>
 
-          <Section title="配色" icon={<Palette className="h-3.5 w-3.5" />}>
+          <Section title={t.themeTitle} icon={<Palette className="h-3.5 w-3.5" />}>
             <div className="grid grid-cols-3 gap-2">
-              {socialThemes.map((t) => {
-                const active = t.id === theme.id
+              {socialThemes.map((th) => {
+                const active = th.id === theme.id
                 return (
                   <button
-                    key={t.id}
+                    key={th.id}
                     type="button"
-                    onClick={() => patch({ themeId: t.id })}
+                    onClick={() => patch({ themeId: th.id })}
                     className={cn(
                       'flex items-center gap-2 rounded-lg border p-1.5 pr-2 transition',
                       active ? 'border-fg ring-1 ring-fg' : 'border-line hover:border-fg/20',
                     )}
                   >
-                    <span className="relative h-7 w-7 shrink-0 rounded-md ring-1 ring-black/5" style={{ background: paintToCss(t.bg) }}>
+                    <span className="relative h-7 w-7 shrink-0 rounded-md ring-1 ring-black/5" style={{ background: paintToCss(th.bg) }}>
                       <span
                         className="absolute bottom-1 right-1 h-2.5 w-2.5 rounded-full ring-2 ring-white/80"
-                        style={{ background: t.accent }}
+                        style={{ background: th.accent }}
                       />
                     </span>
-                    <span className="text-[12px] font-medium">{t.name}</span>
+                    <span className="text-[12px] font-medium">{label(t.themes, th.id)}</span>
                   </button>
                 )
               })}
@@ -185,7 +190,7 @@ export default function SocialPage() {
       {needImages && (
         <div className="pointer-events-none absolute inset-x-0 bottom-6 flex justify-center">
           <span className="rounded-full bg-black/60 px-3 py-1.5 text-[12px] text-white backdrop-blur">
-            在左侧添加图片，或选择「文字卡片」版式
+            {fmt(t.addHint, { style: t.styles.quote.name })}
           </span>
         </div>
       )}

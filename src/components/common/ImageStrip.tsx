@@ -2,6 +2,7 @@ import { useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { GripVertical, Plus, X } from 'lucide-react'
 import { ACCEPT, type ImageAsset } from '@/lib/assets'
+import { useMessages } from '@/i18n'
 import { cn } from '@/lib/cn'
 
 interface Props {
@@ -19,14 +20,15 @@ export function ImageStrip({ images, onAdd, onRemove, onMove, max = Infinity, va
   const input = useRef<HTMLInputElement>(null)
   const [dragIndex, setDragIndex] = useState<number | null>(null)
   const [overIndex, setOverIndex] = useState<number | null>(null)
+  const m = useMessages()
 
   return (
     <div className="p-4">
       <div className="mb-3 flex items-center justify-between">
-        <span className="text-[13px] font-semibold">素材</span>
+        <span className="text-[13px] font-semibold">{m.strip.title}</span>
         <span className="text-[12px] tabular-nums text-muted">
           {images.length}
-          {Number.isFinite(max) && ` / ${max}`} · 拖拽排序
+          {Number.isFinite(max) && ` / ${max}`} · {m.strip.reorder}
         </span>
       </div>
       <div className={cn('grid gap-2', variant === 'grid' ? 'grid-cols-3 lg:grid-cols-2' : 'grid-cols-1')}>
@@ -88,6 +90,7 @@ export function ImageStrip({ images, onAdd, onRemove, onMove, max = Infinity, va
                 <button
                   type="button"
                   onClick={() => onRemove(img.id)}
+                  title={m.common.remove}
                   className="absolute right-1.5 top-1.5 grid h-5 w-5 place-items-center rounded-md bg-black/55 text-white opacity-0 backdrop-blur transition group-hover:opacity-100"
                 >
                   <X className="h-3 w-3" />
@@ -106,7 +109,7 @@ export function ImageStrip({ images, onAdd, onRemove, onMove, max = Infinity, va
             )}
           >
             <span className="flex items-center gap-1.5 text-[12px] font-medium">
-              <Plus className="h-4 w-4" /> 添加
+              <Plus className="h-4 w-4" /> {m.strip.add}
             </span>
           </button>
         )}

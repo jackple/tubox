@@ -1,4 +1,5 @@
 import { useId } from 'react'
+import { useMessages } from '@/i18n'
 import { cn } from '@/lib/cn'
 
 /**
@@ -33,12 +34,13 @@ export function LogoMark({ className }: { className?: string }) {
 }
 
 export function Logo({ className }: { className?: string }) {
+  const name = useMessages().brand.name
   return (
     <div className={cn('flex items-center gap-2.5 text-fg', className)}>
       <LogoMark />
       <div className="flex items-baseline gap-1.5 leading-none">
-        <span className="text-[16px] font-semibold tracking-tight">图盒</span>
-        <span className="text-[13px] font-medium tracking-tight text-muted">Tubox</span>
+        <span className="text-[16px] font-semibold tracking-tight">{name}</span>
+        {name !== 'Tubox' && <span className="text-[13px] font-medium tracking-tight text-muted">Tubox</span>}
       </div>
     </div>
   )

@@ -4,6 +4,7 @@ import { CompareSlider } from '@/components/common/CompareSlider'
 import type { ProcessResult } from '@/core/batch/types'
 import { useDebounced } from '@/hooks/useDebounced'
 import { useObjectUrl } from '@/hooks/useObjectUrl'
+import { useMessages } from '@/i18n'
 import { formatBytes, percentChange } from '@/lib/format'
 import { useBatch } from '@/stores/batch'
 import { processInPool } from '@/workers/pool'
@@ -33,13 +34,14 @@ export function LivePreview() {
   }, [file, options])
 
   const url = useObjectUrl(res?.blob)
+  const m = useMessages()
 
   if (!item)
     return (
       <div className="checker grid aspect-[4/3] place-items-center rounded-xl border border-line/70 text-muted">
         <div className="flex flex-col items-center gap-2 text-[12px]">
           <ImageIcon className="h-6 w-6 opacity-60" />
-          添加图片后实时预览效果
+          {m.batch.previewEmpty}
         </div>
       </div>
     )
@@ -51,14 +53,14 @@ export function LivePreview() {
         {url ? <CompareSlider before={item.url} after={url} className="aspect-[4/3] w-full" /> : <div className="checker aspect-[4/3]" />}
         {busy && (
           <div className="absolute bottom-2 right-2 flex items-center gap-1.5 rounded-md bg-black/60 px-2 py-1 text-[11px] text-white backdrop-blur">
-            <Loader2 className="h-3 w-3 animate-spin" /> 预览中
+            <Loader2 className="h-3 w-3 animate-spin" /> {m.batch.previewing}
           </div>
         )}
       </div>
       <div className="grid grid-cols-2 gap-2 text-[11px] tabular-nums">
-        <Stat label="原图" value={formatBytes(item.file.size)} sub={item.width ? `${item.width}×${item.height}` : ''} />
+        <Stat label={m.common.original} value={formatBytes(item.file.size)} sub={item.width ? `${item.width}×${item.height}` : ''} />
         <Stat
-          label="预计输出"
+          label={m.batch.estimated}
           value={res ? formatBytes(res.blob.size) : '—'}
           sub={res ? `${res.width}×${res.height}` : ''}
           extra={

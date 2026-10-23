@@ -1,12 +1,17 @@
-import { Suspense } from 'react'
+import { Suspense, useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 import { Loader2 } from 'lucide-react'
 import { useSeo } from '@/hooks/useSeo'
+import { useRouteLocale } from '@/i18n'
+import { useLocale } from '@/stores/locale'
 import { MobileNav } from './MobileNav'
 import { Sidebar } from './Sidebar'
 
 export function AppShell() {
   useSeo()
+  // URL 是语言的唯一来源：切换语言、前进后退时按路由加载对应语言包
+  const routeLocale = useRouteLocale()
+  useEffect(() => void useLocale.getState().setLocale(routeLocale), [routeLocale])
   return (
     <div className="flex h-full overflow-hidden">
       <Sidebar />

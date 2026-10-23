@@ -6,27 +6,28 @@ import { gridTemplates, layoutCells } from './templates'
 
 /* ───────────────────────── 画布规格 ───────────────────────── */
 
+/** 显示名见 i18n/messages 的 social.presets */
 export interface SocialPreset {
   id: string
-  name: string
+  /** 比例提示 */
   hint: string
   width: number
   height: number
 }
 
 export const socialPresets: SocialPreset[] = [
-  { id: 'xhs', name: '小红书', hint: '3:4', width: 1242, height: 1656 },
-  { id: 'moments', name: '朋友圈', hint: '1:1', width: 1080, height: 1080 },
-  { id: 'story', name: '视频号', hint: '9:16', width: 1080, height: 1920 },
-  { id: 'weibo', name: '微博横图', hint: '16:9', width: 1920, height: 1080 },
-  { id: 'mp', name: '公众号封面', hint: '2.35:1', width: 900, height: 383 },
+  { id: 'xhs', hint: '3:4', width: 1242, height: 1656 },
+  { id: 'moments', hint: '1:1', width: 1080, height: 1080 },
+  { id: 'story', hint: '9:16', width: 1080, height: 1920 },
+  { id: 'weibo', hint: '16:9', width: 1920, height: 1080 },
+  { id: 'mp', hint: '2.35:1', width: 900, height: 383 },
 ]
 
 /* ───────────────────────── 主题配色 ───────────────────────── */
 
+/** 显示名见 i18n/messages 的 social.themes */
 export interface SocialTheme {
   id: string
-  name: string
   bg: Paint
   surface: string
   fg: string
@@ -38,7 +39,6 @@ export interface SocialTheme {
 export const socialThemes: SocialTheme[] = [
   {
     id: 'cream',
-    name: '奶油',
     bg: linear(160, '#FBF6EE', '#F1E4D2'),
     surface: '#FFFDF8',
     fg: '#2B2118',
@@ -48,7 +48,6 @@ export const socialThemes: SocialTheme[] = [
   },
   {
     id: 'midnight',
-    name: '夜幕',
     bg: linear(160, '#141428', '#2C2155'),
     surface: '#1F1B3D',
     fg: '#F4F1FF',
@@ -58,7 +57,6 @@ export const socialThemes: SocialTheme[] = [
   },
   {
     id: 'mint',
-    name: '薄荷',
     bg: linear(160, '#EAF7F1', '#CDEDE0'),
     surface: '#FFFFFF',
     fg: '#113328',
@@ -68,7 +66,6 @@ export const socialThemes: SocialTheme[] = [
   },
   {
     id: 'sunset',
-    name: '落日',
     bg: linear(150, '#FFB88C', '#FF6F91', '#9A5CF5'),
     surface: '#FFF8F5',
     fg: '#2A1530',
@@ -78,7 +75,6 @@ export const socialThemes: SocialTheme[] = [
   },
   {
     id: 'sakura',
-    name: '樱花',
     bg: linear(160, '#FFF1F5', '#FFD9E4'),
     surface: '#FFFFFF',
     fg: '#3A1D27',
@@ -86,7 +82,7 @@ export const socialThemes: SocialTheme[] = [
     accent: '#F0628C',
     accentFg: '#FFFFFF',
   },
-  { id: 'mono', name: '极简', bg: '#F4F4F2', surface: '#FFFFFF', fg: '#111111', muted: '#77736E', accent: '#111111', accentFg: '#FFFFFF' },
+  { id: 'mono', bg: '#F4F4F2', surface: '#FFFFFF', fg: '#111111', muted: '#77736E', accent: '#111111', accentFg: '#FFFFFF' },
 ]
 
 /* ───────────────────────── 版式 ───────────────────────── */
@@ -107,10 +103,9 @@ export interface SocialBuildContext {
   font: FontKind
 }
 
+/** 名称与说明见 i18n/messages 的 social.styles */
 export interface SocialStyle {
   id: string
-  name: string
-  desc: string
   /** 需要的图片数量区间 */
   images: [number, number]
   build: (c: SocialBuildContext) => Scene
@@ -155,8 +150,6 @@ const metrics = (W: number, H: number) => {
 /** 大字封面：满版图片 + 底部渐变 + 大标题 */
 const cover: SocialStyle = {
   id: 'cover',
-  name: '大字封面',
-  desc: '满版图 · 底部大标题',
   images: [0, 1],
   build: ({ images, W, H, content, theme, font }) => {
     const { u, pad, landscape } = metrics(W, H)
@@ -239,8 +232,6 @@ const cover: SocialStyle = {
 /** 拍立得：倾斜的相纸卡片 + 手写感标题 */
 const polaroid: SocialStyle = {
   id: 'polaroid',
-  name: '拍立得',
-  desc: '相纸卡片 · 复古温柔',
   images: [1, 1],
   build: ({ images, W, H, content, theme, font }) => {
     const { u, pad, landscape } = metrics(W, H)
@@ -348,8 +339,6 @@ const polaroid: SocialStyle = {
 /** 杂志风：刊头大字 + 封面标题 */
 const magazine: SocialStyle = {
   id: 'magazine',
-  name: '杂志封面',
-  desc: '刊头大字 · 时尚感',
   images: [1, 1],
   build: ({ images, W, H, content, theme, font }) => {
     const { u, pad, landscape } = metrics(W, H)
@@ -442,8 +431,6 @@ const magazine: SocialStyle = {
 /** 留白卡片：模糊背景 + 白色卡片 */
 const card: SocialStyle = {
   id: 'card',
-  name: '留白卡片',
-  desc: '模糊底 · 精致卡片',
   images: [1, 1],
   build: ({ images, W, H, content, theme, font }) => {
     const { u, pad, landscape } = metrics(W, H)
@@ -580,8 +567,6 @@ const card: SocialStyle = {
 /** 多图拼贴：标题区 + 自适应网格 */
 const mosaic: SocialStyle = {
   id: 'mosaic',
-  name: '多图拼贴',
-  desc: '1-4 张 · 图文合集',
   images: [1, 4],
   build: ({ images, W, H, content, theme, font }) => {
     const { u, pad, landscape } = metrics(W, H)
@@ -650,8 +635,6 @@ const mosaic: SocialStyle = {
 /** 文字卡：无需图片，适合金句、干货 */
 const quote: SocialStyle = {
   id: 'quote',
-  name: '文字卡片',
-  desc: '无需图片 · 金句干货',
   images: [0, 0],
   build: ({ W, H, content, theme, font }) => {
     const { u, pad, landscape } = metrics(W, H)

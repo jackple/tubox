@@ -2,6 +2,7 @@ import { type ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { ImagePlus } from 'lucide-react'
 import { ACCEPT } from '@/lib/assets'
+import { useMessages } from '@/i18n'
 import { cn } from '@/lib/cn'
 
 interface DropzoneProps {
@@ -21,6 +22,7 @@ export function Dropzone({ onFiles, multiple = true, title, hint, pasteable = tr
   const inputRef = useRef<HTMLInputElement>(null)
   const [over, setOver] = useState(false)
   const depth = useRef(0)
+  const m = useMessages()
 
   const emit = useCallback(
     (list: FileList | File[] | null) => {
@@ -92,17 +94,17 @@ export function Dropzone({ onFiles, multiple = true, title, hint, pasteable = tr
           <FannedCards compact={compact} active={over} />
           <div className="relative space-y-1.5">
             <div className={cn('font-semibold tracking-tight', compact ? 'text-[13px]' : 'text-[18px]')}>
-              {title ?? (over ? '松开即可添加' : '拖入图片，或点击选择')}
+              {title ?? (over ? m.dropzone.release : m.dropzone.title)}
             </div>
-            <div className="text-[13px] text-muted">{hint ?? '图片仅在本地处理，不会上传'}</div>
+            <div className="text-[13px] text-muted">{hint ?? m.dropzone.hint}</div>
           </div>
           {!compact && (
             <div className="relative flex flex-col items-center gap-3">
               <div className="flex items-center gap-2 text-[12px] text-muted">
                 <span className="inline-flex h-8 items-center rounded-lg border border-line bg-panel px-3 font-medium text-fg shadow-[var(--highlight),0_1px_2px_rgb(0_0_0/0.05)]">
-                  选择文件
+                  {m.dropzone.choose}
                 </span>
-                <span>或粘贴</span>
+                <span>{m.dropzone.orPaste}</span>
                 <span className="kbd">⌘</span>
                 <span className="kbd">V</span>
               </div>

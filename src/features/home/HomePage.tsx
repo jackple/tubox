@@ -7,6 +7,7 @@ import { IconTile } from '@/components/layout/ToolIcon'
 import { Logo } from '@/components/layout/Logo'
 import { Button } from '@/components/ui/Button'
 import { type Tool, toolById } from '@/features/tools'
+import { useLocalizedPath, useMessages } from '@/i18n'
 import { cn } from '@/lib/cn'
 import { ProductShot } from './ProductShot'
 import { Scenery } from './Scenery'
@@ -37,6 +38,8 @@ export default function HomePage() {
 /* ───────────────────────── Hero ───────────────────────── */
 
 function Hero() {
+  const m = useMessages().home
+  const to = useLocalizedPath()
   return (
     <section className="relative isolate overflow-hidden pb-6">
       {/* 背景：细网格 + 顶部聚光 */}
@@ -46,11 +49,11 @@ function Hero() {
       <div className="mx-auto max-w-5xl px-6 pt-16 text-center sm:pt-24">
         <motion.div {...fadeUp(0)}>
           <Link
-            to="/id-photo"
+            to={to('/id-photo')}
             className="group inline-flex h-8 items-center gap-2 rounded-full border border-line bg-panel/70 pl-1 pr-3 text-[12px] text-muted shadow-[var(--highlight),0_1px_2px_rgb(0_0_0/0.04)] backdrop-blur transition hover:border-fg/20 hover:text-fg"
           >
             <span className="rounded-full bg-fg px-2 py-0.5 font-mono text-[10px] font-semibold tracking-wider text-bg">NEW</span>
-            证件照已支持 AI 换底
+            {m.badge}
             <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
           </Link>
         </motion.div>
@@ -59,28 +62,27 @@ function Hero() {
           {...fadeUp(0.08)}
           className="mx-auto mt-7 max-w-4xl text-[42px] font-semibold leading-[1.08] tracking-[-0.045em] sm:text-[72px]"
         >
-          <span className="text-metal">专业级图片处理</span>
+          <span className="text-metal">{m.heroLine1}</span>
           <br />
-          <span className="text-metal">就在</span>
-          <span className="text-gradient">浏览器</span>
-          <span className="text-metal">里</span>
+          <span className="text-metal">{m.heroBefore}</span>
+          <span className="text-gradient">{m.heroHighlight}</span>
+          <span className="text-metal">{m.heroAfter}</span>
         </motion.h1>
 
         <motion.p {...fadeUp(0.16)} className="mx-auto mt-6 max-w-xl text-[16px] leading-relaxed text-muted sm:text-[17px]">
-          批量压缩、证件照、拼图排版——六个专业工具，全部在你的设备上运行。
-          <br className="hidden sm:block" />
-          无需安装，无需上传，打开即用。
+          {m.heroDesc1}
+          <br className="hidden sm:block" /> {m.heroDesc2}
         </motion.p>
 
         <motion.div {...fadeUp(0.24)} className="mt-9 flex flex-wrap justify-center gap-3">
-          <Link to="/batch">
+          <Link to={to('/batch')}>
             <Button variant="primary" size="lg" className="px-6">
-              开始使用 <ArrowRight className="h-4 w-4" />
+              {m.start} <ArrowRight className="h-4 w-4" />
             </Button>
           </Link>
-          <Link to="/id-photo">
+          <Link to={to('/id-photo')}>
             <Button size="lg" className="px-6">
-              制作证件照
+              {m.makeIdPhoto}
             </Button>
           </Link>
         </motion.div>
@@ -100,11 +102,12 @@ function Hero() {
 /* ───────────────────────── Stats ───────────────────────── */
 
 function Stats() {
+  const s = useMessages().home.stats
   const items = [
-    ['6', '专业工具'],
-    ['23', '证件照规格'],
-    ['18', '拼图模板'],
-    ['0', '字节上传'],
+    ['6', s.tools],
+    ['23', s.specs],
+    ['18', s.templates],
+    ['0', s.upload],
   ]
   return (
     <section className="border-y border-line bg-panel/40">
@@ -123,12 +126,13 @@ function Stats() {
 /* ───────────────────────── Tools Bento ───────────────────────── */
 
 function Tools() {
+  const m = useMessages().home
   return (
     <section className="mx-auto max-w-6xl px-6 py-24">
       <div className="mx-auto max-w-2xl text-center">
         <div className="eyebrow">Toolkit</div>
-        <h2 className="text-metal mt-3 text-[32px] font-semibold tracking-[-0.035em] sm:text-[40px]">一个工具箱，覆盖日常所需</h2>
-        <p className="mt-3 text-[15px] text-muted">从电商修图到签证照片，从朋友圈九宫格到小红书封面。</p>
+        <h2 className="text-metal mt-3 text-[32px] font-semibold tracking-[-0.035em] sm:text-[40px]">{m.toolsTitle}</h2>
+        <p className="mt-3 text-[15px] text-muted">{m.toolsDesc}</p>
       </div>
 
       <div className="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -140,8 +144,8 @@ function Tools() {
         <ToolCard tool={toolById('social')} visual={<SocialVisual />} />
         <div className="flex flex-col justify-end rounded-2xl border border-dashed border-fg/15 p-6">
           <div className="eyebrow">Coming soon</div>
-          <div className="mt-3 text-[15px] font-semibold tracking-tight">更多工具筹备中</div>
-          <p className="mt-1.5 text-[13px] leading-relaxed text-muted">智能抠图、GIF 制作、EXIF 隐私清除、图片标注……</p>
+          <div className="mt-3 text-[15px] font-semibold tracking-tight">{m.soonTitle}</div>
+          <p className="mt-1.5 text-[13px] leading-relaxed text-muted">{m.soonDesc}</p>
         </div>
       </div>
     </section>
@@ -154,9 +158,11 @@ function ToolCard({ tool, className, visual, tall }: { tool: Tool; className?: s
     e.currentTarget.style.setProperty('--mx', `${e.clientX - r.left}px`)
     e.currentTarget.style.setProperty('--my', `${e.clientY - r.top}px`)
   }
+  const text = useMessages().tools[tool.id]
+  const to = useLocalizedPath()
   return (
     <Link
-      to={tool.path}
+      to={to(tool.path)}
       onMouseMove={onMove}
       className={cn(
         'panel group relative flex flex-col overflow-hidden transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-0.5 hover:border-fg/20',
@@ -179,12 +185,12 @@ function ToolCard({ tool, className, visual, tall }: { tool: Tool; className?: s
       <div className="relative p-6">
         <div className="flex items-center gap-3">
           <IconTile icon={tool.icon} size="sm" />
-          <h3 className="text-[15px] font-semibold tracking-tight">{tool.title}</h3>
+          <h3 className="text-[15px] font-semibold tracking-tight">{text.title}</h3>
           <ArrowUpRight className="ml-auto h-4 w-4 text-muted opacity-0 transition-all duration-300 group-hover:opacity-100" />
         </div>
-        <p className="mt-3 text-[13px] leading-relaxed text-muted">{tool.desc}</p>
+        <p className="mt-3 text-[13px] leading-relaxed text-muted">{text.desc}</p>
         <div className="mt-4 flex flex-wrap gap-x-3 gap-y-1">
-          {tool.chips.map((c) => (
+          {text.chips.map((c) => (
             <span key={c} className="font-mono text-[11px] text-muted/80">
               {c}
             </span>
@@ -253,11 +259,8 @@ function IdVisual() {
 }
 
 function LongVisual() {
-  const strips = [
-    { p: 'ocean' as const, t: '今天天气真好' },
-    { p: 'dusk' as const, t: '我们出发吧' },
-    { p: 'sand' as const, t: '海边见！' },
-  ]
+  const captions = useMessages().home.longCaptions
+  const strips = (['ocean', 'dusk', 'sand'] as const).map((p, i) => ({ p, t: captions[i] }))
   return (
     <div className="mt-12 w-[132px] overflow-hidden rounded-t-xl border border-b-0 border-line bg-panel p-1.5 shadow-soft transition-transform duration-700 group-hover:-translate-y-5">
       {strips.map((s, i) => (
@@ -305,18 +308,15 @@ function NineVisual() {
 }
 
 function SocialVisual() {
+  const sample = useMessages().social.sample
   return (
     <div className="relative h-[150px] w-[112px] overflow-hidden rounded-lg shadow-stage transition-transform duration-500 group-hover:-rotate-3 group-hover:scale-105">
       <Scenery palette="dusk" />
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60" />
       <span className="absolute left-2 top-2 rounded-full bg-white/90 px-1.5 py-px text-[7px] font-semibold text-neutral-900">
-        旅行日记
+        {sample.tag}
       </span>
-      <div className="absolute bottom-2.5 left-2 text-[13px] font-bold leading-tight text-white">
-        周末去海边
-        <br />
-        吹吹风
-      </div>
+      <div className="absolute bottom-2.5 left-2 whitespace-pre-line text-[13px] font-bold leading-tight text-white">{sample.title}</div>
     </div>
   )
 }
@@ -324,22 +324,20 @@ function SocialVisual() {
 /* ───────────────────────── Privacy ───────────────────────── */
 
 function Privacy() {
-  const points = ['所有解码、压缩与 AI 推理都在浏览器内完成', '没有服务器、没有账号、没有追踪', '关闭页面即清空，不留任何痕迹']
+  const m = useMessages().home
   return (
     <section className="border-t border-line bg-panel/40">
       <div className="mx-auto grid max-w-6xl items-center gap-14 px-6 py-24 lg:grid-cols-2">
         <div>
           <div className="eyebrow">Privacy by design</div>
           <h2 className="text-metal mt-3 text-[32px] font-semibold leading-tight tracking-[-0.035em] sm:text-[40px]">
-            你的图片，
+            {m.privacyTitle1}
             <br />
-            从不离开你的设备。
+            {m.privacyTitle2}
           </h2>
-          <p className="mt-4 max-w-md text-[15px] leading-relaxed text-muted">
-            证件照、身份证明、私人相册——这些本就不该上传到陌生的服务器。图盒把整套处理流程搬进了浏览器。
-          </p>
+          <p className="mt-4 max-w-md text-[15px] leading-relaxed text-muted">{m.privacyDesc}</p>
           <ul className="mt-8 space-y-3">
-            {points.map((p) => (
+            {m.privacyPoints.map((p) => (
               <li key={p} className="flex items-center gap-3 text-[14px]">
                 <span className="grid h-5 w-5 place-items-center rounded-full border border-line bg-panel">
                   <Check className="h-3 w-3 text-success" strokeWidth={2.5} />

@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 import { ChevronsLeftRight } from 'lucide-react'
+import { useMessages } from '@/i18n'
 import { cn } from '@/lib/cn'
 
 interface Props {
@@ -11,7 +12,8 @@ interface Props {
 }
 
 /** 前后对比滑块：拖动分割线查看压缩 / 水印效果 */
-export function CompareSlider({ before, after, beforeLabel = '原图', afterLabel = '处理后', className }: Props) {
+export function CompareSlider({ before, after, beforeLabel, afterLabel, className }: Props) {
+  const m = useMessages()
   const ref = useRef<HTMLDivElement>(null)
   const [pos, setPos] = useState(50)
 
@@ -45,10 +47,10 @@ export function CompareSlider({ before, after, beforeLabel = '原图', afterLabe
         </div>
       </div>
       <span className="pointer-events-none absolute left-2 top-2 rounded-md bg-black/55 px-1.5 py-0.5 text-[11px] font-medium text-white backdrop-blur">
-        {beforeLabel}
+        {beforeLabel ?? m.common.original}
       </span>
       <span className="pointer-events-none absolute right-2 top-2 rounded-md bg-white/90 px-1.5 py-0.5 text-[11px] font-medium text-neutral-900 backdrop-blur">
-        {afterLabel}
+        {afterLabel ?? m.common.processed}
       </span>
     </div>
   )
