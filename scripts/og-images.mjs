@@ -33,7 +33,7 @@ const CJK_FONTS = {
   ko: "'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR'",
 }
 
-const TOOL_ORDER = ['batch', 'cutout', 'idphoto', 'long', 'grid', 'nine', 'social']
+const TOOL_ORDER = ['batch', 'cutout', 'annotate', 'exif', 'idphoto', 'long', 'grid', 'nine', 'social', 'gif']
 
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 
@@ -91,11 +91,11 @@ function page(m, meta, logo, fontDir) {
   .brand-en { margin-left: 12px; color: rgb(150 150 162); font-weight: 500; }
   .domain { font-size: 24px; color: rgb(150 150 162); font-weight: 500; }
   h1 { margin-top: auto; font-size: 76px; line-height: 1.12; font-weight: 700; letter-spacing: -0.03em; }
-  h1 > span, p, .chips { white-space: nowrap; }
+  h1 > span, p, .chip { white-space: nowrap; }
   h1 > span { display: block; }
   h1 .hl { background: linear-gradient(100deg, #8b8dff, #c084fc); -webkit-background-clip: text; background-clip: text; color: transparent; }
   p { margin-top: 24px; font-size: 28px; line-height: 1.4; color: rgb(170 170 182); }
-  .chips { margin-top: 44px; display: flex; gap: 0.55em; font-size: 22px; }
+  .chips { margin-top: 40px; display: flex; flex-wrap: wrap; gap: 0.55em; font-size: 22px; }
   .chip {
     padding: 0.45em 0.9em; border-radius: 999px; font-weight: 500; color: #e4e4e7;
     background: rgb(255 255 255 / 0.05); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.1);
@@ -116,7 +116,7 @@ function page(m, meta, logo, fontDir) {
     <div class="chips">${chips}</div>
   </div>
   <script>
-    // 各语言文案长短不一：标题两行、副标题与工具标签各一行，放不下就逐步缩小字号
+    // 各语言文案长短不一：标题两行、副标题一行、工具标签最多两行，放不下就逐步缩小字号
     const maxWidth = ${WIDTH} - 72 * 2
     const fits = (el) => [el, ...el.children].every((c) => c.scrollWidth <= maxWidth)
     function fit(el, from, to) {
@@ -125,7 +125,9 @@ function page(m, meta, logo, fontDir) {
     document.fonts.ready.then(() => {
       fit(document.querySelector('h1'), 76, 44)
       fit(document.querySelector('p'), 28, 18)
-      fit(document.querySelector('.chips'), 22, 12)
+      const chips = document.querySelector('.chips')
+      const rows = () => new Set([...chips.children].map((c) => c.offsetTop)).size
+      for (let size = 22; size > 14 && rows() > 2; size -= 1) chips.style.fontSize = size - 1 + 'px'
     })
   </script>
 </body>

@@ -10,7 +10,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 图盒 Tubox：纯前端图片处理工具箱（批量处理 / 证件照 / 长图 / 拼图 / 九宫格 / 社交排版）。**所有处理都在浏览器内完成，没有后端**，图片不上传。界面支持 10 种语言（见下文「多语言」），代码注释为中文。
 
-技术栈：Vite 6 · React 19 · TypeScript（strict）· Tailwind CSS 3 · Zustand · Framer Motion · Comlink · MediaPipe Tasks Vision · @imgly/background-removal（onnxruntime-web）· JSZip。包管理用 **pnpm**。
+技术栈：Vite 6 · React 19 · TypeScript（strict）· Tailwind CSS 3 · Zustand · Framer Motion · Comlink · gifenc · MediaPipe Tasks Vision · @imgly/background-removal（onnxruntime-web）· JSZip。包管理用 **pnpm**。
 
 ## 常用命令
 
@@ -36,7 +36,7 @@ pnpm build --base=/tubox/   # 部署到子路径，路由 basename 自动跟随 
 
 - `src/core/` —— 图像引擎，**纯 TS，不依赖 React/DOM 专属 API**，同一份代码同时跑在主线程和 Web Worker。不要在 `core/` 中引入 React、store、toast 等。
 - `src/stores/` —— Zustand，每个工具一个 store（模块级单例），切换页面状态不丢失。业务流程（加载、分析、导出）写在 store 的 action 里。
-- `src/features/` —— 页面组件，按工具分目录；`features/tools.ts` 是工具注册表（标题、路径、图标、分组），被 Sidebar / 首页 / `ToolLayout` 共用。
+- `src/features/` —— 页面组件，按工具分目录（图片标注、隐私清除、GIF 也复用 `features/collage/shared.tsx` 的 `EmptyStage` / `ExportFooter`）；`features/tools.ts` 是工具注册表（标题、路径、图标、分组），被 Sidebar / 首页 / `ToolLayout` 共用。
 - `src/components/layout/ToolLayout.tsx` —— 所有工具页的统一工作台布局：header + 左侧素材栏 + 中间舞台 + 右侧 inspector。
 - 路由在 `src/App.tsx`，每个页面 `lazy()` 拆包（MediaPipe / onnxruntime 只在进入证件照 / 抠图时加载）。使用 History 路由，部署时需要服务器回退到 `index.html`（见 README）。
 
@@ -87,6 +87,23 @@ pnpm build --base=/tubox/   # 部署到子路径，路由 basename 自动跟随 
 - 推理只在长边 `MATTE_SIZE`（1024，等于模型输入）的工作图上进行；`buildMatte` 做收缩/扩展、羽化并给出主体外接框；`compose.ts` 的 `composeCutout` 按源图区域合成（透明 / 纯色 / 原图虚化），预览限制长边 1600，导出按原图（长边上限 4096）。
 - 资源（`resources.json` + 4MB 分块的模型与 wasm）地址见 `config.ts` 的 `imglyAssets`：`VITE_MODEL_BASE/imgly/<版本>/` → 本地 `public/imgly/<版本>/`（`setup:models` 只下载 `IMGLY_MODEL` 与 onnxruntime，两处需保持一致）→ staticimgly.com CDN。
 - `vite.config.ts` 把 `onnxruntime-web` 别名到非 bundle 版本：wasm 由 imgly 以 blob URL 传入，否则 Vite 会多打包一份 24MB 的 wasm。
+
+### 图片标注（`core/annotate/` + `stores/annotate.ts`）
+
+- 图形（`types.ts`）坐标均为原图像素；`size` 是 1-10 档位，由 `metrics(size, unitOf(w, h))` 按图片长边换算像素，预览与导出观感一致。`renderAnnotations` 同时用于预览（传显示缩放）与导出（`exportAnnotated`，scale 1）。
+- `Shape` 联合中 `BoxShape` / `PathShape` 的 `kind` 是多值联合，`s.kind === 'pen'` 无法排除成员，用 `isBox` / `isPath` 类型守卫收窄；新建图形参数用 `NewShape`（按成员分别 Omit id）。
+- store 的 `commit` 统一记入撤销历史；拖动中的图形是组件内的 draft，松手后才 `add` / `replace`。序号按出现顺序在渲染时编号。
+
+### 隐私查看与清除（`core/exif/` + `stores/exif.ts`）
+
+- `scan.ts` 只解析容器结构，找出元数据块（JPEG APPn/COM、PNG 辅助块、WebP RIFF 块、GIF 扩展块）；`read.ts` 从 EXIF（TIFF）/ XMP / PNG 文本中提取隐私字段；`strip.ts` 直接删除这些字节段，不重新编码。JPEG 的 APP0（JFIF）与 APP14（Adobe）、GIF 的循环扩展必须保留。
+- 「保留方向」会写回只含 Orientation 的最小 EXIF（PNG 需重算 CRC，WebP 需同步 VP8X 标志位与 RIFF 长度）。不支持的格式（AVIF / HEIC / BMP）回退为解码后重新编码 PNG。
+- 拍摄位置的具体地址由 `lib/geocode.ts` 调用 OpenStreetMap Nominatim 反查，这是全站唯一把照片相关数据发往第三方的地方：只能由用户点击触发，不要改成自动查询；展示结果需注明 © OpenStreetMap 贡献者，请求间隔 ≥1 秒。
+
+### GIF 制作（`core/gif/` + `stores/gif.ts` + `workers/gif.ts`）
+
+- `planFrames` 把图片数量与选项展开为帧序列（往返、淡入淡出插值帧），`drawFrame` 绘制单帧，预览与导出共用。
+- 编码用 gifenc（无类型声明，见 `src/types/gifenc.d.ts`），每帧单独量化调色板；导出时主线程逐帧绘制、像素 transfer 给一次性 Worker 编码，主线程画下一帧与 Worker 编码上一帧并行。
 
 ### 开源许可（AGPL-3.0）
 

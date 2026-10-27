@@ -6,11 +6,14 @@
 | --- | --- |
 | **批量处理** | 统一尺寸（长边 / 适应 / 裁切填充 / 拉伸 / 固定宽高 / 百分比）、质量压缩、**按目标体积压缩**、文字 / Logo 水印（九宫格定位、斜向平铺防盗）、格式转换（JPG / PNG / WebP / AVIF）、文件名模板、ZIP 打包 |
 | **AI 抠图** | 人物 / 商品 / 动物等主体一键去背景（ISNet，WebGPU 优先、WASM 回退，Worker 推理）、透明 / 纯色 / 原图虚化背景、边缘收缩扩展与羽化、裁剪到主体、按住对比原图、PNG / WebP / JPG 原分辨率导出 |
+| **图片标注** | 箭头 / 矩形 / 椭圆 / 直线 / 画笔 / 荧光笔 / 文字 / 序号 / 马赛克，选中后可移动、改色、改粗细，双击文字重新编辑，Shift 约束正方形 / 正圆 / 45°，撤销重做与快捷键，原分辨率导出 |
+| **隐私查看与清除** | 读取 GPS 位置、拍摄设备、序列号、拍摄时间、编辑软件、作者、PNG 文本块等元数据；直接删除 EXIF / XMP / IPTC / 注释段（JPG / PNG / WebP / GIF 无损，不重新压缩），可保留方向与 ICC 色彩配置，批量 ZIP 下载 |
 | **证件照** | 30+ 规格（一寸二寸、3×4、身份证、护照，美 / 英 / 欧盟 / 加 / 澳 / 印 / 日 / 韩 / 俄护照，美 / 申根 / 日 / 韩 / 英 / 加 / 澳签证、国考 / 教资 / 四六级等；非中文界面默认当地护照规格）、AI 人像分割换底、人脸定位自动构图与歪头纠正、调色、规格合规检测、体积达标、冲印排版（6 寸 / 5 寸 / A4，带裁切线，写入 300 DPI） |
 | **长图拼接** | 竖向 / 横向、电影字幕拼接、间距 / 边距 / 圆角 / 背景，超出浏览器画布上限自动缩放 |
 | **自由拼图** | 18 种模板（2-9 张），7 种画布比例（含 Instagram 4:5），按图片数量自动推荐模板 |
 | **九宫格切图** | 九宫格 / 四宫格 / 六宫格 / 横竖三连，单张 1:1 / 4:5 / 3:4（Instagram 主页网格），拖拽取景，朋友圈间隙预览，一键打包 |
 | **社交排版** | 小红书 / 朋友圈 / 视频号 / 微博 / 公众号封面，Instagram 帖子与快拍 / YouTube 封面 / X / Facebook / Pinterest；6 种版式 × 6 套配色 × 2 种字体 |
+| **GIF 制作** | 最多 60 张图片合成 GIF，帧时长、淡入淡出、往返播放、循环，画面比例 / 裁切或完整显示 / 输出宽度 / 颜色数，实时预览，Worker 内编码（gifenc） |
 
 ## 快速开始
 
@@ -60,7 +63,7 @@ VITE_SITE_URL=https://tubox.example.com pnpm build   # 或写进 .env.production
 
 ## 技术栈
 
-Vite 6 · React 19 · TypeScript · Tailwind CSS 3 · Zustand · Framer Motion · Comlink（Web Worker）· MediaPipe Tasks Vision · @imgly/background-removal（onnxruntime-web）· JSZip · Geist 字体
+Vite 6 · React 19 · TypeScript · Tailwind CSS 3 · Zustand · Framer Motion · Comlink（Web Worker）· gifenc · MediaPipe Tasks Vision · @imgly/background-removal（onnxruntime-web）· JSZip · Geist 字体
 
 ## 架构
 
@@ -73,15 +76,18 @@ src/
 │   ├── scene/             #   声明式场景图 + 渲染器（图片 / 矩形 / 文字图层，渐变、圆角、阴影、模糊、旋转、中英文换行）
 │   ├── collage/           #   长图 / 拼图模板 / 九宫格 / 社交版式 —— 只负责「生成场景」
 │   ├── cutout/            #   通用抠图：imgly 推理、蒙版收缩扩展 / 羽化、背景合成
+│   ├── annotate/          #   标注图形（原图坐标）、渲染、命中测试
+│   ├── exif/              #   按容器格式扫描元数据段、解析 EXIF（TIFF）、无损删除
+│   ├── gif/               #   帧序列规划与绘制、gifenc 逐帧量化编码
 │   └── idphoto/           #   规格库、MediaPipe 加载、人像分析、构图合成、冲印排版
-├── workers/               # 批量处理 Worker 池、抠图推理 Worker（不支持 OffscreenCanvas 时回退主线程）
+├── workers/               # 批量处理 Worker 池、抠图推理 Worker、GIF 编码 Worker（不支持 OffscreenCanvas 时回退主线程）
 ├── stores/                # Zustand：每个工具一个 store，切换页面状态不丢失
 ├── components/
 │   ├── icons/             #   工具专属双色图标（墨色描边 + 品牌色强调）
 │   ├── ui/                #   设计系统：Button / Segmented / Slider / Switch / Section / ColorSwatches…
 │   ├── layout/            #   AppShell / Sidebar / ToolLayout（标题栏 + 素材栏 + 舞台 + 检查器）
 │   └── common/            #   Dropzone / CompareSlider / ScenePreview / SceneThumb / ImageStrip
-├── features/              # 页面：home / batch / cutout / idphoto / collage
+├── features/              # 页面：home / batch / cutout / annotate / exif / idphoto / collage / gif
 ├── i18n/                  # 多语言：语言表与路由前缀、插值 / 复数、各语言文案（含 SEO）
 ├── hooks/  lib/           # 通用 hooks 与工具函数
 └── config.ts              # 模型与 wasm 地址（自托管优先，CDN 回退）

@@ -10,22 +10,28 @@ import { useTheme } from '@/stores/theme'
 const HomePage = lazy(() => import('@/features/home/HomePage'))
 const BatchPage = lazy(() => import('@/features/batch/BatchPage'))
 const CutoutPage = lazy(() => import('@/features/cutout/CutoutPage'))
+const AnnotatePage = lazy(() => import('@/features/annotate/AnnotatePage'))
+const ExifPage = lazy(() => import('@/features/exif/ExifPage'))
 const IdPhotoPage = lazy(() => import('@/features/idphoto/IdPhotoPage'))
 const LongImagePage = lazy(() => import('@/features/collage/LongImagePage'))
 const GridPage = lazy(() => import('@/features/collage/GridPage'))
 const NineGridPage = lazy(() => import('@/features/collage/NineGridPage'))
 const SocialPage = lazy(() => import('@/features/collage/SocialPage'))
+const GifPage = lazy(() => import('@/features/gif/GifPage'))
 
 function pageRoutes(): RouteObject[] {
   return [
     { index: true, element: <HomePage /> },
     { path: 'batch', element: <BatchPage /> },
     { path: 'cutout', element: <CutoutPage /> },
+    { path: 'annotate', element: <AnnotatePage /> },
+    { path: 'exif', element: <ExifPage /> },
     { path: 'id-photo', element: <IdPhotoPage /> },
     { path: 'collage/long', element: <LongImagePage /> },
     { path: 'collage/grid', element: <GridPage /> },
     { path: 'collage/nine', element: <NineGridPage /> },
     { path: 'collage/social', element: <SocialPage /> },
+    { path: 'gif', element: <GifPage /> },
     { path: '*', element: <ToLocaleHome /> },
   ]
 }

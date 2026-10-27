@@ -20,7 +20,7 @@ export interface AssetList {
   clear: () => void
 }
 
-function assetList<T extends AssetList>(set: StoreApi<T>['setState'], get: StoreApi<T>['getState'], max = 60): AssetList {
+export function assetList<T extends AssetList>(set: StoreApi<T>['setState'], get: StoreApi<T>['getState'], max = 60): AssetList {
   return {
     images: [],
     add: async (files) => {

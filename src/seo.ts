@@ -16,11 +16,14 @@ export const pagePaths: { path: string; key: PageKey; page: string }[] = [
   { path: '/', key: 'home', page: 'features/home/HomePage' },
   { path: '/batch', key: 'batch', page: 'features/batch/BatchPage' },
   { path: '/cutout', key: 'cutout', page: 'features/cutout/CutoutPage' },
+  { path: '/annotate', key: 'annotate', page: 'features/annotate/AnnotatePage' },
+  { path: '/exif', key: 'exif', page: 'features/exif/ExifPage' },
   { path: '/id-photo', key: 'idphoto', page: 'features/idphoto/IdPhotoPage' },
   { path: '/collage/long', key: 'long', page: 'features/collage/LongImagePage' },
   { path: '/collage/grid', key: 'grid', page: 'features/collage/GridPage' },
   { path: '/collage/nine', key: 'nine', page: 'features/collage/NineGridPage' },
   { path: '/collage/social', key: 'social', page: 'features/collage/SocialPage' },
+  { path: '/gif', key: 'gif', page: 'features/gif/GifPage' },
 ]
 
 export interface PageSeo {

@@ -167,6 +167,9 @@ function Tools() {
         <ToolCard tool={toolById('grid')} visual={<GridVisual />} />
         <ToolCard tool={toolById('nine')} visual={<NineVisual />} />
         <ToolCard tool={toolById('social')} visual={<SocialVisual />} />
+        <ToolCard tool={toolById('gif')} visual={<GifVisual />} />
+        <ToolCard tool={toolById('exif')} visual={<ExifVisual />} />
+        <ToolCard tool={toolById('annotate')} visual={<AnnotateVisual />} />
         <div className="flex flex-col justify-end rounded-2xl border border-dashed border-fg/15 p-6 lg:col-span-3">
           <div className="eyebrow">Coming soon</div>
           <div className="mt-3 text-[15px] font-semibold tracking-tight">{m.soonTitle}</div>
@@ -355,6 +358,91 @@ function SocialVisual() {
         {sample.tag}
       </span>
       <div className="absolute bottom-2.5 left-2 whitespace-pre-line text-[13px] font-bold leading-tight text-white">{sample.title}</div>
+    </div>
+  )
+}
+
+function GifVisual() {
+  const frames = ['dusk', 'ocean', 'forest', 'sand'] as const
+  const holes = (
+    <div className="flex justify-between px-1.5">
+      {Array.from({ length: 11 }, (_, i) => (
+        <span key={i} className="h-1.5 w-2.5 rounded-[2px] bg-white/25" />
+      ))}
+    </div>
+  )
+  return (
+    <div className="relative w-[228px] space-y-2 overflow-hidden rounded-lg bg-neutral-900 py-2 shadow-stage transition-transform duration-500 group-hover:scale-105">
+      {holes}
+      <div className="flex gap-2 px-2 transition-transform duration-700 ease-out group-hover:-translate-x-[152px]">
+        {[...frames, ...frames].map((p, i) => (
+          <div key={i} className="h-[56px] w-[68px] shrink-0 overflow-hidden rounded-[3px]">
+            <Scenery palette={p} />
+          </div>
+        ))}
+      </div>
+      {holes}
+      <span className="absolute right-2 top-1/2 -translate-y-1/2 rounded bg-white px-1.5 py-px font-mono text-[9px] font-bold tracking-wider text-neutral-900">
+        GIF
+      </span>
+    </div>
+  )
+}
+
+function ExifVisual() {
+  const rows = [
+    ['GPS', '31.2304°N 121.4737°E'],
+    ['Device', 'iPhone 15 Pro'],
+    ['Date', '2025:06:01 09:41'],
+  ]
+  return (
+    <div className="flex w-[78%] max-w-[280px] items-center gap-3 rounded-xl border border-line bg-panel p-2.5 shadow-[var(--highlight),0_1px_2px_rgb(0_0_0/0.05)]">
+      <span className="h-[72px] w-[72px] shrink-0 overflow-hidden rounded-lg">
+        <Scenery palette="forest" />
+      </span>
+      <div className="min-w-0 flex-1 space-y-1.5 font-mono text-[10px]">
+        {rows.map(([k, v], i) => (
+          <div
+            key={k}
+            className="flex gap-2 whitespace-nowrap transition-opacity duration-500 group-hover:opacity-35"
+            style={{ transitionDelay: `${i * 80}ms` }}
+          >
+            <span className={cn('w-9 shrink-0', i === 0 ? 'text-danger' : 'text-muted')}>{k}</span>
+            <span className="relative truncate text-fg">
+              {v}
+              <span
+                className="absolute inset-x-0 top-1/2 h-px origin-left scale-x-0 bg-fg transition-transform duration-500 group-hover:scale-x-100"
+                style={{ transitionDelay: `${i * 80}ms` }}
+              />
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function AnnotateVisual() {
+  return (
+    <div className="relative h-[124px] w-[176px] overflow-hidden rounded-lg shadow-stage transition-transform duration-500 group-hover:-rotate-2 group-hover:scale-105">
+      <Scenery palette="ocean" />
+      {/* 马赛克 */}
+      <div className="absolute bottom-3 left-3 grid h-6 w-12 grid-cols-4 grid-rows-2 overflow-hidden rounded-[2px]">
+        {['#075985', '#0F172A', '#0C4A6E', '#075985', '#0F172A', '#075985', '#0F172A', '#0C4A6E'].map((c, i) => (
+          <span key={i} style={{ background: c }} />
+        ))}
+      </div>
+      <svg viewBox="0 0 176 124" className="absolute inset-0 h-full w-full" fill="none" aria-hidden>
+        <rect x="98" y="30" width="46" height="46" rx="3" stroke="#FF3B30" strokeWidth="3" />
+        <g className="transition-transform duration-500 group-hover:-translate-y-1 group-hover:translate-x-1">
+          <path d="M40 92 L86 59.5" stroke="#FF3B30" strokeWidth="3.5" strokeLinecap="round" />
+          <path d="M95 53 L88.7 64.8 L81.7 55 Z" fill="#FF3B30" stroke="#FF3B30" strokeWidth="2" strokeLinejoin="round" />
+        </g>
+        <circle cx="152" cy="24" r="10" fill="#FF3B30" stroke="#fff" strokeWidth="2" />
+        <text x="152" y="28.5" textAnchor="middle" fill="#fff" fontSize="12" fontWeight="700">
+          1
+        </text>
+      </svg>
     </div>
   )
 }

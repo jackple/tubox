@@ -27,6 +27,7 @@
     "clsx": "^2.1.1",
     "comlink": "^4.4.2",
     "framer-motion": "^11.15.0",
+    "gifenc": "^1.0.3",
     "jszip": "^3.10.1",
     "lucide-react": "^0.468.0",
     "onnxruntime-web": "1.21.0",
