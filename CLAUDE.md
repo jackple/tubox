@@ -40,7 +40,7 @@ pnpm build --base=/tubox/   # 部署到子路径，路由 basename 自动跟随 
 - `src/components/layout/ToolLayout.tsx` —— 所有工具页的统一工作台布局：header + 左侧素材栏 + 中间舞台 + 右侧 inspector。
 - 路由在 `src/App.tsx`，每个页面 `lazy()` 拆包（MediaPipe / onnxruntime 只在进入证件照 / 抠图时加载）。使用 History 路由，部署时需要服务器回退到 `index.html`（见 README）。
 
-**新增工具**需同时改：`features/tools.ts`（注册）、`App.tsx`（路由）、`src/seo.ts` 的 `pagePaths`（构建时据此预渲染各语言该路由的 HTML 与 sitemap）、各语言文案的 `tools` 与 `seo`、`components/icons/ToolGlyphs.tsx`（图标）、对应 store 与 `core/` 实现。
+**新增工具**需同时改：`features/tools.ts`（注册）、`App.tsx`（路由）、`src/seo.ts` 的 `pagePaths`（构建时据此预渲染各语言该路由的 HTML 与 sitemap，`page` 字段用于在 HTML 中预加载页面 chunk）、各语言文案的 `tools` 与 `seo`、`components/icons/ToolGlyphs.tsx`（图标）、对应 store 与 `core/` 实现。
 
 ### 多语言（`src/i18n/`）
 

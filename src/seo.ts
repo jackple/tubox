@@ -8,16 +8,19 @@ import type { Messages } from './i18n/messages/zh-CN'
 
 type PageKey = keyof Messages['seo']
 
-/** 路由路径（不含 base 与语言前缀），与 App.tsx 的路由一致 */
-export const pagePaths: { path: string; key: PageKey }[] = [
-  { path: '/', key: 'home' },
-  { path: '/batch', key: 'batch' },
-  { path: '/cutout', key: 'cutout' },
-  { path: '/id-photo', key: 'idphoto' },
-  { path: '/collage/long', key: 'long' },
-  { path: '/collage/grid', key: 'grid' },
-  { path: '/collage/nine', key: 'nine' },
-  { path: '/collage/social', key: 'social' },
+/**
+ * 路由路径（不含 base 与语言前缀），与 App.tsx 的路由一致。
+ * page 为该路由的页面模块（相对 src/，对应 App.tsx 中的 lazy import），构建时据此在各路由 HTML 中预加载页面 chunk
+ */
+export const pagePaths: { path: string; key: PageKey; page: string }[] = [
+  { path: '/', key: 'home', page: 'features/home/HomePage' },
+  { path: '/batch', key: 'batch', page: 'features/batch/BatchPage' },
+  { path: '/cutout', key: 'cutout', page: 'features/cutout/CutoutPage' },
+  { path: '/id-photo', key: 'idphoto', page: 'features/idphoto/IdPhotoPage' },
+  { path: '/collage/long', key: 'long', page: 'features/collage/LongImagePage' },
+  { path: '/collage/grid', key: 'grid', page: 'features/collage/GridPage' },
+  { path: '/collage/nine', key: 'nine', page: 'features/collage/NineGridPage' },
+  { path: '/collage/social', key: 'social', page: 'features/collage/SocialPage' },
 ]
 
 export interface PageSeo {

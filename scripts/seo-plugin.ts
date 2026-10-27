@@ -1,6 +1,6 @@
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
-import type { Plugin } from 'vite'
+import type { Plugin, Rollup } from 'vite'
 import { catalog } from '../src/i18n/catalog'
 import { type Locale, defaultLocale, localeMeta, locales, localizePath, splitLocale } from '../src/i18n/locales'
 import { absoluteUrl, alternates, fullTitle, ogImage, pagePaths, pageSeo, type PageSeo, structuredData } from '../src/seo'
@@ -11,10 +11,14 @@ import { absoluteUrl, alternates, fullTitle, ogImage, pagePaths, pageSeo, type P
  * - 构建时为每个语言的每个路由输出 dist/<path>.html（如 dist/collage/grid.html、dist/en/collage/grid.html、dist/en.html），
  *   不执行 JS 的爬虫（百度等）也能拿到各页标题与描述
  * - 配置了 VITE_SITE_URL 时额外输出 canonical、og:url、hreflang 与 sitemap.xml
+ * - 每个页面预加载该语言的文案 chunk、该路由的页面 chunk 及其依赖和正文字体：否则要等入口执行完才请求文案，
+ *   渲染后才请求页面 chunk，形成「入口 → 文案 → 页面」的串行瀑布（Cloudflare Pages 还会据此发 103 Early Hints）
  */
 export function seoPlugin(siteUrl: string | undefined): Plugin {
   let base = '/'
   let template = ''
+  let bundle: Rollup.OutputBundle | undefined
+  let entry: string | undefined
 
   const seoOf = (locale: Locale, path: string) => pageSeo(catalog[locale], locale, path)
 
@@ -22,6 +26,13 @@ export function seoPlugin(siteUrl: string | undefined): Plugin {
     html
       .replace(/<html lang="[^"]*"/, `<html lang="${localeMeta(page.locale).htmlLang}"`)
       .replace('<!-- seo:head -->', renderHead(page))
+      // 放在 Vite 注入的入口脚本与样式之后，让它们先发起请求
+      .replace(
+        '</head>',
+        `${preloads(page)
+          .map((tag) => `  ${tag}\n  `)
+          .join('')}</head>`,
+      )
       .replace('<!-- seo:body -->', renderBody(page))
 
   function renderHead(page: PageSeo) {
@@ -55,6 +66,31 @@ export function seoPlugin(siteUrl: string | undefined): Plugin {
     ]
       .filter(Boolean)
       .join('\n    ')
+  }
+
+  /** 首屏必需的懒加载资源：入口已由 Vite 注入，这里补上文案、页面 chunk（含静态依赖）与正文字体 */
+  function preloads(page: PageSeo) {
+    if (!bundle) return []
+    const chunks = Object.values(bundle).filter((c): c is Rollup.OutputChunk => c.type === 'chunk')
+    const byModule = (suffix: string) => {
+      const c = chunks.find((c) => c.facadeModuleId?.replace(/\.tsx?$/, '').endsWith(suffix))
+      if (!c) throw new Error(`[seo] 找不到 ${suffix} 对应的 chunk，检查 src/seo.ts 的 pagePaths`)
+      return c
+    }
+    const files = new Set<string>()
+    const walk = (c: Rollup.OutputChunk) => {
+      if (c.fileName === entry || files.has(c.fileName)) return
+      files.add(c.fileName)
+      c.imports.forEach((f) => walk(bundle![f] as Rollup.OutputChunk))
+    }
+    walk(byModule(`/src/i18n/messages/${page.locale}`))
+    walk(byModule(`/src/${pagePaths.find((p) => p.path === page.path)!.page}`))
+    // Geist 拉丁字形各语言界面都会用到（品牌名、数字等）
+    const font = Object.keys(bundle).find((f) => /\/geist-latin-wght-normal-[\w-]+\.woff2$/.test(f))
+    return [
+      ...[...files].map((f) => `<link rel="modulepreload" crossorigin href="${base}${f}">`),
+      font && `<link rel="preload" as="font" type="font/woff2" crossorigin href="${base}${font}">`,
+    ].filter(Boolean)
   }
 
   // 静态正文：React 挂载时会清空 #root，有 JS 的访客看不到它（见 index.html 的 .seo-static 样式）
@@ -98,6 +134,8 @@ export function seoPlugin(siteUrl: string | undefined): Plugin {
           return render(html, seoOf(locale, path))
         }
         template = html
+        bundle = ctx.bundle
+        entry = ctx.chunk?.fileName
         return render(html, seoOf(defaultLocale, '/'))
       },
     },
