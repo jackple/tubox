@@ -1,7 +1,7 @@
 import type { MouseEvent, ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowRight, ArrowUpRight, Check } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, Check, Play } from 'lucide-react'
 import { Portrait } from '@/components/common/Portrait'
 import { IconTile } from '@/components/layout/ToolIcon'
 import { Logo } from '@/components/layout/Logo'
@@ -168,9 +168,10 @@ function Tools() {
         <ToolCard tool={toolById('nine')} visual={<NineVisual />} />
         <ToolCard tool={toolById('social')} visual={<SocialVisual />} />
         <ToolCard tool={toolById('gif')} visual={<GifVisual />} />
+        <ToolCard tool={toolById('videogif')} visual={<VideoGifVisual />} />
         <ToolCard tool={toolById('exif')} visual={<ExifVisual />} />
         <ToolCard tool={toolById('annotate')} visual={<AnnotateVisual />} />
-        <div className="flex flex-col justify-end rounded-2xl border border-dashed border-fg/15 p-6 lg:col-span-3">
+        <div className="flex flex-col justify-end rounded-2xl border border-dashed border-fg/15 p-6 lg:col-span-2">
           <div className="eyebrow">Coming soon</div>
           <div className="mt-3 text-[15px] font-semibold tracking-tight">{m.soonTitle}</div>
           <p className="mt-1.5 text-[13px] leading-relaxed text-muted">{m.soonDesc}</p>
@@ -385,6 +386,34 @@ function GifVisual() {
       <span className="absolute right-2 top-1/2 -translate-y-1/2 rounded bg-white px-1.5 py-px font-mono text-[9px] font-bold tracking-wider text-neutral-900">
         GIF
       </span>
+    </div>
+  )
+}
+
+function VideoGifVisual() {
+  const strip = ['dusk', 'dusk', 'ocean', 'ocean', 'forest', 'forest', 'sand', 'sand'] as const
+  return (
+    <div className="w-[216px] transition-transform duration-500 group-hover:scale-105">
+      <div className="relative aspect-video overflow-hidden rounded-lg shadow-stage">
+        <Scenery palette="ocean" />
+        <span className="absolute inset-0 grid place-items-center">
+          <span className="grid h-9 w-9 place-items-center rounded-full bg-black/35 backdrop-blur-sm">
+            <Play className="ml-0.5 h-4 w-4 fill-white text-white" />
+          </span>
+        </span>
+        <span className="absolute right-2 top-2 rounded bg-white px-1.5 py-px font-mono text-[9px] font-bold tracking-wider text-neutral-900">
+          GIF
+        </span>
+      </div>
+      {/* 时间轴：选框在悬停时滑向另一段 */}
+      <div className="relative mt-2.5 flex h-7 gap-px overflow-hidden rounded-md shadow-stage">
+        {strip.map((p, i) => (
+          <div key={i} className="flex-1 opacity-50">
+            <Scenery palette={p} sun={false} />
+          </div>
+        ))}
+        <span className="absolute inset-y-0 left-[18%] right-[46%] rounded-[4px] border-2 border-brand bg-white/10 transition-[left,right] duration-700 ease-out group-hover:left-[44%] group-hover:right-[20%]" />
+      </div>
     </div>
   )
 }

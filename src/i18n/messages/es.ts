@@ -40,6 +40,7 @@ const messages: Messages = {
     'decode-failed': 'No se puede decodificar esta imagen',
     'model-load-failed': 'No se pudieron cargar los modelos de IA. Revisa tu conexión o alójalos tú mismo con pnpm setup:models',
     'segment-failed': 'No se pudo quitar el fondo. Prueba con otra imagen',
+    'video-decode-failed': 'Tu navegador no puede decodificar este vídeo. Conviértelo a MP4 (H.264) e inténtalo de nuevo',
   },
 
   nav: {
@@ -59,6 +60,7 @@ const messages: Messages = {
     process: 'Edición de imágenes',
     photo: 'Documentos y visados',
     layout: 'Collage y diseño',
+    animation: 'GIF animados',
   },
 
   tools: {
@@ -112,6 +114,11 @@ const messages: Messages = {
       desc: 'Combina varias imágenes en un GIF animado con duración por imagen, fundido y reproducción de ida y vuelta',
       chips: ['Fundido', 'Ida y vuelta', 'Proporción', 'Colores'],
     },
+    videogif: {
+      title: 'Vídeo a GIF',
+      desc: 'Recorta un fragmento de cualquier vídeo y conviértelo en GIF, con fps, velocidad, tamaño y proporción ajustables',
+      chips: ['Recortar clip', 'FPS y velocidad', 'Ida y vuelta', 'Encuadre'],
+    },
   },
 
   dropzone: {
@@ -144,7 +151,7 @@ const messages: Messages = {
     heroHighlight: 'navegador',
     heroAfter: '',
     heroDesc1:
-      'Compresión por lotes, fotos carné, collages, diseños y GIF animados: diez herramientas profesionales que funcionan por completo en tu dispositivo.',
+      'Compresión por lotes, fotos carné, collages, diseños y GIF animados: once herramientas profesionales que funcionan por completo en tu dispositivo.',
     heroDesc2: 'Sin instalar nada, sin subir nada. Abre y empieza.',
     start: 'Empezar',
     makeIdPhoto: 'Hacer foto carné',
@@ -157,7 +164,7 @@ const messages: Messages = {
     toolsTitle: 'Una caja de herramientas para el día a día',
     toolsDesc: 'De fotos de producto a fotos de visado, de cuadrículas 3×3 a portadas para redes sociales.',
     soonTitle: 'Más herramientas en camino',
-    soonDesc: 'Ampliar imágenes con IA, OCR, vídeo a GIF, imagen a PDF, generador de códigos QR…',
+    soonDesc: 'Ampliar imágenes con IA, OCR, imagen a PDF, generador de códigos QR…',
     longCaptions: ['¡Qué día tan bonito!', 'Vámonos ya', '¡Nos vemos en la playa!'],
     privacyTitle1: 'Tus imágenes',
     privacyTitle2: 'nunca salen de tu dispositivo.',
@@ -542,6 +549,27 @@ const messages: Messages = {
     done: 'GIF exportado · {size}',
   },
 
+  videogif: {
+    dropTitle: 'Arrastra un vídeo o haz clic para elegirlo',
+    dropHint: 'Recorta un fragmento y conviértelo en GIF. El vídeo se procesa en tu dispositivo y nunca se sube',
+    loading: 'Leyendo el vídeo…',
+    needVideo: 'Añade un vídeo para previsualizar la animación',
+    notVideo: 'Elige un archivo de vídeo (MP4, WebM, MOV)',
+    loadFailed: 'No se pudo leer el vídeo',
+    changeVideo: 'Cambiar vídeo',
+    cancel: 'Cancelar',
+    clipTitle: 'Fragmento',
+    clipStart: 'Inicio',
+    clipEnd: 'Fin',
+    clipLength: 'Duración',
+    clipHint: 'Arrastra los tiradores de la línea de tiempo para recortar, o arrastra la selección para moverla. Máximo {max} segundos.',
+    fps: 'Fotogramas por segundo (fps)',
+    speed: 'Velocidad',
+    ratioAuto: 'Original',
+    sizeHint: 'Menos fps, anchura y colores dan archivos más pequeños. Para reacciones suelen bastar 10–12 fps a 320–480 px.',
+    tooManyFrames: 'Más de {max} fotogramas: acorta el fragmento, baja los fps o aumenta la velocidad',
+  },
+
   long: {
     fileName: 'imagen-larga',
     emptyTitle: 'Añade imágenes para unirlas en una imagen larga',
@@ -649,7 +677,7 @@ const messages: Messages = {
       name: 'Inicio',
       title: 'Editor de imágenes online gratis: comprimir, foto carné, collage',
       description:
-        'Editor de imágenes gratis: comprime y redimensiona fotos en lote, quita fondos con IA, haz fotos carné con fondo por IA, anota y pixela imágenes, borra datos EXIF, crea collages, cuadrículas y GIF animados. Todo en tu navegador, sin subir nada.',
+        'Editor de imágenes gratis: comprime y redimensiona fotos en lote, quita fondos con IA, haz fotos carné con fondo por IA, anota y pixela imágenes, borra datos EXIF, crea collages, cuadrículas, GIF animados y GIF desde vídeo. Todo en tu navegador, sin subir nada.',
       keywords: [
         'editor de imágenes online',
         'herramientas de imagen gratis',
@@ -890,6 +918,27 @@ const messages: Messages = {
         'Proporciones 1:1, 4:5, 3:4, 16:9, 9:16 y más, con recorte o imagen completa',
         'Ancho de salida y número de colores ajustables para controlar el peso',
         'Vista previa de la animación en tiempo real y codificación local con Web Worker',
+      ],
+    },
+    videogif: {
+      name: 'Vídeo a GIF',
+      title: 'Vídeo a GIF: convierte clips MP4 / MOV en GIF animados online',
+      description:
+        'Convertidor de vídeo a GIF gratis: recorta cualquier fragmento de un MP4, WebM o MOV, ajusta fps, velocidad, ida y vuelta y bucle, encuadra en 1:1, 4:5, 9:16 y más, y controla el tamaño con la anchura y el número de colores. Todo en tu navegador, sin subir nada.',
+      keywords: [
+        'vídeo a GIF',
+        'MP4 a GIF',
+        'MOV a GIF',
+        'convertir vídeo a GIF online',
+        'grabación de pantalla a GIF',
+        'crear GIF desde vídeo',
+      ],
+      features: [
+        'Vídeos MP4, WebM y MOV; recorta fragmentos de hasta 30 segundos en la línea de tiempo',
+        '5–25 fps, velocidad de 0,5× a 3×, ida y vuelta y bucle',
+        'Proporción original o encuadre en 1:1, 4:5, 3:4, 16:9 o 9:16',
+        'Anchura de salida y número de colores para controlar el tamaño',
+        'Vista previa en tiempo real; el vídeo se procesa en el navegador, sin subirlo',
       ],
     },
   },

@@ -3,6 +3,12 @@
  * 由 UI 层的 errorMessage() 翻译为当前语言，文案见 i18n/messages 的 errors。
  */
 export type ErrorCode =
-  'canvas-unsupported' | 'encode-failed' | 'heic-unsupported' | 'decode-failed' | 'model-load-failed' | 'segment-failed'
+  | 'canvas-unsupported'
+  | 'encode-failed'
+  | 'heic-unsupported'
+  | 'decode-failed'
+  | 'model-load-failed'
+  | 'segment-failed'
+  | 'video-decode-failed'
 
 export const coreError = (code: ErrorCode) => new Error(code)

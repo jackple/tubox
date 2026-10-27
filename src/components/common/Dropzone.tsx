@@ -1,4 +1,4 @@
-import { type ReactNode, useCallback, useEffect, useRef, useState } from 'react'
+import { type ComponentType, type ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { ImagePlus } from 'lucide-react'
 import { ACCEPT } from '@/lib/assets'
@@ -15,10 +15,28 @@ interface DropzoneProps {
   className?: string
   compact?: boolean
   children?: ReactNode
+  /** 可选文件类型，默认图片 */
+  accept?: string
+  /** 底部格式说明，默认图片格式 */
+  formats?: string
+  /** 卡片中央图标，默认 ImagePlus */
+  icon?: ComponentType<{ className?: string }>
 }
 
 /** 拖拽 / 点击 / 粘贴 三合一的上传区域 */
-export function Dropzone({ onFiles, multiple = true, title, hint, pasteable = true, className, compact, children }: DropzoneProps) {
+export function Dropzone({
+  onFiles,
+  multiple = true,
+  title,
+  hint,
+  pasteable = true,
+  className,
+  compact,
+  children,
+  accept = ACCEPT,
+  formats = 'JPG · PNG · WEBP · GIF · AVIF',
+  icon,
+}: DropzoneProps) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [over, setOver] = useState(false)
   const depth = useRef(0)
@@ -81,7 +99,7 @@ export function Dropzone({ onFiles, multiple = true, title, hint, pasteable = tr
       <input
         ref={inputRef}
         type="file"
-        accept={ACCEPT}
+        accept={accept}
         multiple={multiple}
         className="hidden"
         onChange={(e) => {
@@ -91,7 +109,7 @@ export function Dropzone({ onFiles, multiple = true, title, hint, pasteable = tr
       />
       {children ?? (
         <>
-          <FannedCards compact={compact} active={over} />
+          <FannedCards compact={compact} active={over} icon={icon} />
           <div className="relative space-y-1.5">
             <div className={cn('font-semibold tracking-tight', compact ? 'text-[13px]' : 'text-[18px]')}>
               {title ?? (over ? m.dropzone.release : m.dropzone.title)}
@@ -108,7 +126,7 @@ export function Dropzone({ onFiles, multiple = true, title, hint, pasteable = tr
                 <span className="kbd">⌘</span>
                 <span className="kbd">V</span>
               </div>
-              <div className="font-mono text-[10px] tracking-[0.12em] text-muted/70">JPG · PNG · WEBP · GIF · AVIF</div>
+              <div className="font-mono text-[10px] tracking-[0.12em] text-muted/70">{formats}</div>
             </div>
           )}
         </>
@@ -118,7 +136,15 @@ export function Dropzone({ onFiles, multiple = true, title, hint, pasteable = tr
 }
 
 /** 扇形展开的三张卡片，拖入时散开 */
-function FannedCards({ compact, active }: { compact?: boolean; active: boolean }) {
+function FannedCards({
+  compact,
+  active,
+  icon: Icon = ImagePlus,
+}: {
+  compact?: boolean
+  active: boolean
+  icon?: ComponentType<{ className?: string }>
+}) {
   const size = compact ? 'h-10 w-9' : 'h-16 w-14'
   const spread = compact ? 10 : 18
   return (
@@ -138,7 +164,7 @@ function FannedCards({ compact, active }: { compact?: boolean; active: boolean }
         animate={{ y: active ? -6 : 0, scale: active ? 1.06 : 1 }}
         transition={{ type: 'spring', stiffness: 260, damping: 20 }}
       >
-        <ImagePlus className={cn(compact ? 'h-4 w-4' : 'h-6 w-6')} />
+        <Icon className={cn(compact ? 'h-4 w-4' : 'h-6 w-6')} />
       </motion.span>
     </div>
   )

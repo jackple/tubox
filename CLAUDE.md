@@ -100,10 +100,11 @@ pnpm build --base=/tubox/   # 部署到子路径，路由 basename 自动跟随 
 - 「保留方向」会写回只含 Orientation 的最小 EXIF（PNG 需重算 CRC，WebP 需同步 VP8X 标志位与 RIFF 长度）。不支持的格式（AVIF / HEIC / BMP）回退为解码后重新编码 PNG。
 - 拍摄位置的具体地址由 `lib/geocode.ts` 调用 OpenStreetMap Nominatim 反查，这是全站唯一把照片相关数据发往第三方的地方：只能由用户点击触发，不要改成自动查询；展示结果需注明 © OpenStreetMap 贡献者，请求间隔 ≥1 秒。
 
-### GIF 制作（`core/gif/` + `stores/gif.ts` + `workers/gif.ts`）
+### GIF 制作 / 视频转 GIF（`core/gif/` + `stores/gif.ts` / `stores/videogif.ts` + `workers/gif.ts`）
 
 - `planFrames` 把图片数量与选项展开为帧序列（往返、淡入淡出插值帧），`drawFrame` 绘制单帧，预览与导出共用。
 - 编码用 gifenc（无类型声明，见 `src/types/gifenc.d.ts`），每帧单独量化调色板；导出时主线程逐帧绘制、像素 transfer 给一次性 Worker 编码，主线程画下一帧与 Worker 编码上一帧并行。
+- 视频转 GIF（`core/gif/video.ts` + `lib/video.ts` + `stores/videogif.ts`）：`planVideoFrames` 按片段 / 帧率 / 速度生成取样时间（帧时长按累计时间取整到 10ms，总时长不漂移），复用同一个 `encodeGifInWorker`（`render` 可异步）。视频解码依赖 DOM 的 `<video>`，只能在主线程：导出与时间轴缩略图各自 `openVideo` 一个独立元素逐帧 `seekVideo`，不干扰舞台预览；预览按输出帧率把播放中的视频画到画布，往返播放的倒放段靠逐帧 seek 模拟。导出可通过 `AbortSignal` 取消。
 
 ### 开源许可（AGPL-3.0）
 

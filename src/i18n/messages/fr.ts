@@ -40,6 +40,7 @@ const messages: Messages = {
     'decode-failed': 'Impossible de décoder cette image',
     'model-load-failed': 'Échec du chargement des modèles IA. Vérifiez votre connexion ou hébergez-les vous-même avec pnpm setup:models',
     'segment-failed': "Échec de la suppression de l'arrière-plan. Essayez une autre image",
+    'video-decode-failed': 'Votre navigateur ne peut pas décoder cette vidéo. Convertissez-la en MP4 (H.264) puis réessayez',
   },
 
   nav: {
@@ -59,6 +60,7 @@ const messages: Messages = {
     process: "Traitement d'images",
     photo: 'Identité et visa',
     layout: 'Collage et mise en page',
+    animation: 'GIF animés',
   },
 
   tools: {
@@ -112,6 +114,11 @@ const messages: Messages = {
       desc: 'Assemblez plusieurs images en GIF animé : durée par image, fondu enchaîné et lecture aller-retour',
       chips: ['Fondu', 'Aller-retour', 'Format', 'Couleurs'],
     },
+    videogif: {
+      title: 'Vidéo en GIF',
+      desc: "Découpez un extrait de n'importe quelle vidéo et transformez-le en GIF : fps, vitesse, taille et format réglables",
+      chips: ['Découpe', 'FPS et vitesse', 'Aller-retour', 'Recadrage'],
+    },
   },
 
   dropzone: {
@@ -144,7 +151,7 @@ const messages: Messages = {
     heroHighlight: 'navigateur',
     heroAfter: '',
     heroDesc1:
-      "Compression par lots, photos d'identité, collages, mises en page et GIF animés : dix outils pro qui tournent entièrement sur votre appareil.",
+      "Compression par lots, photos d'identité, collages, mises en page et GIF animés : onze outils pro qui tournent entièrement sur votre appareil.",
     heroDesc2: "Rien à installer, rien à envoyer. Ouvrez et c'est parti.",
     start: 'Commencer',
     makeIdPhoto: "Créer une photo d'identité",
@@ -157,7 +164,7 @@ const messages: Messages = {
     toolsTitle: 'Une boîte à outils pour le quotidien',
     toolsDesc: 'Des photos produit aux photos de visa, des grilles 3×3 aux couvertures pour les réseaux sociaux.',
     soonTitle: "D'autres outils arrivent",
-    soonDesc: 'Agrandissement par IA, OCR, vidéo en GIF, image en PDF, générateur de QR code…',
+    soonDesc: 'Agrandissement par IA, OCR, image en PDF, générateur de QR code…',
     longCaptions: ['Quelle belle journée', 'On y va ?', 'Rendez-vous à la plage !'],
     privacyTitle1: 'Vos images',
     privacyTitle2: 'ne quittent jamais votre appareil.',
@@ -547,6 +554,28 @@ const messages: Messages = {
     done: 'GIF exporté · {size}',
   },
 
+  videogif: {
+    dropTitle: 'Déposez une vidéo ou cliquez pour la choisir',
+    dropHint: 'Découpez un extrait et transformez-le en GIF. La vidéo est traitée sur votre appareil, jamais envoyée',
+    loading: 'Lecture de la vidéo…',
+    needVideo: "Ajoutez une vidéo pour prévisualiser l'animation",
+    notVideo: 'Choisissez un fichier vidéo (MP4, WebM, MOV)',
+    loadFailed: 'Impossible de lire la vidéo',
+    changeVideo: 'Changer de vidéo',
+    cancel: 'Annuler',
+    clipTitle: 'Extrait',
+    clipStart: 'Début',
+    clipEnd: 'Fin',
+    clipLength: 'Durée',
+    clipHint: 'Faites glisser les poignées de la timeline pour découper, ou la sélection pour la déplacer. {max} secondes maximum.',
+    fps: 'Images par seconde (fps)',
+    speed: 'Vitesse',
+    ratioAuto: 'Original',
+    sizeHint:
+      'Moins de fps, de largeur et de couleurs donnent des fichiers plus légers. Pour un GIF de réaction, 10–12 fps en 320–480 px suffisent.',
+    tooManyFrames: "Plus de {max} images : raccourcissez l'extrait, baissez les fps ou accélérez",
+  },
+
   long: {
     fileName: 'image-longue',
     emptyTitle: 'Ajoutez des images à assembler en image longue',
@@ -655,7 +684,7 @@ const messages: Messages = {
       name: 'Accueil',
       title: "Outils image gratuits : compresser, photo d'identité, collage",
       description:
-        "Tubox, outils image gratuits en ligne : compresser et redimensionner par lots, supprimer l'arrière-plan, photo d'identité avec fond IA, annoter et pixeliser, effacer les EXIF, collage, découpe en grille, GIF animé. 100 % local, sans envoi.",
+        "Tubox, outils image gratuits en ligne : compresser et redimensionner par lots, supprimer l'arrière-plan, photo d'identité avec fond IA, annoter et pixeliser, effacer les EXIF, collage, découpe en grille, GIF animé, vidéo en GIF. 100 % local, sans envoi.",
       keywords: [
         'outils image en ligne',
         'compresser image',
@@ -889,6 +918,27 @@ const messages: Messages = {
         'Formats 1:1, 4:5, 3:4, 16:9, 9:16…, recadrage ou image entière',
         'Largeur de sortie et nombre de couleurs réglables pour maîtriser le poids',
         "Aperçu en direct de l'animation, encodage local dans un Web Worker",
+      ],
+    },
+    videogif: {
+      name: 'Vidéo en GIF',
+      title: 'Vidéo en GIF : convertir un extrait MP4 / MOV en GIF animé en ligne',
+      description:
+        "Convertisseur vidéo en GIF gratuit : découpez un extrait de vidéo MP4, WebM ou MOV, réglez les fps, la vitesse, l'aller-retour et la boucle, recadrez en 1:1, 4:5, 9:16…, et maîtrisez le poids avec la largeur et le nombre de couleurs. Traitement local dans le navigateur, sans envoi.",
+      keywords: [
+        'vidéo en GIF',
+        'MP4 en GIF',
+        'MOV en GIF',
+        'convertir une vidéo en GIF',
+        "enregistrement d'écran en GIF",
+        'créer un GIF à partir d’une vidéo',
+      ],
+      features: [
+        "Vidéos MP4, WebM et MOV ; découpe d'extraits jusqu'à 30 secondes sur la timeline",
+        '5–25 fps, vitesse de 0,5× à 3×, aller-retour et boucle',
+        "Format d'origine ou recadrage en 1:1, 4:5, 3:4, 16:9 ou 9:16",
+        'Largeur de sortie et nombre de couleurs pour maîtriser le poids',
+        'Aperçu en direct ; la vidéo est traitée dans le navigateur, sans envoi',
       ],
     },
   },

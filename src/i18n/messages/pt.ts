@@ -40,6 +40,7 @@ const messages: Messages = {
     'decode-failed': 'Não foi possível decodificar esta imagem',
     'model-load-failed': 'Falha ao carregar os modelos de IA. Verifique sua conexão ou hospede-os com pnpm setup:models',
     'segment-failed': 'Falha ao remover o fundo. Tente outra imagem',
+    'video-decode-failed': 'Seu navegador não consegue decodificar este vídeo. Converta para MP4 (H.264) e tente novamente',
   },
 
   nav: {
@@ -59,6 +60,7 @@ const messages: Messages = {
     process: 'Processamento de imagens',
     photo: 'Documentos e vistos',
     layout: 'Colagens e layouts',
+    animation: 'GIF animado',
   },
 
   tools: {
@@ -112,6 +114,11 @@ const messages: Messages = {
       desc: 'Junte várias imagens em um GIF animado, com duração por quadro, transição suave e reprodução de ida e volta',
       chips: ['Transição suave', 'Ida e volta', 'Proporção', 'Número de cores'],
     },
+    videogif: {
+      title: 'Vídeo para GIF',
+      desc: 'Recorte um trecho de qualquer vídeo e transforme em GIF, com fps, velocidade, tamanho e proporção ajustáveis',
+      chips: ['Recortar trecho', 'FPS e velocidade', 'Vai e volta', 'Enquadramento'],
+    },
   },
 
   dropzone: {
@@ -144,7 +151,7 @@ const messages: Messages = {
     heroHighlight: 'navegador',
     heroAfter: '',
     heroDesc1:
-      'Compressão em lote, fotos para documento, colagens, layouts e GIFs — dez ferramentas profissionais que rodam no seu dispositivo.',
+      'Compressão em lote, fotos para documento, colagens, layouts e GIFs — onze ferramentas profissionais que rodam no seu dispositivo.',
     heroDesc2: 'Nada para instalar, nada para enviar. É só abrir e usar.',
     start: 'Começar',
     makeIdPhoto: 'Fazer foto para documento',
@@ -157,7 +164,7 @@ const messages: Messages = {
     toolsTitle: 'Uma caixa de ferramentas para o dia a dia',
     toolsDesc: 'De fotos de produto a fotos para visto, de grades 3×3 a capas para redes sociais.',
     soonTitle: 'Mais ferramentas a caminho',
-    soonDesc: 'Ampliação com IA, reconhecimento de texto (OCR), vídeo para GIF, imagem para PDF, gerador de QR Code…',
+    soonDesc: 'Ampliação com IA, reconhecimento de texto (OCR), imagem para PDF, gerador de QR Code…',
     longCaptions: ['Que dia lindo', 'Bora sair', 'Te vejo na praia!'],
     privacyTitle1: 'Suas imagens',
     privacyTitle2: 'nunca saem do seu dispositivo.',
@@ -546,6 +553,27 @@ const messages: Messages = {
     done: 'GIF exportado · {size}',
   },
 
+  videogif: {
+    dropTitle: 'Arraste um vídeo ou clique para escolher',
+    dropHint: 'Recorte um trecho e transforme em GIF. O vídeo é processado no seu dispositivo e nunca é enviado',
+    loading: 'Lendo o vídeo…',
+    needVideo: 'Adicione um vídeo para pré-visualizar a animação',
+    notVideo: 'Escolha um arquivo de vídeo (MP4, WebM, MOV)',
+    loadFailed: 'Não foi possível ler o vídeo',
+    changeVideo: 'Trocar vídeo',
+    cancel: 'Cancelar',
+    clipTitle: 'Trecho',
+    clipStart: 'Início',
+    clipEnd: 'Fim',
+    clipLength: 'Duração',
+    clipHint: 'Arraste as alças da linha do tempo para recortar, ou arraste a seleção para movê-la. Máximo de {max} segundos.',
+    fps: 'Quadros por segundo (fps)',
+    speed: 'Velocidade',
+    ratioAuto: 'Original',
+    sizeHint: 'Menos fps, largura e cores geram arquivos menores. Para GIFs de reação, 10–12 fps em 320–480 px costumam bastar.',
+    tooManyFrames: 'Mais de {max} quadros: encurte o trecho, reduza os fps ou aumente a velocidade',
+  },
+
   long: {
     fileName: 'imagem-longa',
     emptyTitle: 'Adicione imagens para juntar em uma imagem longa',
@@ -653,7 +681,7 @@ const messages: Messages = {
       name: 'Início',
       title: 'Editor de imagens online grátis: comprimir, foto 3x4 e colagem',
       description:
-        'Ferramentas de imagem online grátis: comprima e redimensione em lote, remova o fundo com IA, faça foto 3x4 com IA, anote e borre imagens, apague dados EXIF, crie colagens, grades e GIFs. Tudo no navegador, sem upload.',
+        'Ferramentas de imagem online grátis: comprima e redimensione em lote, remova o fundo com IA, faça foto 3x4 com IA, anote e borre imagens, apague dados EXIF, crie colagens, grades, GIFs e GIF a partir de vídeo. Tudo no navegador, sem upload.',
       keywords: [
         'editor de imagens online',
         'ferramentas de imagem grátis',
@@ -895,6 +923,27 @@ const messages: Messages = {
         'Proporções 1:1, 4:5, 3:4, 16:9, 9:16 e mais, cortando para preencher ou mostrando a imagem inteira',
         'Largura de saída e número de cores personalizáveis para controlar o tamanho do arquivo',
         'Prévia da animação em tempo real, codificação local com Web Worker',
+      ],
+    },
+    videogif: {
+      name: 'Vídeo para GIF',
+      title: 'Vídeo para GIF: converta clipes MP4 / MOV em GIF animado online',
+      description:
+        'Conversor de vídeo para GIF grátis: recorte qualquer trecho de vídeos MP4, WebM ou MOV, ajuste fps, velocidade, vai e volta e loop, enquadre em 1:1, 4:5, 9:16 e mais, e controle o tamanho pela largura e número de cores. Tudo no navegador, sem upload.',
+      keywords: [
+        'vídeo para GIF',
+        'MP4 para GIF',
+        'MOV para GIF',
+        'converter vídeo em GIF online',
+        'gravação de tela para GIF',
+        'criar GIF de vídeo',
+      ],
+      features: [
+        'Vídeos MP4, WebM e MOV; recorte trechos de até 30 segundos na linha do tempo',
+        '5–25 fps, velocidade de 0,5× a 3×, vai e volta e loop',
+        'Proporção original ou enquadramento em 1:1, 4:5, 3:4, 16:9 ou 9:16',
+        'Largura de saída e número de cores para controlar o tamanho',
+        'Pré-visualização em tempo real; o vídeo é processado no navegador, sem upload',
       ],
     },
   },

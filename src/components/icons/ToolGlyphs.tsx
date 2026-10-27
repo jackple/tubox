@@ -102,6 +102,17 @@ export const GifGlyph = (p: GlyphProps) => (
   </Svg>
 )
 
+/** 视频转 GIF：播放窗口 + 截取片段的时间轴 */
+export const VideoGifGlyph = (p: GlyphProps) => (
+  <Svg {...p}>
+    <rect className="g-tint" x="3" y="3.5" width="18" height="12.5" rx="2.5" />
+    <rect x="3" y="3.5" width="18" height="12.5" rx="2.5" />
+    <path className="g-accent" d="M10.4 7.1v5.3l4.3-2.65z" />
+    <path d="M3.5 20h17" />
+    <path className="g-accent-stroke" d="M8 20h8M8 18.2v3.6M16 18.2v3.6" />
+  </Svg>
+)
+
 /** EXIF 隐私清除：照片 + 盾牌 */
 export const ExifGlyph = (p: GlyphProps) => (
   <Svg {...p}>

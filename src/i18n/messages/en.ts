@@ -40,6 +40,7 @@ const messages: Messages = {
     'decode-failed': 'Unable to decode this image',
     'model-load-failed': 'Failed to load the AI models. Check your network or self-host them with pnpm setup:models',
     'segment-failed': 'Background removal failed. Please try another image',
+    'video-decode-failed': "Your browser can't decode this video. Convert it to MP4 (H.264) and try again",
   },
 
   nav: {
@@ -59,6 +60,7 @@ const messages: Messages = {
     process: 'Image processing',
     photo: 'ID & visa',
     layout: 'Collage & layout',
+    animation: 'Animated GIF',
   },
 
   tools: {
@@ -112,6 +114,11 @@ const messages: Messages = {
       desc: 'Turn multiple images into an animated GIF with custom frame timing, crossfades and ping-pong playback',
       chips: ['Crossfade', 'Ping-pong', 'Aspect ratio', 'Color count'],
     },
+    videogif: {
+      title: 'Video to GIF',
+      desc: 'Trim a clip from any video and turn it into a GIF, with adjustable frame rate, speed, size and aspect ratio',
+      chips: ['Trim clip', 'FPS & speed', 'Ping-pong', 'Crop'],
+    },
   },
 
   dropzone: {
@@ -140,7 +147,7 @@ const messages: Messages = {
     heroBefore: 'right in your ',
     heroHighlight: 'browser',
     heroAfter: '',
-    heroDesc1: 'Batch compression, ID photos, collages and animated GIFs — ten pro tools that run entirely on your device.',
+    heroDesc1: 'Batch compression, ID photos, collages and animated GIFs — eleven pro tools that run entirely on your device.',
     heroDesc2: 'Nothing to install, nothing to upload. Just open and go.',
     start: 'Get started',
     makeIdPhoto: 'Make an ID photo',
@@ -153,7 +160,7 @@ const messages: Messages = {
     toolsTitle: 'One toolbox for everyday needs',
     toolsDesc: 'From product shots to visa photos, from 3×3 grids to social media covers.',
     soonTitle: 'More tools on the way',
-    soonDesc: 'AI upscaling, OCR text recognition, video to GIF, image to PDF, QR code generator…',
+    soonDesc: 'AI upscaling, OCR text recognition, image to PDF, QR code generator…',
     longCaptions: ['What a lovely day', "Let's head out", 'See you at the beach!'],
     privacyTitle1: 'Your images',
     privacyTitle2: 'never leave your device.',
@@ -536,6 +543,27 @@ const messages: Messages = {
     done: 'GIF exported · {size}',
   },
 
+  videogif: {
+    dropTitle: 'Drop a video, or click to choose',
+    dropHint: 'Trim a clip into an animated GIF. Your video is processed locally and never uploaded',
+    loading: 'Reading video…',
+    needVideo: 'Add a video to preview the animation',
+    notVideo: 'Please choose a video file (MP4, WebM, MOV)',
+    loadFailed: "Couldn't read the video",
+    changeVideo: 'Change video',
+    cancel: 'Cancel',
+    clipTitle: 'Clip',
+    clipStart: 'Start',
+    clipEnd: 'End',
+    clipLength: 'Length',
+    clipHint: 'Drag the handles on the timeline to trim, or drag the selection to move it. Up to {max} seconds.',
+    fps: 'Frame rate (fps)',
+    speed: 'Speed',
+    ratioAuto: 'Original',
+    sizeHint: 'Lower frame rate, width and colors mean smaller files. For reaction GIFs, 10–12 fps at 320–480px is usually enough.',
+    tooManyFrames: 'More than {max} frames — shorten the clip, lower the frame rate or speed it up',
+  },
+
   long: {
     fileName: 'long-image',
     emptyTitle: 'Add images to stitch into a long image',
@@ -643,7 +671,7 @@ const messages: Messages = {
       name: 'Home',
       title: 'Free Online Image Toolbox: Batch Compress, ID Photos, Collages, Grids',
       description:
-        'Tubox is a free online image toolbox: batch compress, resize and watermark images, remove backgrounds with AI, make ID photos with AI background replacement, annotate and pixelate images, remove EXIF metadata, stitch long images, create collages, split images into grids, design social media covers and make animated GIFs. Everything runs locally in your browser — no uploads, no sign-up.',
+        'Tubox is a free online image toolbox: batch compress, resize and watermark images, remove backgrounds with AI, make ID photos with AI background replacement, annotate and pixelate images, remove EXIF metadata, stitch long images, create collages, split images into grids, design social media covers, make animated GIFs and convert videos to GIF. Everything runs locally in your browser — no uploads, no sign-up.',
       keywords: [
         'online image tools',
         'image editor',
@@ -863,6 +891,27 @@ const messages: Messages = {
         '1:1, 4:5, 3:4, 16:9, 9:16 and more, crop to fill or show the whole image',
         'Custom output width and color count to control file size',
         'Live animation preview, encoded locally in a Web Worker',
+      ],
+    },
+    videogif: {
+      name: 'Video to GIF',
+      title: 'Video to GIF: Convert MP4 / MOV Clips to Animated GIFs Online',
+      description:
+        'Free online video to GIF converter: trim any clip from MP4, WebM or MOV videos, set frame rate, playback speed, ping-pong and looping, crop to 1:1, 4:5, 9:16 and more, and control file size with output width and color count. Videos are processed locally in your browser — nothing is uploaded.',
+      keywords: [
+        'video to GIF',
+        'MP4 to GIF',
+        'MOV to GIF',
+        'convert video to GIF online',
+        'screen recording to GIF',
+        'GIF maker from video',
+      ],
+      features: [
+        'MP4, WebM and MOV videos; trim clips of up to 30 seconds on the timeline',
+        '5–25 fps, 0.5×–3× speed, ping-pong and looping',
+        'Keep the original aspect ratio or crop to 1:1, 4:5, 3:4, 16:9 or 9:16',
+        'Custom output width and color count to control file size',
+        'Live preview; videos are processed locally and never uploaded',
       ],
     },
   },

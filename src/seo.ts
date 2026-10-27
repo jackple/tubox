@@ -24,6 +24,7 @@ export const pagePaths: { path: string; key: PageKey; page: string }[] = [
   { path: '/collage/nine', key: 'nine', page: 'features/collage/NineGridPage' },
   { path: '/collage/social', key: 'social', page: 'features/collage/SocialPage' },
   { path: '/gif', key: 'gif', page: 'features/gif/GifPage' },
+  { path: '/video-to-gif', key: 'videogif', page: 'features/gif/VideoGifPage' },
 ]
 
 export interface PageSeo {

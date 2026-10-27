@@ -47,6 +47,7 @@ const messages = {
     'decode-failed': '无法解码该图片',
     'model-load-failed': 'AI 模型加载失败，请检查网络或执行 pnpm setup:models 自托管模型',
     'segment-failed': '抠图失败，请换一张图片重试',
+    'video-decode-failed': '浏览器无法解码该视频，请转为 MP4（H.264）后重试',
   },
 
   nav: {
@@ -67,6 +68,7 @@ const messages = {
     process: '图片处理',
     photo: '证件与签证',
     layout: '拼图排版',
+    animation: '动图制作',
   },
 
   tools: {
@@ -120,6 +122,11 @@ const messages = {
       desc: '多张图片合成 GIF 动图，自定义帧时长、淡入淡出与往返播放',
       chips: ['淡入淡出', '往返播放', '尺寸比例', '颜色数'],
     },
+    videogif: {
+      title: '视频转 GIF',
+      desc: '截取视频片段转为 GIF 动图，可调帧率、速度、尺寸与画面比例',
+      chips: ['片段截取', '帧率 / 倍速', '往返播放', '画面裁切'],
+    },
   },
 
   dropzone: {
@@ -149,7 +156,7 @@ const messages = {
     heroBefore: '就在',
     heroHighlight: '浏览器',
     heroAfter: '里',
-    heroDesc1: '批量压缩、证件照、拼图排版、GIF 动图——十个专业工具，全部在你的设备上运行。',
+    heroDesc1: '批量压缩、证件照、拼图排版、GIF 动图——十一个专业工具，全部在你的设备上运行。',
     heroDesc2: '无需安装，无需上传，打开即用。',
     start: '开始使用',
     makeIdPhoto: '制作证件照',
@@ -162,7 +169,7 @@ const messages = {
     toolsTitle: '一个工具箱，覆盖日常所需',
     toolsDesc: '从电商修图到签证照片，从朋友圈九宫格到小红书封面。',
     soonTitle: '更多工具筹备中',
-    soonDesc: 'AI 高清放大、OCR 文字识别、视频转 GIF、图片转 PDF、二维码生成……',
+    soonDesc: 'AI 高清放大、OCR 文字识别、图片转 PDF、二维码生成……',
     /** 卡片插画里的示意文字 */
     longCaptions: ['今天天气真好', '我们出发吧', '海边见！'],
     privacyTitle1: '你的图片，',
@@ -534,6 +541,27 @@ const messages = {
     done: 'GIF 已导出 · {size}',
   },
 
+  videogif: {
+    dropTitle: '拖入视频，或点击选择',
+    dropHint: '截取片段转为 GIF 动图，视频仅在本地处理，不会上传',
+    loading: '正在读取视频…',
+    needVideo: '添加视频后预览动画',
+    notVideo: '请选择视频文件（MP4、WebM、MOV）',
+    loadFailed: '视频读取失败',
+    changeVideo: '更换视频',
+    cancel: '取消',
+    clipTitle: '片段',
+    clipStart: '起点',
+    clipEnd: '终点',
+    clipLength: '时长',
+    clipHint: '拖动时间轴两端的手柄截取片段，拖动选区可整体平移，最长 {max} 秒。',
+    fps: '帧率（fps）',
+    speed: '播放速度',
+    ratioAuto: '原始比例',
+    sizeHint: '帧率、宽度和颜色数越低，文件越小；表情包一般 10-12 fps、320-480px 即可。',
+    tooManyFrames: '帧数超过 {max}，请缩短片段、降低帧率或加快速度',
+  },
+
   long: {
     fileName: '长图',
     emptyTitle: '添加多张图片拼成长图',
@@ -640,7 +668,7 @@ const messages = {
       name: '首页',
       title: '免费在线图片工具箱：批量压缩、证件照、拼图、九宫格',
       description:
-        '图盒 Tubox 是免费的在线图片处理工具箱：批量压缩改尺寸加水印、AI 抠图、证件照 AI 换底、图片标注打码、EXIF 隐私清除、长图拼接、拼图、九宫格切图、小红书封面排版、GIF 动图制作。全部在浏览器本地处理，图片不上传，无需注册。',
+        '图盒 Tubox 是免费的在线图片处理工具箱：批量压缩改尺寸加水印、AI 抠图、证件照 AI 换底、图片标注打码、EXIF 隐私清除、长图拼接、拼图、九宫格切图、小红书封面排版、GIF 动图制作、视频转 GIF。全部在浏览器本地处理，图片不上传，无需注册。',
       keywords: ['在线图片工具', '图片处理', '图片压缩', '证件照制作', '在线拼图', '九宫格切图', '长图拼接', '小红书封面'],
       features: ['图片在浏览器本地处理，不上传服务器', '免费使用，无需注册登录', '支持 JPG / PNG / WebP / AVIF'],
     },
@@ -804,6 +832,20 @@ const messages = {
         '1:1、4:5、3:4、16:9、9:16 等画面比例，裁切铺满或完整显示',
         '自定义输出宽度与颜色数，控制文件体积',
         '实时预览动画，Web Worker 本地编码',
+      ],
+    },
+    videogif: {
+      name: '视频转 GIF',
+      title: '视频转 GIF：在线把 MP4 / MOV 视频片段转成 GIF 动图',
+      description:
+        '免费在线视频转 GIF：截取 MP4、WebM、MOV 视频中的任意片段，自定义帧率、播放速度、往返播放与循环，可裁切为 1:1、4:5、9:16 等比例，调整输出宽度与颜色数控制体积。视频在浏览器本地处理，不上传服务器。',
+      keywords: ['视频转 GIF', 'MP4 转 GIF', '在线视频转 GIF', 'MOV 转 GIF', '视频截取 GIF', '录屏转 GIF', '表情包制作'],
+      features: [
+        '支持 MP4、WebM、MOV 视频，拖动时间轴截取片段（最长 30 秒）',
+        '帧率 5-25 fps，0.5-3 倍速，往返播放与循环',
+        '保持原比例或裁切为 1:1、4:5、3:4、16:9、9:16',
+        '自定义输出宽度与颜色数，控制文件体积',
+        '实时预览，视频在浏览器本地处理，不上传',
       ],
     },
   },

@@ -43,7 +43,7 @@ const FADE_DELAY = 60
 /** 输出高度上限，防止竖长比例下画布过大 */
 const MAX_HEIGHT = 2160
 
-export function gifSize(first: { width: number; height: number } | undefined, o: GifOptions) {
+export function gifSize(first: { width: number; height: number } | undefined, o: Pick<GifOptions, 'width' | 'ratio'>) {
   let r = first ? first.width / first.height : 1
   if (o.ratio !== 'auto') {
     const [a, b] = o.ratio.split(':').map(Number)
@@ -82,7 +82,7 @@ export function planFrames(count: number, o: GifOptions): GifFrame[] {
   return frames
 }
 
-export const totalDuration = (frames: GifFrame[]) => frames.reduce((s, f) => s + f.delay, 0)
+export const totalDuration = (frames: { delay: number }[]) => frames.reduce((s, f) => s + f.delay, 0)
 
 function drawFit(ctx: Ctx2D, img: Drawable, w: number, h: number, fit: GifFit) {
   const k = fit === 'cover' ? Math.max(w / img.width, h / img.height) : Math.min(w / img.width, h / img.height)

@@ -40,6 +40,7 @@ const messages: Messages = {
     'decode-failed': 'Dieses Bild kann nicht dekodiert werden',
     'model-load-failed': 'KI-Modelle konnten nicht geladen werden. Prüfe deine Verbindung oder hoste sie selbst mit pnpm setup:models',
     'segment-failed': 'Hintergrund konnte nicht entfernt werden. Bitte versuche ein anderes Bild',
+    'video-decode-failed': 'Dein Browser kann dieses Video nicht dekodieren. Wandle es in MP4 (H.264) um und versuche es erneut',
   },
 
   nav: {
@@ -59,6 +60,7 @@ const messages: Messages = {
     process: 'Bildbearbeitung',
     photo: 'Pass & Visum',
     layout: 'Collage & Layout',
+    animation: 'GIF-Animation',
   },
 
   tools: {
@@ -112,6 +114,11 @@ const messages: Messages = {
       desc: 'Mehrere Bilder zu einem animierten GIF verbinden – mit eigener Bilddauer, Überblendung und Hin-und-zurück-Wiedergabe',
       chips: ['Überblendung', 'Hin und zurück', 'Seitenverhältnis', 'Farbanzahl'],
     },
+    videogif: {
+      title: 'Video zu GIF',
+      desc: 'Schneide einen Ausschnitt aus einem Video und mach daraus ein GIF – mit einstellbarer Bildrate, Geschwindigkeit, Größe und Seitenverhältnis',
+      chips: ['Zuschneiden', 'FPS & Tempo', 'Ping-Pong', 'Bildausschnitt'],
+    },
   },
 
   dropzone: {
@@ -143,7 +150,7 @@ const messages: Messages = {
     heroBefore: 'direkt im ',
     heroHighlight: 'Browser',
     heroAfter: '',
-    heroDesc1: 'Stapelkomprimierung, Passbilder, Collagen, Layouts und GIFs – zehn Profi-Tools, die komplett auf deinem Gerät laufen.',
+    heroDesc1: 'Stapelkomprimierung, Passbilder, Collagen, Layouts und GIFs – elf Profi-Tools, die komplett auf deinem Gerät laufen.',
     heroDesc2: 'Nichts installieren, nichts hochladen. Einfach öffnen und loslegen.',
     start: 'Jetzt starten',
     makeIdPhoto: 'Passbild erstellen',
@@ -156,7 +163,7 @@ const messages: Messages = {
     toolsTitle: 'Eine Toolbox für den Alltag',
     toolsDesc: 'Von Produktfotos bis Visabildern, von 3×3-Rastern bis Social-Media-Covern.',
     soonTitle: 'Weitere Tools in Arbeit',
-    soonDesc: 'KI-Hochskalierung, Texterkennung (OCR), Video zu GIF, Bild zu PDF, QR-Code-Generator …',
+    soonDesc: 'KI-Hochskalierung, Texterkennung (OCR), Bild zu PDF, QR-Code-Generator …',
     longCaptions: ['Was für ein schöner Tag', 'Lass uns losfahren', 'Wir sehen uns am Strand!'],
     privacyTitle1: 'Deine Bilder',
     privacyTitle2: 'verlassen nie dein Gerät.',
@@ -544,6 +551,27 @@ const messages: Messages = {
     done: 'GIF exportiert · {size}',
   },
 
+  videogif: {
+    dropTitle: 'Video hierher ziehen oder klicken',
+    dropHint: 'Schneide einen Ausschnitt zu und wandle ihn in ein GIF um. Das Video wird lokal verarbeitet und nie hochgeladen',
+    loading: 'Video wird gelesen …',
+    needVideo: 'Füge ein Video hinzu, um die Animation zu sehen',
+    notVideo: 'Bitte wähle eine Videodatei (MP4, WebM, MOV)',
+    loadFailed: 'Video konnte nicht gelesen werden',
+    changeVideo: 'Video wechseln',
+    cancel: 'Abbrechen',
+    clipTitle: 'Ausschnitt',
+    clipStart: 'Start',
+    clipEnd: 'Ende',
+    clipLength: 'Länge',
+    clipHint: 'Ziehe die Griffe auf der Zeitleiste zum Zuschneiden oder die Auswahl zum Verschieben. Maximal {max} Sekunden.',
+    fps: 'Bildrate (fps)',
+    speed: 'Geschwindigkeit',
+    ratioAuto: 'Original',
+    sizeHint: 'Weniger fps, Breite und Farben ergeben kleinere Dateien. Für Reaktions-GIFs reichen meist 10–12 fps bei 320–480 px.',
+    tooManyFrames: 'Mehr als {max} Frames – kürze den Ausschnitt, senke die Bildrate oder erhöhe das Tempo',
+  },
+
   long: {
     fileName: 'langbild',
     emptyTitle: 'Bilder hinzufügen und zu einem Langbild verbinden',
@@ -651,7 +679,7 @@ const messages: Messages = {
       name: 'Startseite',
       title: 'Kostenlose Bild-Tools online: Komprimieren, Passbild, Collage',
       description:
-        'Kostenlose Bild-Tools im Browser: Bilder komprimieren und verkleinern, Hintergrund entfernen, Passbild mit KI, Bilder beschriften und verpixeln, EXIF-Daten löschen, Collage, Bild in Raster teilen, GIF erstellen – ohne Upload und Anmeldung.',
+        'Kostenlose Bild-Tools im Browser: Bilder komprimieren und verkleinern, Hintergrund entfernen, Passbild mit KI, Bilder beschriften und verpixeln, EXIF-Daten löschen, Collage, Bild in Raster teilen, GIF erstellen, Video zu GIF – ohne Upload und Anmeldung.',
       keywords: [
         'Bildbearbeitung online',
         'Bilder komprimieren',
@@ -893,6 +921,27 @@ const messages: Messages = {
         'Seitenverhältnisse wie 1:1, 4:5, 3:4, 16:9 und 9:16 – zuschneiden oder vollständig anzeigen',
         'Ausgabebreite und Farbanzahl frei wählbar, um die Dateigröße zu steuern',
         'Live-Vorschau der Animation, lokale Kodierung per Web Worker',
+      ],
+    },
+    videogif: {
+      name: 'Video zu GIF',
+      title: 'Video zu GIF: MP4- / MOV-Clips online in animierte GIFs umwandeln',
+      description:
+        'Kostenloser Video-zu-GIF-Konverter: Schneide beliebige Ausschnitte aus MP4-, WebM- oder MOV-Videos, stelle Bildrate, Geschwindigkeit, Ping-Pong und Schleife ein, beschneide auf 1:1, 4:5, 9:16 u. a. und steuere die Dateigröße über Breite und Farbanzahl. Alles lokal im Browser – ohne Upload.',
+      keywords: [
+        'Video zu GIF',
+        'MP4 zu GIF',
+        'MOV zu GIF',
+        'Video in GIF umwandeln',
+        'Bildschirmaufnahme zu GIF',
+        'GIF aus Video erstellen',
+      ],
+      features: [
+        'MP4-, WebM- und MOV-Videos; Ausschnitte bis 30 Sekunden auf der Zeitleiste zuschneiden',
+        '5–25 fps, 0,5× bis 3× Tempo, Ping-Pong und Schleife',
+        'Originales Seitenverhältnis oder Zuschnitt auf 1:1, 4:5, 3:4, 16:9 oder 9:16',
+        'Ausgabebreite und Farbanzahl zur Steuerung der Dateigröße',
+        'Live-Vorschau; das Video wird lokal im Browser verarbeitet, ohne Upload',
       ],
     },
   },

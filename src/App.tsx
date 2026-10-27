@@ -18,6 +18,7 @@ const GridPage = lazy(() => import('@/features/collage/GridPage'))
 const NineGridPage = lazy(() => import('@/features/collage/NineGridPage'))
 const SocialPage = lazy(() => import('@/features/collage/SocialPage'))
 const GifPage = lazy(() => import('@/features/gif/GifPage'))
+const VideoGifPage = lazy(() => import('@/features/gif/VideoGifPage'))
 
 function pageRoutes(): RouteObject[] {
   return [
@@ -32,6 +33,7 @@ function pageRoutes(): RouteObject[] {
     { path: 'collage/nine', element: <NineGridPage /> },
     { path: 'collage/social', element: <SocialPage /> },
     { path: 'gif', element: <GifPage /> },
+    { path: 'video-to-gif', element: <VideoGifPage /> },
     { path: '*', element: <ToLocaleHome /> },
   ]
 }

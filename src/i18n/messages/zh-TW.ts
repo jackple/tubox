@@ -40,6 +40,7 @@ const messages: Messages = {
     'decode-failed': '無法解碼此圖片',
     'model-load-failed': 'AI 模型載入失敗，請檢查網路，或執行 pnpm setup:models 自行託管模型',
     'segment-failed': '去背失敗，請換一張圖片重試',
+    'video-decode-failed': '瀏覽器無法解碼此影片，請轉成 MP4（H.264）後再試',
   },
 
   nav: {
@@ -59,6 +60,7 @@ const messages: Messages = {
     process: '圖片處理',
     photo: '證件與簽證',
     layout: '拼貼排版',
+    animation: '動畫製作',
   },
 
   tools: {
@@ -112,6 +114,11 @@ const messages: Messages = {
       desc: '多張圖片合成 GIF 動畫，自訂每張時間、淡入淡出與來回播放',
       chips: ['淡入淡出', '來回播放', '尺寸比例', '顏色數'],
     },
+    videogif: {
+      title: '影片轉 GIF',
+      desc: '擷取影片片段轉成 GIF 動畫，可調整影格速率、速度、尺寸與畫面比例',
+      chips: ['片段擷取', '影格速率 / 倍速', '往返播放', '畫面裁切'],
+    },
   },
 
   dropzone: {
@@ -140,7 +147,7 @@ const messages: Messages = {
     heroBefore: '就在',
     heroHighlight: '瀏覽器',
     heroAfter: '裡',
-    heroDesc1: '批次壓縮、證件照、拼貼排版、GIF 動畫——十款專業工具，全部在你的裝置上執行。',
+    heroDesc1: '批次壓縮、證件照、拼貼排版、GIF 動畫——十一款專業工具，全部在你的裝置上執行。',
     heroDesc2: '免安裝、免上傳，開啟即可使用。',
     start: '開始使用',
     makeIdPhoto: '製作證件照',
@@ -153,7 +160,7 @@ const messages: Messages = {
     toolsTitle: '一個工具箱，滿足日常所需',
     toolsDesc: '從電商修圖到簽證照片，從九宮格到小紅書封面。',
     soonTitle: '更多工具籌備中',
-    soonDesc: 'AI 高畫質放大、OCR 文字辨識、影片轉 GIF、圖片轉 PDF、QR Code 產生器……',
+    soonDesc: 'AI 高畫質放大、OCR 文字辨識、圖片轉 PDF、QR Code 產生器……',
     longCaptions: ['今天天氣真好', '我們出發吧', '海邊見！'],
     privacyTitle1: '你的圖片，',
     privacyTitle2: '從不離開你的裝置。',
@@ -521,6 +528,27 @@ const messages: Messages = {
     done: 'GIF 已匯出 · {size}',
   },
 
+  videogif: {
+    dropTitle: '拖入影片，或點擊選擇',
+    dropHint: '擷取片段轉成 GIF 動畫，影片僅在本機處理，不會上傳',
+    loading: '正在讀取影片…',
+    needVideo: '加入影片後預覽動畫',
+    notVideo: '請選擇影片檔案（MP4、WebM、MOV）',
+    loadFailed: '影片讀取失敗',
+    changeVideo: '更換影片',
+    cancel: '取消',
+    clipTitle: '片段',
+    clipStart: '起點',
+    clipEnd: '終點',
+    clipLength: '長度',
+    clipHint: '拖曳時間軸兩端的控點擷取片段，拖曳選取範圍可整段平移，最長 {max} 秒。',
+    fps: '影格速率（fps）',
+    speed: '播放速度',
+    ratioAuto: '原始比例',
+    sizeHint: '影格速率、寬度與顏色數越低，檔案越小；梗圖一般 10-12 fps、320-480px 即可。',
+    tooManyFrames: '影格數超過 {max}，請縮短片段、降低影格速率或加快速度',
+  },
+
   long: {
     fileName: '長圖',
     emptyTitle: '新增多張圖片拼成長圖',
@@ -625,7 +653,7 @@ const messages: Messages = {
       name: '首頁',
       title: '免費線上圖片工具箱：批次壓縮、證件照、照片拼貼、九宮格',
       description:
-        '圖盒 Tubox 是免費的線上圖片處理工具箱：批次壓縮、調整尺寸、加浮水印，AI 去背，證件照與大頭照 AI 換背景，圖片標註與馬賽克，EXIF 隱私清除，長圖拼接、照片拼貼、IG 九宮格切圖、小紅書封面排版，GIF 動畫製作。全部在瀏覽器本機處理，圖片不上傳，免註冊。',
+        '圖盒 Tubox 是免費的線上圖片處理工具箱：批次壓縮、調整尺寸、加浮水印，AI 去背，證件照與大頭照 AI 換背景，圖片標註與馬賽克，EXIF 隱私清除，長圖拼接、照片拼貼、IG 九宮格切圖、小紅書封面排版，GIF 動畫製作與影片轉 GIF。全部在瀏覽器本機處理，圖片不上傳，免註冊。',
       keywords: ['線上圖片工具', '圖片處理', '圖片壓縮', '證件照製作', '大頭照', '照片拼貼', '九宮格切圖', '長截圖拼接'],
       features: ['圖片在瀏覽器本機處理，不上傳伺服器', '免費使用，免註冊登入', '支援 JPG / PNG / WebP / AVIF'],
     },
@@ -779,6 +807,20 @@ const messages: Messages = {
         '1:1、4:5、3:4、16:9、9:16 等畫面比例，裁切填滿或完整顯示',
         '自訂輸出寬度與顏色數，控制檔案大小',
         '即時預覽動畫，Web Worker 本機編碼',
+      ],
+    },
+    videogif: {
+      name: '影片轉 GIF',
+      title: '影片轉 GIF：線上把 MP4 / MOV 影片片段轉成 GIF 動畫',
+      description:
+        '免費線上影片轉 GIF：擷取 MP4、WebM、MOV 影片中的任意片段，自訂影格速率、播放速度、往返播放與循環，可裁切為 1:1、4:5、9:16 等比例，調整輸出寬度與顏色數控制檔案大小。影片在瀏覽器本機處理，不上傳伺服器。',
+      keywords: ['影片轉 GIF', 'MP4 轉 GIF', '線上影片轉 GIF', 'MOV 轉 GIF', '螢幕錄影轉 GIF', 'GIF 動畫製作'],
+      features: [
+        '支援 MP4、WebM、MOV 影片，拖曳時間軸擷取片段（最長 30 秒）',
+        '影格速率 5-25 fps，0.5-3 倍速，往返播放與循環',
+        '保持原比例或裁切為 1:1、4:5、3:4、16:9、9:16',
+        '自訂輸出寬度與顏色數，控制檔案大小',
+        '即時預覽，影片在瀏覽器本機處理，不上傳',
       ],
     },
   },

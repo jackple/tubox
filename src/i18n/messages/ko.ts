@@ -40,6 +40,7 @@ const messages: Messages = {
     'decode-failed': '이 이미지를 디코딩할 수 없어요',
     'model-load-failed': 'AI 모델을 불러오지 못했어요. 네트워크를 확인하거나 pnpm setup:models로 모델을 직접 호스팅하세요',
     'segment-failed': '배경 제거에 실패했어요. 다른 이미지로 다시 시도해 주세요',
+    'video-decode-failed': '브라우저에서 이 동영상을 디코딩할 수 없어요. MP4(H.264)로 변환한 뒤 다시 시도해 주세요',
   },
 
   nav: {
@@ -59,6 +60,7 @@ const messages: Messages = {
     process: '이미지 처리',
     photo: '증명·비자 사진',
     layout: '콜라주·레이아웃',
+    animation: 'GIF 움짤',
   },
 
   tools: {
@@ -112,6 +114,11 @@ const messages: Messages = {
       desc: '여러 이미지를 GIF 움짤로 합치기. 장당 시간, 페이드 전환, 왕복 재생을 자유롭게',
       chips: ['페이드', '왕복 재생', '화면 비율', '색상 수'],
     },
+    videogif: {
+      title: '동영상 GIF 변환',
+      desc: '동영상에서 원하는 구간을 잘라 GIF로 만들어요. 프레임 속도·재생 속도·크기·비율 조절',
+      chips: ['구간 자르기', 'fps / 배속', '왕복 재생', '화면 자르기'],
+    },
   },
 
   dropzone: {
@@ -140,7 +147,7 @@ const messages: Messages = {
     heroBefore: '',
     heroHighlight: '브라우저',
     heroAfter: '에서 바로',
-    heroDesc1: '일괄 압축, 증명사진, 콜라주, GIF 움짤까지 — 10가지 전문 도구가 모두 내 기기에서 실행돼요.',
+    heroDesc1: '일괄 압축, 증명사진, 콜라주, GIF 움짤까지 — 11가지 전문 도구가 모두 내 기기에서 실행돼요.',
     heroDesc2: '설치도, 업로드도 필요 없이 열면 바로 사용하세요.',
     start: '시작하기',
     makeIdPhoto: '증명사진 만들기',
@@ -153,7 +160,7 @@ const messages: Messages = {
     toolsTitle: '일상에 필요한 모든 것을 하나의 도구 상자로',
     toolsDesc: '쇼핑몰 상품 사진부터 비자 사진, 피드 9분할부터 SNS 표지까지.',
     soonTitle: '더 많은 도구 준비 중',
-    soonDesc: 'AI 고화질 업스케일, OCR 텍스트 인식, 동영상 GIF 변환, 이미지 PDF 변환, QR 코드 생성…',
+    soonDesc: 'AI 고화질 업스케일, OCR 텍스트 인식, 이미지 PDF 변환, QR 코드 생성…',
     longCaptions: ['오늘 날씨 정말 좋다', '이제 출발하자', '바다에서 만나!'],
     privacyTitle1: '내 이미지는',
     privacyTitle2: '기기 밖으로 나가지 않아요.',
@@ -534,6 +541,27 @@ const messages: Messages = {
     done: 'GIF 내보내기 완료 · {size}',
   },
 
+  videogif: {
+    dropTitle: '동영상을 끌어다 놓거나 클릭해서 선택하세요',
+    dropHint: '구간을 잘라 GIF 움짤로 만들어요. 동영상은 기기에서만 처리되고 업로드되지 않아요',
+    loading: '동영상을 읽는 중…',
+    needVideo: '동영상을 추가하면 애니메이션을 미리 볼 수 있어요',
+    notVideo: '동영상 파일(MP4, WebM, MOV)을 선택해 주세요',
+    loadFailed: '동영상을 읽지 못했어요',
+    changeVideo: '동영상 변경',
+    cancel: '취소',
+    clipTitle: '구간',
+    clipStart: '시작',
+    clipEnd: '끝',
+    clipLength: '길이',
+    clipHint: '타임라인 양 끝의 핸들을 드래그해 구간을 정하고, 선택 영역을 드래그하면 통째로 옮길 수 있어요. 최대 {max}초.',
+    fps: '프레임 속도(fps)',
+    speed: '재생 속도',
+    ratioAuto: '원본 비율',
+    sizeHint: '프레임 속도·너비·색상 수가 낮을수록 파일이 작아져요. 움짤은 보통 10~12fps, 320~480px면 충분해요.',
+    tooManyFrames: '프레임이 {max}개를 넘어요. 구간을 줄이거나 프레임 속도를 낮추거나 배속을 높여 주세요',
+  },
+
   long: {
     fileName: '긴이미지',
     emptyTitle: '여러 이미지를 추가해 긴 이미지로 이어 붙이세요',
@@ -638,7 +666,7 @@ const messages: Messages = {
       name: '홈',
       title: '무료 온라인 이미지 도구: 사진 압축·증명사진·콜라주',
       description:
-        'Tubox는 무료 온라인 이미지 도구 모음이에요. 사진 일괄 압축·리사이즈·워터마크, AI 누끼, AI 증명사진 배경 변경, 이미지 주석·모자이크, EXIF 개인정보 삭제, 긴 이미지 합치기, 사진 콜라주, 이미지 분할, GIF 움짤 만들기까지. 모든 처리는 브라우저에서 이뤄져 업로드나 회원가입이 필요 없어요.',
+        'Tubox는 무료 온라인 이미지 도구 모음이에요. 사진 일괄 압축·리사이즈·워터마크, AI 누끼, AI 증명사진 배경 변경, 이미지 주석·모자이크, EXIF 개인정보 삭제, 긴 이미지 합치기, 사진 콜라주, 이미지 분할, GIF 움짤 만들기, 동영상 GIF 변환까지. 모든 처리는 브라우저에서 이뤄져 업로드나 회원가입이 필요 없어요.',
       keywords: [
         '온라인 이미지 편집',
         '사진 편집 사이트',
@@ -852,6 +880,20 @@ const messages: Messages = {
         '1:1, 4:5, 3:4, 16:9, 9:16 등 화면 비율, 채워 자르기 또는 전체 보기',
         '출력 너비와 색상 수를 조절해 파일 용량 관리',
         '애니메이션 실시간 미리보기, Web Worker로 기기에서 인코딩',
+      ],
+    },
+    videogif: {
+      name: '동영상 GIF 변환',
+      title: '동영상 GIF 변환: MP4 / MOV 영상을 온라인에서 GIF 움짤로',
+      description:
+        '무료 온라인 동영상 GIF 변환: MP4, WebM, MOV 영상에서 원하는 구간을 잘라 프레임 속도, 재생 속도, 왕복 재생과 반복을 설정하고, 1:1·4:5·9:16 등 비율로 자르며 출력 너비와 색상 수로 용량을 조절하세요. 동영상은 브라우저에서 처리되어 업로드되지 않아요.',
+      keywords: ['동영상 GIF 변환', 'MP4 GIF 변환', 'MOV GIF 변환', '움짤 만들기', '영상 움짤', '화면 녹화 GIF'],
+      features: [
+        'MP4, WebM, MOV 동영상 지원, 타임라인에서 구간 자르기(최대 30초)',
+        '프레임 속도 5~25fps, 0.5~3배속, 왕복 재생과 반복',
+        '원본 비율 유지 또는 1:1, 4:5, 3:4, 16:9, 9:16으로 자르기',
+        '출력 너비와 색상 수로 파일 용량 조절',
+        '실시간 미리보기, 동영상은 브라우저에서 처리되어 업로드 없음',
       ],
     },
   },
