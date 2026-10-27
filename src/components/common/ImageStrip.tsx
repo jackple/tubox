@@ -70,8 +70,9 @@ export function ImageStrip({ images, onAdd, onRemove, onMove, max = Infinity, va
                 )}
               >
                 <img
-                  src={img.url}
+                  src={img.thumb}
                   alt=""
+                  decoding="async"
                   draggable={false}
                   className={cn('object-cover', variant === 'grid' ? 'h-full w-full' : 'h-full w-14 shrink-0')}
                 />

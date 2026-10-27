@@ -1,11 +1,13 @@
 import { MAX_CANVAS_AREA, createCanvas, decodeImage, getCtx } from '@/core/canvas'
+import { makeThumbnail } from '@/core/thumbnail'
 import { uid } from './format'
 
 export interface ImageAsset {
   id: string
   name: string
   file: File
-  url: string
+  /** 列表缩略图的 object URL（长边 THUMB_SIDE），小图展示用它，不要渲染原图 */
+  thumb: string
   bitmap: ImageBitmap
   width: number
   height: number
@@ -25,11 +27,13 @@ export async function loadAsset(file: File, maxSide = 4096): Promise<ImageAsset>
     bitmap.close()
     bitmap = await createImageBitmap(c)
   }
+  // 直接用已解码的位图生成缩略图，省去再次解码
+  const thumb = await makeThumbnail(bitmap, bitmap.width, bitmap.height).catch(() => file)
   return {
     id: uid(),
     name: file.name,
     file,
-    url: URL.createObjectURL(file),
+    thumb: URL.createObjectURL(thumb),
     bitmap,
     width: bitmap.width,
     height: bitmap.height,
@@ -37,7 +41,7 @@ export async function loadAsset(file: File, maxSide = 4096): Promise<ImageAsset>
 }
 
 export function disposeAsset(a: ImageAsset) {
-  URL.revokeObjectURL(a.url)
+  URL.revokeObjectURL(a.thumb)
   a.bitmap.close()
 }
 

@@ -210,7 +210,11 @@ function ExifRow({ item: it }: { item: ExifItem }) {
         onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && toggle(it.id)}
         className="group flex cursor-pointer items-center gap-3 p-2.5 pr-3"
       >
-        <img src={it.url} alt="" className="h-12 w-12 shrink-0 rounded-lg bg-subtle object-cover" />
+        {it.thumb ? (
+          <img src={it.thumb} alt="" decoding="async" className="h-12 w-12 shrink-0 rounded-lg bg-subtle object-cover" draggable={false} />
+        ) : (
+          <div className="h-12 w-12 shrink-0 rounded-lg bg-subtle" />
+        )}
         <div className="min-w-0 flex-1">
           <div className="truncate text-[13px] font-medium">{it.file.name}</div>
           <div className="mt-1 flex flex-wrap items-center gap-1.5">

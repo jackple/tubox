@@ -113,7 +113,9 @@ pnpm build --base=/tubox/   # 部署到子路径，路由 basename 自动跟随 
 
 ### 资源生命周期
 
-`lib/assets.ts` 的 `loadAsset` 解码为 `ImageBitmap`（超大图降采样到 4096）并创建 object URL；移除时必须 `disposeAsset`（`revokeObjectURL` + `bitmap.close()`）。`core/` 中临时解码的 bitmap 也在 `finally` 里 `close()`。拼图类 store 通过 `stores/collage.ts` 的 `assetList` 工厂共享增删排序逻辑。
+`lib/assets.ts` 的 `loadAsset` 解码为 `ImageBitmap`（超大图降采样到 4096），并用该位图生成缩略图 object URL（`thumb`，素材栏 `ImageStrip` 用它）；移除时必须 `disposeAsset`（`revokeObjectURL` + `bitmap.close()`）。`core/` 中临时解码的 bitmap 也在 `finally` 里 `close()`。拼图类 store 通过 `stores/collage.ts` 的 `assetList` 工厂共享增删排序逻辑。
+
+**只需小图展示的地方（文件列表、素材条、卡片等）尽可能用缩略图，不要直接把原图 object URL 塞进 `<img>`**——几十张大图同时解码会让内存暴涨、滚动卡顿。用 `core/thumbnail.ts`（`probeImage` / `makeThumbnail`，长边 `THUMB_SIDE` 的 WebP），在主线程外通过 `workers/pool.ts` 的 `probeInPool` 生成（与批量处理共用 Worker 池，顺带限制并发解码）；缩略图就绪前显示占位，生成失败再回退原文件 URL；条目移除时 `revokeObjectURL`，并处理「生成期间条目已被移除」的情况。参考 `stores/batch.ts` 的 `addFiles` 与 `stores/exif.ts` 的 `loadThumb`；已在主线程解码出位图的场景（如 `loadAsset`）直接对位图调用 `makeThumbnail`，不必再解码一次。
 
 ### 兼容性
 

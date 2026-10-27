@@ -7,14 +7,15 @@ import { fmt, getMessages, plural } from '@/i18n'
 import { isImageFile } from '@/lib/assets'
 import { saveFiles, timestamp } from '@/lib/download'
 import { uid } from '@/lib/format'
+import { probeInPool } from '@/workers/pool'
 
 export const EXIF_MAX_FILES = 200
 
 export interface ExifItem {
   id: string
   file: File
-  /** 缩略图地址（原文件的 object URL） */
-  url: string
+  /** 列表缩略图的 object URL（Worker 中生成，未就绪时为空；生成失败回退原文件） */
+  thumb?: string
   report: MetaReport | null
   /** 清除后的文件；reencoded 表示格式不支持无损清除，已重新编码为 PNG */
   cleaned: { blob: Blob; reencoded: boolean } | null
@@ -76,6 +77,19 @@ export const useExif = create<ExifState>((set, get) => {
     await Promise.all(Array.from({ length: 4 }, worker))
   }
 
+  /** 列表只显示小图，不直接渲染原图：与批量处理共用 Worker 池生成缩略图 */
+  const loadThumb = async (it: ExifItem) => {
+    let url: string
+    try {
+      url = URL.createObjectURL((await probeInPool(it.file)).thumb)
+    } catch {
+      url = URL.createObjectURL(it.file)
+    }
+    // 生成期间条目可能已被移除
+    if (!get().items.some((x) => x.id === it.id)) return URL.revokeObjectURL(url)
+    set((s) => ({ items: s.items.map((x) => (x.id === it.id ? { ...x, thumb: url } : x)) }))
+  }
+
   return {
     items: [],
     options: { keepOrientation: true, keepColorProfile: true },
@@ -88,22 +102,21 @@ export const useExif = create<ExifState>((set, get) => {
       if (images.length < files.length) toast.warning(plural(m.batch.ignored, files.length - images.length))
       if (room <= 0) return void toast.warning(fmt(m.assets.max, { max: EXIF_MAX_FILES }))
       if (images.length > room) toast.warning(plural(m.assets.truncated, room))
-      const fresh: ExifItem[] = images
-        .slice(0, room)
-        .map((file) => ({ id: uid(), file, url: URL.createObjectURL(file), report: null, cleaned: null, error: null }))
+      const fresh: ExifItem[] = images.slice(0, room).map((file) => ({ id: uid(), file, report: null, cleaned: null, error: null }))
       if (!fresh.length) return
       set((s) => ({ items: [...s.items, ...fresh] }))
+      fresh.forEach((it) => void loadThumb(it))
       await process(fresh)
     },
 
     remove: (id) => {
       const it = get().items.find((x) => x.id === id)
-      if (it) URL.revokeObjectURL(it.url)
+      if (it?.thumb) URL.revokeObjectURL(it.thumb)
       set((s) => ({ items: s.items.filter((x) => x.id !== id) }))
     },
 
     clear: () => {
-      get().items.forEach((x) => URL.revokeObjectURL(x.url))
+      get().items.forEach((x) => x.thumb && URL.revokeObjectURL(x.thumb))
       set({ items: [], openId: null })
     },
 
