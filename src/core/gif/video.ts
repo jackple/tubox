@@ -1,4 +1,4 @@
-import type { Ctx2D } from '../canvas'
+import { type AnyCanvas, type Ctx2D, createCanvas, getCtx } from '../canvas'
 import type { GifRatio } from './frames'
 
 export interface VideoGifOptions {
@@ -63,10 +63,40 @@ export function planVideoFrames(o: Pick<VideoGifOptions, 'start' | 'end' | 'fps'
   return order.map((i, k) => ({ time: o.start + i * step, delay: at(k + 1) - at(k) }))
 }
 
-/** 把源画面（sw×sh）居中裁切铺满 w×h；比例相同时即整幅缩放 */
+/** 逐级缩小用的中间画布，按级复用：预览与导出每帧都要缩放，避免反复分配大画布 */
+const steps: { canvas: AnyCanvas; ctx: Ctx2D }[] = []
+
+/**
+ * 把源画面（sw×sh）居中裁切铺满 w×h；比例相同时即整幅缩放。
+ * 大比例缩小时逐级减半：浏览器对视频帧单次 drawImage 只做双线性采样，
+ * 缩小数倍（如 4K 录屏缩到 480）会严重混叠，文字糊成一片。
+ */
 export function drawCover(ctx: Ctx2D, src: CanvasImageSource, sw: number, sh: number, w: number, h: number) {
   const k = Math.max(w / sw, h / sh)
-  const cw = w / k
-  const ch = h / k
-  ctx.drawImage(src, (sw - cw) / 2, (sh - ch) / 2, cw, ch, 0, 0, w, h)
+  let cw = w / k
+  let ch = h / k
+  let x = (sw - cw) / 2
+  let y = (sh - ch) / 2
+  let cur: CanvasImageSource = src
+  for (let i = 0; cw / 2 >= w && ch / 2 >= h; i++) {
+    const nw = Math.round(cw / 2)
+    const nh = Math.round(ch / 2)
+    let s = steps[i]
+    if (!s) {
+      const canvas = createCanvas(nw, nh)
+      s = steps[i] = { canvas, ctx: getCtx(canvas) }
+    } else if (s.canvas.width !== nw || s.canvas.height !== nh) {
+      // 改尺寸会重置上下文状态，需重新开启高质量平滑
+      s.canvas.width = nw
+      s.canvas.height = nh
+      s.ctx.imageSmoothingQuality = 'high'
+    }
+    s.ctx.drawImage(cur, x, y, cw, ch, 0, 0, nw, nh)
+    cur = s.canvas
+    x = 0
+    y = 0
+    cw = nw
+    ch = nh
+  }
+  ctx.drawImage(cur, x, y, cw, ch, 0, 0, w, h)
 }

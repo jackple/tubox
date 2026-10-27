@@ -219,7 +219,7 @@ export default function VideoGifPage() {
 type DragKind = 'start' | 'end' | 'range' | 'seek'
 
 /**
- * 预览：隐藏的 video 按设定速度播放，按输出帧率把画面裁切绘制到画布，观感接近导出的 GIF；
+ * 预览：隐藏的 video 按设定速度播放，按输出帧率把画面裁切绘制到画布，节奏接近导出的 GIF；
  * 往返播放的倒放段逐帧 seek 模拟。
  */
 function VideoStage({ video }: { video: VideoAsset }) {
@@ -241,8 +241,9 @@ function VideoStage({ video }: { video: VideoAsset }) {
   const scale = Math.min((box.width - 64) / size.width, (box.height - 32) / size.height)
   const cssW = Math.max(1, size.width * scale)
   const cssH = Math.max(1, size.height * scale)
-  // 预览不超过输出分辨率
-  const k = Math.min(1, scale * (window.devicePixelRatio || 1))
+  // 预览按显示尺寸 × DPR 渲染（不超过源视频裁切区域的分辨率），细节清晰可辨；导出按输出尺寸
+  const cover = Math.max(size.width / video.width, size.height / video.height)
+  const k = Math.min(scale * (window.devicePixelRatio || 1), 1 / cover)
   const pw = Math.max(1, Math.round(size.width * k))
   const ph = Math.max(1, Math.round(size.height * k))
 
