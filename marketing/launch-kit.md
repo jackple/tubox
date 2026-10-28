@@ -26,8 +26,11 @@
 - 已保存 GitHub 仓库简介、正式站点主页和 18 个搜索标签。
 - 已在知乎发布技术文章：https://zhuanlan.zhihu.com/p/2098793918645145667
 - 已在小红书发布四图图文，平台当前显示审核中。
+- 已在掘金发布技术文章：https://juejin.cn/spost/7701525643872026659
 - 已向 HelloGitHub 提交开源项目推荐：https://github.com/521xueweihan/HelloGitHub/issues/4143
 - 已发布 GitHub `v0.1.0` Release。
+- 已向 AlternativeTo 提交产品收录，正在等待审核。
+- 已排期 Product Hunt，时间为 2026-11-03 12:01 AM PT。
 
 ## V2EX：分享创造
 

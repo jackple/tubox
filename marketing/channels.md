@@ -302,10 +302,10 @@ Description:
 - 知乎：技术文章已发布，https://zhuanlan.zhihu.com/p/2098793918645145667
 - HelloGitHub：项目推荐已提交，https://github.com/521xueweihan/HelloGitHub/issues/4143
 - 小红书：四张图片和正文已发布，账号为「小犬吠吠」，平台状态为审核中。
-- 掘金：当前浏览器未登录，需要账号所有者登录。
+- 掘金：技术文章已发布，https://juejin.cn/spost/7701525643872026659
 - 即刻：网页版要求 App 扫码登录。
 - B 站：当前账号已登录，但等级不足，无法发布动态；视频投稿需另行制作成片。
 - 微信：桌面客户端可用，朋友圈与群发涉及对外发布，等待明确受众与发布确认。
-- Product Hunt：已有 Google 登录入口，但存在多个账号，需账号所有者选择。
-- AlternativeTo：未登录；提交入口需要登录后再操作。
+- Product Hunt：已完成产品页和首评，并排期到 2026-11-03 12:01 AM PT。
+- AlternativeTo：产品已提交，等待平台审核。
 - SaaSHub：未登录；提交前需要注册或登录并验证产品。
