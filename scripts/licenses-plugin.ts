@@ -9,6 +9,7 @@ export const LICENSES_FILE = 'third-party-licenses.txt'
 const MODELS = [
   'ISNet / DIS (https://github.com/xuebinqin/DIS) — 抠图模型 background removal model, via @imgly/background-removal-data',
   'MediaPipe selfie_multiclass_256x256 / blaze_face_short_range (https://ai.google.dev/edge/mediapipe) — Apache-2.0',
+  'Real-ESRGAN realesr-general-x4v3 (https://github.com/xinntao/Real-ESRGAN, Copyright (c) 2021 Xintao Wang) — BSD-3-Clause — AI 高清放大模型 super-resolution model, ONNX export from https://huggingface.co/vlad-grig/realesr-general-x4v3-onnx',
 ]
 
 /** 包内未附带许可证文件、package.json 的 author 也不是版权方时，手动指定 */
@@ -124,6 +125,12 @@ export function licensesPlugin(): { main: Plugin; worker: Plugin } {
         'Models distributed with this site:',
         ...MODELS.map((x) => `- ${x}`),
         '',
+        rule,
+        'Real-ESRGAN realesr-general-x4v3 — BSD-3-Clause',
+        rule,
+        '',
+        REAL_ESRGAN_LICENSE,
+        '',
         ...entries.flatMap((e) => [
           rule,
           `${e.id} — ${e.license}`,
@@ -140,6 +147,37 @@ export function licensesPlugin(): { main: Plugin; worker: Plugin } {
 
   return { main, worker }
 }
+
+/** 模型权重随站点分发（public/models），BSD-3-Clause 要求附带许可声明 */
+const REAL_ESRGAN_LICENSE = `BSD 3-Clause License
+
+Copyright (c) 2021, Xintao Wang
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.`
 
 const ISC_BODY = `Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above

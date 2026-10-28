@@ -10,5 +10,7 @@ export type ErrorCode =
   | 'model-load-failed'
   | 'segment-failed'
   | 'video-decode-failed'
+  | 'upscale-failed'
+  | 'qr-too-long'
 
 export const coreError = (code: ErrorCode) => new Error(code)

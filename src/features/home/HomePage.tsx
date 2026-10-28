@@ -163,6 +163,7 @@ function Tools() {
         <ToolCard tool={toolById('batch')} className="lg:col-span-2" visual={<BatchVisual />} />
         <ToolCard tool={toolById('idphoto')} className="lg:row-span-2" visual={<IdVisual />} tall />
         <ToolCard tool={toolById('cutout')} visual={<CutoutVisual />} />
+        <ToolCard tool={toolById('upscale')} visual={<UpscaleVisual />} />
         <ToolCard tool={toolById('long')} visual={<LongVisual />} />
         <ToolCard tool={toolById('grid')} visual={<GridVisual />} />
         <ToolCard tool={toolById('nine')} visual={<NineVisual />} />
@@ -171,7 +172,8 @@ function Tools() {
         <ToolCard tool={toolById('videogif')} visual={<VideoGifVisual />} />
         <ToolCard tool={toolById('exif')} visual={<ExifVisual />} />
         <ToolCard tool={toolById('annotate')} visual={<AnnotateVisual />} />
-        <div className="flex flex-col justify-end rounded-2xl border border-dashed border-fg/15 p-6 lg:col-span-2">
+        <ToolCard tool={toolById('qrcode')} visual={<QrVisual />} />
+        <div className="flex flex-col justify-end rounded-2xl border border-dashed border-fg/15 p-6 lg:col-span-3">
           <div className="eyebrow">Coming soon</div>
           <div className="mt-3 text-[15px] font-semibold tracking-tight">{m.soonTitle}</div>
           <p className="mt-1.5 text-[13px] leading-relaxed text-muted">{m.soonDesc}</p>
@@ -296,6 +298,24 @@ function CutoutVisual() {
       </div>
       <Portrait className="absolute bottom-0 left-1/2 w-[78%] -translate-x-1/2" />
       <div className="absolute inset-y-0 left-1/2 w-px bg-white/90 shadow-[0_0_0_1px_rgb(0_0_0/0.08)] transition-[left] duration-700 group-hover:left-[12%]" />
+    </div>
+  )
+}
+
+function UpscaleVisual() {
+  return (
+    <div className="relative h-[140px] w-[196px] overflow-hidden rounded-lg shadow-stage transition-transform duration-500 group-hover:scale-105">
+      <Scenery palette="forest" />
+      {/* 左侧为模糊的原图，悬停时分割线左移，露出更多放大后的清晰画面 */}
+      <div className="absolute inset-0 overflow-hidden transition-[clip-path] duration-700 [clip-path:inset(0_50%_0_0)] group-hover:[clip-path:inset(0_86%_0_0)]">
+        <div className="h-full w-full scale-110 blur-[3px]">
+          <Scenery palette="forest" />
+        </div>
+      </div>
+      <div className="absolute inset-y-0 left-1/2 w-px bg-white/90 shadow-[0_0_0_1px_rgb(0_0_0/0.08)] transition-[left] duration-700 group-hover:left-[14%]" />
+      <span className="absolute right-2 top-2 rounded bg-white px-1.5 py-px font-mono text-[9px] font-bold tracking-wider text-neutral-900">
+        4×
+      </span>
     </div>
   )
 }
@@ -471,6 +491,44 @@ function AnnotateVisual() {
         <text x="152" y="28.5" textAnchor="middle" fill="#fff" fontSize="12" fontWeight="700">
           1
         </text>
+      </svg>
+    </div>
+  )
+}
+
+/** 示意二维码：21×21 码点，按固定规则撒点（非真实编码），避开三个定位点与中心 Logo */
+const qrDots = Array.from({ length: 21 * 21 }, (_, i) => [i % 21, Math.floor(i / 21)]).filter(([x, y]) => {
+  const finder = (x < 8 && y < 8) || (x > 12 && y < 8) || (x < 8 && y > 12)
+  const logo = x > 7 && x < 13 && y > 7 && y < 13
+  return !finder && !logo && (x * 37 + y * 11 + x * y * 7) % 7 < 3
+})
+
+function QrVisual() {
+  return (
+    <div className="rounded-xl bg-white p-3 shadow-stage transition-transform duration-500 group-hover:-rotate-3 group-hover:scale-105">
+      <svg viewBox="0 0 21 21" className="h-[118px] w-[118px]" aria-hidden>
+        {qrDots.map(([x, y]) => (
+          <rect key={`${x}-${y}`} x={x + 0.06} y={y + 0.06} width={0.88} height={0.88} rx={0.44} fill="#111114" />
+        ))}
+        {[
+          [0, 0],
+          [14, 0],
+          [0, 14],
+        ].map(([x, y]) => (
+          <g key={`${x}-${y}`}>
+            <rect x={x + 0.5} y={y + 0.5} width={6} height={6} rx={1.8} fill="none" stroke="#111114" strokeWidth={1} />
+            <rect x={x + 2} y={y + 2} width={3} height={3} rx={0.9} fill="#111114" />
+          </g>
+        ))}
+        <rect
+          x={8.6}
+          y={8.6}
+          width={3.8}
+          height={3.8}
+          rx={1}
+          style={{ fill: 'rgb(var(--brand))' }}
+          className="origin-center transition-transform duration-500 [transform-box:fill-box] group-hover:rotate-90"
+        />
       </svg>
     </div>
   )

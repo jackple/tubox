@@ -8,9 +8,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 项目概述
 
-图盒 Tubox：纯前端图片处理工具箱（批量处理 / 证件照 / 长图 / 拼图 / 九宫格 / 社交排版）。**所有处理都在浏览器内完成，没有后端**，图片不上传。界面支持 10 种语言（见下文「多语言」），代码注释为中文。
+图盒 Tubox：纯前端图片处理工具箱（批量处理 / AI 抠图 / 高清放大 / 证件照 / 拼图排版 / GIF / 二维码等）。**所有处理都在浏览器内完成，没有后端**，图片不上传。界面支持 10 种语言（见下文「多语言」），代码注释为中文。
 
-技术栈：Vite 6 · React 19 · TypeScript（strict）· Tailwind CSS 3 · Zustand · Framer Motion · Comlink · gifenc · MediaPipe Tasks Vision · @imgly/background-removal（onnxruntime-web）· JSZip。包管理用 **pnpm**。
+技术栈：Vite 6 · React 19 · TypeScript（strict）· Tailwind CSS 3 · Zustand · Framer Motion · Comlink · gifenc · uqr（二维码编码）· MediaPipe Tasks Vision · @imgly/background-removal 与 Real-ESRGAN（onnxruntime-web）· JSZip。包管理用 **pnpm**。
 
 ## 常用命令
 
@@ -21,7 +21,7 @@ pnpm typecheck       # tsc --noEmit
 pnpm build           # setup:models + 类型检查 + vite build 到 dist/（模型随站点自托管）
 pnpm preview         # 预览构建产物
 pnpm format          # prettier 格式化 src/**/*.{ts,tsx,css}
-pnpm setup:models    # 把 MediaPipe wasm / .tflite 模型与 imgly 抠图模型下载到 public/（自托管，已 gitignore）
+pnpm setup:models    # 把 MediaPipe wasm / .tflite 模型、Real-ESRGAN 放大模型与 imgly 抠图模型下载到 public/（自托管，已 gitignore）
 pnpm og:images       # 用本机 Chrome 按各语言文案重新生成社交分享图 public/og/<语言>.png（提交到仓库）
 pnpm build --base=/tubox/   # 部署到子路径，路由 basename 自动跟随 BASE_URL
 ```
@@ -36,11 +36,11 @@ pnpm build --base=/tubox/   # 部署到子路径，路由 basename 自动跟随 
 
 - `src/core/` —— 图像引擎，**纯 TS，不依赖 React/DOM 专属 API**，同一份代码同时跑在主线程和 Web Worker。不要在 `core/` 中引入 React、store、toast 等。
 - `src/stores/` —— Zustand，每个工具一个 store（模块级单例），切换页面状态不丢失。业务流程（加载、分析、导出）写在 store 的 action 里。
-- `src/features/` —— 页面组件，按工具分目录（图片标注、隐私清除、GIF 也复用 `features/collage/shared.tsx` 的 `EmptyStage` / `ExportFooter`）；`features/tools.ts` 是工具注册表（标题、路径、图标、分组），被 Sidebar / 首页 / `ToolLayout` 共用。
+- `src/features/` —— 页面组件，按工具分目录（图片标注、隐私清除、GIF 等也复用 `features/collage/shared.tsx` 的 `EmptyStage` / `ExportFooter`）；`features/tools.ts` 是工具注册表（标题、路径、图标、分组），被 Sidebar / 首页 / `ToolLayout` 共用。
 - `src/components/layout/ToolLayout.tsx` —— 所有工具页的统一工作台布局：header + 左侧素材栏 + 中间舞台 + 右侧 inspector。
 - 路由在 `src/App.tsx`，每个页面 `lazy()` 拆包（MediaPipe / onnxruntime 只在进入证件照 / 抠图时加载）。使用 History 路由，部署时需要服务器回退到 `index.html`（见 README）。
 
-**新增工具**需同时改：`features/tools.ts`（注册）、`App.tsx`（路由）、`src/seo.ts` 的 `pagePaths`（构建时据此预渲染各语言该路由的 HTML 与 sitemap，`page` 字段用于在 HTML 中预加载页面 chunk）、各语言文案的 `tools` 与 `seo`、`components/icons/ToolGlyphs.tsx`（图标）、对应 store 与 `core/` 实现。
+**新增工具**需同时改：`features/tools.ts`（注册）、`App.tsx`（路由）、`src/seo.ts` 的 `pagePaths`（构建时据此预渲染各语言该路由的 HTML 与 sitemap，`page` 字段用于在 HTML 中预加载页面 chunk）、各语言文案的 `tools` 与 `seo`（以及 `home.heroDesc1` 里的工具数量）、`components/icons/ToolGlyphs.tsx`（图标）、首页 `HomePage.tsx` 的卡片与插画、`scripts/og-images.mjs` 的 `TOOL_ORDER`（之后 `pnpm og:images` 重新生成分享图）、对应 store 与 `core/` 实现。
 
 ### 多语言（`src/i18n/`）
 
@@ -87,6 +87,21 @@ pnpm build --base=/tubox/   # 部署到子路径，路由 basename 自动跟随 
 - 推理只在长边 `MATTE_SIZE`（1024，等于模型输入）的工作图上进行；`buildMatte` 做收缩/扩展、羽化并给出主体外接框；`compose.ts` 的 `composeCutout` 按源图区域合成（透明 / 纯色 / 原图虚化），预览限制长边 1600，导出按原图（长边上限 4096）。
 - 资源（`resources.json` + 4MB 分块的模型与 wasm）地址见 `config.ts` 的 `imglyAssets`：`VITE_MODEL_BASE/imgly/<版本>/` → 本地 `public/imgly/<版本>/`（`setup:models` 只下载 `IMGLY_MODEL` 与 onnxruntime，两处需保持一致）→ staticimgly.com CDN。
 - `vite.config.ts` 把 `onnxruntime-web` 别名到非 bundle 版本：wasm 由 imgly 以 blob URL 传入，否则 Vite 会多打包一份 24MB 的 wasm。
+
+### AI 高清放大（`core/upscale/` + `stores/upscale.ts` + `workers/upscale.ts`）
+
+- 模型为 Real-ESRGAN realesr-general-x4v3（SRVGGNetCompact，固定 ×4，BSD-3-Clause，fp32 约 4.9MB），**直接调用 onnxruntime-web**（不经 imgly）。地址见 `config.ts` 的 `upscaleModel`：`VITE_MODEL_BASE` → 本地 `public/models/`（`setup:models` 下载）→ Hugging Face（固定到提交 hash），与 `scripts/setup-models.mjs` 的 `MODELS` 保持一致。
+- onnxruntime 的 glue mjs + wasm 复用抠图的 imgly 资源（`imglyAssets` 的 `resources.json` 分块拼回后以 blob URL 设给 `env.wasm.wasmPaths`），不额外打包 / 自托管一份。有 WebGPU 时加载 `onnxruntime-web/webgpu`（jsep，同时支持 webgpu 与 wasm 后端），会话创建或推理失败回退 wasm。onnxruntime-web 的 exports 不带类型，`src/types/onnxruntime-web.d.ts` 引用包内声明，`onnxruntime-common` 因此列为同版本 devDependency。
+- `upscalePixels` 纯像素运算：固定 256 窗口、16 重叠分块推理（窗口形状不变便于 WebGPU 复用），×2 由 ×4 结果逐块 2×2 均值得到；透明图先把颜色向全透明区域外扩（BFS）再推理，alpha 双线性放大。输入先经 `planUpscale` 按输出上限（长边 8192、`MAX_CANVAS_AREA`）缩小。
+- Worker 会话常驻，`cancel()` 递增任务号，在下一块推理前中止；store 用 runId 丢弃过期结果。上传后自动开始放大，改倍数后需「重新放大」。
+
+### 二维码生成（`core/qrcode/` + `stores/qrcode.ts`）
+
+- 编码用 `uqr`（只取码点矩阵与模块类型），`content.ts` 拼装网址 / 文本 / Wi-Fi（`WIFI:` 转义）/ vCard 3.0。`render.ts` 的 `layoutQr` 把码点、定位点、Logo 底板生成为 SVG path 数据（单位为码点），`drawQr`（Canvas，`Path2D`）与 `qrSvg` 共用，保证预览、PNG / JPG 与 SVG 一致。
+- 定位图形（`Position`，含分隔白边）不画进码点，按 `EyeStyle` 单独绘制；圆点 / 线条样式下其余功能图形（时序 / 校正 / 格式信息）保持方块，否则不少解码器无法定位。Logo 覆盖区域的码点挖空，添加 Logo 时自动切到 H 容错。
+- 圆形外观（`QrShape`）：码区 + 静区内切于圆，圆内其余位置按坐标哈希撒装饰码点（`decorDark`），整张图统一成 n×n 网格后再按样式出 path。
+- 艺术码（`QrArtStyle`）：可选照片，或按提示词生成山、日落、湖泊、森林等本地构图。Canvas 将每个像素按二维码遮罩融合，码点保留底图色相与纹理，浅区按亮度阈值提亮；SVG 用遮罩和半透明深色码点近似同一效果。三个定位角额外铺浅底并实色重绘；艺术模式不使用透明背景，界面需持续提示用手机扫码回归。
+- 改动样式后用真实解码器回归（BarcodeDetector + jsQR）：版本较高（`DOTS_MAX_VERSION` 以上）的圆点 / 线条样式部分扫码器识别不了，界面会提示改用方块 / 圆润；浅色码点 + 深色背景（反色）也会提示，背景预设不放深色。
 
 ### 图片标注（`core/annotate/` + `stores/annotate.ts`）
 

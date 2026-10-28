@@ -16,6 +16,7 @@ export const pagePaths: { path: string; key: PageKey; page: string }[] = [
   { path: '/', key: 'home', page: 'features/home/HomePage' },
   { path: '/batch', key: 'batch', page: 'features/batch/BatchPage' },
   { path: '/cutout', key: 'cutout', page: 'features/cutout/CutoutPage' },
+  { path: '/upscale', key: 'upscale', page: 'features/upscale/UpscalePage' },
   { path: '/annotate', key: 'annotate', page: 'features/annotate/AnnotatePage' },
   { path: '/exif', key: 'exif', page: 'features/exif/ExifPage' },
   { path: '/id-photo', key: 'idphoto', page: 'features/idphoto/IdPhotoPage' },
@@ -25,6 +26,7 @@ export const pagePaths: { path: string; key: PageKey; page: string }[] = [
   { path: '/collage/social', key: 'social', page: 'features/collage/SocialPage' },
   { path: '/gif', key: 'gif', page: 'features/gif/GifPage' },
   { path: '/video-to-gif', key: 'videogif', page: 'features/gif/VideoGifPage' },
+  { path: '/qr-code', key: 'qrcode', page: 'features/qrcode/QrCodePage' },
 ]
 
 export interface PageSeo {

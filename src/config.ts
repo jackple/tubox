@@ -36,6 +36,19 @@ export const imglyAssets = [
   .filter(Boolean)
   .map((u) => new URL(u as string, location.href).href)
 
+/**
+ * AI 高清放大模型：Real-ESRGAN realesr-general-x4v3（SRVGGNetCompact，BSD-3-Clause）的 ONNX 导出版，fp32 约 4.9MB，
+ * 输入输出均为 float32 NCHW，宽高可变。CDN 地址固定到提交，避免上游改动；onnxruntime 的 wasm 复用抠图的 imgly 资源（imglyAssets）。
+ */
+export const UPSCALE_MODEL = 'realesr-general-x4v3.onnx'
+export const upscaleModel = [
+  custom && `${custom}/${UPSCALE_MODEL}`,
+  `${base}/models/${UPSCALE_MODEL}`,
+  'https://huggingface.co/vlad-grig/realesr-general-x4v3-onnx/resolve/0e95d93e454cf6b5de9bdf5a1c9e7ec340d38231/onnx/model.onnx',
+]
+  .filter(Boolean)
+  .map((u) => new URL(u as string, location.href).href)
+
 /** 抠图模型：isnet_fp16 约 84MB，精度与体积的折中（另有 isnet_quint8 约 42MB / isnet 约 167MB） */
 export const IMGLY_MODEL = 'isnet_fp16'
 

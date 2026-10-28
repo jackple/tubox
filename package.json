@@ -36,6 +36,7 @@
     "react-router-dom": "^6.28.0",
     "sonner": "^1.7.1",
     "tailwind-merge": "^2.5.5",
+    "uqr": "^0.1.2",
     "zustand": "^5.0.2"
   },
   "devDependencies": {
@@ -44,6 +45,7 @@
     "@types/react-dom": "^19.0.2",
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
+    "onnxruntime-common": "1.21.0",
     "postcss": "^8.4.49",
     "prettier": "^3.4.2",
     "prettier-plugin-tailwindcss": "^0.6.9",

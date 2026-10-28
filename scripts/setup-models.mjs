@@ -1,4 +1,4 @@
-// 将 MediaPipe 的 wasm 与模型、@imgly/background-removal 的 ONNX 模型与 onnxruntime wasm 落地到 public/，
+// 将 MediaPipe 的 wasm 与模型、Real-ESRGAN 放大模型、@imgly/background-removal 的 ONNX 模型与 onnxruntime wasm 落地到 public/，
 // 实现完全自托管（国内网络 / 离线部署友好）。
 // 用法：pnpm setup:models
 import { cp, mkdir, writeFile, access, readFile, readdir, rm, stat } from 'node:fs/promises'
@@ -13,6 +13,9 @@ const MODELS = {
     'https://storage.googleapis.com/mediapipe-models/image_segmenter/selfie_multiclass_256x256/float32/latest/selfie_multiclass_256x256.tflite',
   'blaze_face_short_range.tflite':
     'https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/latest/blaze_face_short_range.tflite',
+  // AI 高清放大，与 src/config.ts 的 upscaleModel 保持一致
+  'realesr-general-x4v3.onnx':
+    'https://huggingface.co/vlad-grig/realesr-general-x4v3-onnx/resolve/0e95d93e454cf6b5de9bdf5a1c9e7ec340d38231/onnx/model.onnx',
 }
 
 // 通用抠图只下载实际用到的模型（与 src/config.ts 的 IMGLY_MODEL 保持一致）及 WASM / WebGPU 两套 onnxruntime

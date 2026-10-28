@@ -43,6 +43,16 @@ export const CutoutGlyph = (p: GlyphProps) => (
   </Svg>
 )
 
+/** AI 高清放大：小图 + 外框 + 放大箭头 */
+export const UpscaleGlyph = (p: GlyphProps) => (
+  <Svg {...p}>
+    <rect className="g-tint" x="3.5" y="12.5" width="8" height="8" rx="2" />
+    <rect x="3.5" y="12.5" width="8" height="8" rx="2" />
+    <path d="M3.5 9V6a2.5 2.5 0 0 1 2.5-2.5h12A2.5 2.5 0 0 1 20.5 6v12a2.5 2.5 0 0 1-2.5 2.5h-3" />
+    <path className="g-accent-stroke" d="m14 10 3.5-3.5M13.5 6.5h4v4" />
+  </Svg>
+)
+
 /** 证件照：人像卡 */
 export const IdPhotoGlyph = (p: GlyphProps) => (
   <Svg {...p}>
@@ -132,6 +142,18 @@ export const AnnotateGlyph = (p: GlyphProps) => (
     <path className="g-accent-stroke" d="M20.5 20.5 12 12" />
     <path className="g-accent-stroke" d="M12 16.5V12h4.5" />
     <path d="M4 20.5h5" />
+  </Svg>
+)
+
+/** 二维码：三个定位点 + 码点 */
+export const QrCodeGlyph = (p: GlyphProps) => (
+  <Svg {...p}>
+    <rect className="g-tint" x="3.5" y="3.5" width="7" height="7" rx="1.8" />
+    <rect x="3.5" y="3.5" width="7" height="7" rx="1.8" />
+    <rect x="13.5" y="3.5" width="7" height="7" rx="1.8" />
+    <rect x="3.5" y="13.5" width="7" height="7" rx="1.8" />
+    <path d="M13.5 13.5v3M17 13.5h3.5M20.5 17v3.5h-3.5" />
+    <rect className="g-accent" x="15.6" y="15.6" width="2.8" height="2.8" rx="0.7" />
   </Svg>
 )
 

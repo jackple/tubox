@@ -6,10 +6,11 @@ import { useLocalizedPath } from '@/i18n'
 import { locales } from '@/i18n/locales'
 import { useTheme } from '@/stores/theme'
 
-// 按页面拆包：MediaPipe 等重依赖只在进入抠图 / 证件照时加载
+// 按页面拆包：MediaPipe / onnxruntime 等重依赖只在进入抠图 / 证件照 / 高清放大时加载
 const HomePage = lazy(() => import('@/features/home/HomePage'))
 const BatchPage = lazy(() => import('@/features/batch/BatchPage'))
 const CutoutPage = lazy(() => import('@/features/cutout/CutoutPage'))
+const UpscalePage = lazy(() => import('@/features/upscale/UpscalePage'))
 const AnnotatePage = lazy(() => import('@/features/annotate/AnnotatePage'))
 const ExifPage = lazy(() => import('@/features/exif/ExifPage'))
 const IdPhotoPage = lazy(() => import('@/features/idphoto/IdPhotoPage'))
@@ -19,12 +20,14 @@ const NineGridPage = lazy(() => import('@/features/collage/NineGridPage'))
 const SocialPage = lazy(() => import('@/features/collage/SocialPage'))
 const GifPage = lazy(() => import('@/features/gif/GifPage'))
 const VideoGifPage = lazy(() => import('@/features/gif/VideoGifPage'))
+const QrCodePage = lazy(() => import('@/features/qrcode/QrCodePage'))
 
 function pageRoutes(): RouteObject[] {
   return [
     { index: true, element: <HomePage /> },
     { path: 'batch', element: <BatchPage /> },
     { path: 'cutout', element: <CutoutPage /> },
+    { path: 'upscale', element: <UpscalePage /> },
     { path: 'annotate', element: <AnnotatePage /> },
     { path: 'exif', element: <ExifPage /> },
     { path: 'id-photo', element: <IdPhotoPage /> },
@@ -34,6 +37,7 @@ function pageRoutes(): RouteObject[] {
     { path: 'collage/social', element: <SocialPage /> },
     { path: 'gif', element: <GifPage /> },
     { path: 'video-to-gif', element: <VideoGifPage /> },
+    { path: 'qr-code', element: <QrCodePage /> },
     { path: '*', element: <ToLocaleHome /> },
   ]
 }

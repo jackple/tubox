@@ -10,13 +10,16 @@ import {
   IdPhotoGlyph,
   LongImageGlyph,
   NineGridGlyph,
+  QrCodeGlyph,
   SocialGlyph,
+  UpscaleGlyph,
   VideoGifGlyph,
 } from '@/components/icons/ToolGlyphs'
 
-export type ToolGroup = 'process' | 'photo' | 'layout' | 'animation'
+export type ToolGroup = 'process' | 'photo' | 'layout' | 'animation' | 'utility'
 
-export type ToolId = 'batch' | 'cutout' | 'annotate' | 'exif' | 'idphoto' | 'long' | 'grid' | 'nine' | 'social' | 'gif' | 'videogif'
+export type ToolId =
+  'batch' | 'cutout' | 'upscale' | 'annotate' | 'exif' | 'idphoto' | 'long' | 'grid' | 'nine' | 'social' | 'gif' | 'videogif' | 'qrcode'
 
 /** 工具注册表；标题、描述、标签等文案见 i18n/messages 的 tools（按 id） */
 export interface Tool {
@@ -28,11 +31,12 @@ export interface Tool {
   en: string
 }
 
-export const toolGroups: ToolGroup[] = ['process', 'photo', 'layout', 'animation']
+export const toolGroups: ToolGroup[] = ['process', 'photo', 'layout', 'animation', 'utility']
 
 export const tools: Tool[] = [
   { id: 'batch', group: 'process', path: '/batch', icon: BatchGlyph, en: 'Batch' },
   { id: 'cutout', group: 'process', path: '/cutout', icon: CutoutGlyph, en: 'Cutout' },
+  { id: 'upscale', group: 'process', path: '/upscale', icon: UpscaleGlyph, en: 'AI Upscale' },
   { id: 'annotate', group: 'process', path: '/annotate', icon: AnnotateGlyph, en: 'Annotate' },
   { id: 'exif', group: 'process', path: '/exif', icon: ExifGlyph, en: 'EXIF Viewer & Cleaner' },
   { id: 'idphoto', group: 'photo', path: '/id-photo', icon: IdPhotoGlyph, en: 'ID Photo' },
@@ -42,6 +46,7 @@ export const tools: Tool[] = [
   { id: 'social', group: 'layout', path: '/collage/social', icon: SocialGlyph, en: 'Social' },
   { id: 'gif', group: 'animation', path: '/gif', icon: GifGlyph, en: 'GIF Maker' },
   { id: 'videogif', group: 'animation', path: '/video-to-gif', icon: VideoGifGlyph, en: 'Video to GIF' },
+  { id: 'qrcode', group: 'utility', path: '/qr-code', icon: QrCodeGlyph, en: 'QR Code' },
 ]
 
 export const toolById = (id: ToolId) => tools.find((t) => t.id === id)!
