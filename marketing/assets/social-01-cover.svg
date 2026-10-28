@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1440" viewBox="0 0 1080 1440">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b0c13"/>
+      <stop offset="0.56" stop-color="#141428"/>
+      <stop offset="1" stop-color="#291f60"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="80%" cy="15%" r="55%">
+      <stop offset="0" stop-color="#a78bfa" stop-opacity=".45"/>
+      <stop offset="1" stop-color="#a78bfa" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="54" height="54" patternUnits="userSpaceOnUse">
+      <path d="M54 0H0V54" fill="none" stroke="#ffffff" stroke-opacity=".045"/>
+    </pattern>
+  </defs>
+  <rect width="1080" height="1440" rx="0" fill="url(#bg)"/>
+  <rect width="1080" height="1440" fill="url(#glow)"/>
+  <rect width="1080" height="1440" fill="url(#grid)"/>
+  <g transform="translate(82 88)">
+    <rect width="92" height="92" rx="25" fill="#f7f7fb"/>
+    <text x="46" y="67" text-anchor="middle" font-family="Arial Rounded MT Bold, Arial" font-size="66" font-weight="800" fill="#11121a">t</text>
+  </g>
+  <text x="202" y="151" fill="#ffffff" font-family="Hiragino Sans GB" font-size="45" font-weight="700">图盒 Tubox</text>
+  <text x="82" y="338" fill="#ffffff" font-family="Hiragino Sans GB" font-size="86" font-weight="800">13 个图片工具</text>
+  <text x="82" y="448" fill="#ffffff" font-family="Hiragino Sans GB" font-size="86" font-weight="800">塞进一个网页</text>
+  <text x="82" y="548" fill="#c8b8ff" font-family="Hiragino Sans GB" font-size="52" font-weight="650">不传图 · 免登录 · 打开即用</text>
+  <g font-family="Hiragino Sans GB" font-size="35" fill="#f4f2ff">
+    <rect x="82" y="668" width="260" height="76" rx="38" fill="#ffffff" fill-opacity=".1" stroke="#ffffff" stroke-opacity=".14"/>
+    <text x="212" y="718" text-anchor="middle">批量压缩</text>
+    <rect x="362" y="668" width="210" height="76" rx="38" fill="#ffffff" fill-opacity=".1" stroke="#ffffff" stroke-opacity=".14"/>
+    <text x="467" y="718" text-anchor="middle">AI 抠图</text>
+    <rect x="592" y="668" width="240" height="76" rx="38" fill="#ffffff" fill-opacity=".1" stroke="#ffffff" stroke-opacity=".14"/>
+    <text x="712" y="718" text-anchor="middle">高清放大</text>
+    <rect x="82" y="766" width="210" height="76" rx="38" fill="#ffffff" fill-opacity=".1" stroke="#ffffff" stroke-opacity=".14"/>
+    <text x="187" y="816" text-anchor="middle">证件照</text>
+    <rect x="312" y="766" width="210" height="76" rx="38" fill="#ffffff" fill-opacity=".1" stroke="#ffffff" stroke-opacity=".14"/>
+    <text x="417" y="816" text-anchor="middle">九宫格</text>
+    <rect x="542" y="766" width="290" height="76" rx="38" fill="#ffffff" fill-opacity=".1" stroke="#ffffff" stroke-opacity=".14"/>
+    <text x="687" y="816" text-anchor="middle">GIF / 视频转 GIF</text>
+  </g>
+  <rect x="82" y="1120" width="916" height="2" fill="#ffffff" fill-opacity=".16"/>
+  <text x="82" y="1224" fill="#d9d4ef" font-family="Hiragino Sans GB" font-size="38">图片解码、压缩和 AI 推理都在设备本地完成</text>
+  <text x="82" y="1305" fill="#ffffff" font-family="Montserrat, Arial, sans-serif" font-size="44" font-weight="700">tubox.top</text>
+</svg>

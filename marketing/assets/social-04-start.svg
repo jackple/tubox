@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1080" height="1440" viewBox="0 0 1080 1440">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f8f7fb"/>
+      <stop offset="1" stop-color="#e7e2ff"/>
+    </linearGradient>
+  </defs>
+  <rect width="1080" height="1440" fill="url(#bg)"/>
+  <rect x="64" y="64" width="952" height="1312" rx="52" fill="#0f111a"/>
+  <text x="112" y="172" fill="#b8a8ff" font-family="Hiragino Sans GB" font-size="35" font-weight="600">TUBOX · 图片工具箱</text>
+  <text x="112" y="320" fill="#ffffff" font-family="Hiragino Sans GB" font-size="94" font-weight="800">打开网页</text>
+  <text x="112" y="440" fill="#ffffff" font-family="Hiragino Sans GB" font-size="94" font-weight="800">马上处理</text>
+  <text x="112" y="540" fill="#b8a8ff" font-family="Hiragino Sans GB" font-size="38" font-weight="500">无需安装 · 无需登录</text>
+  <g font-family="Hiragino Sans GB" font-size="33" fill="#ffffff">
+    <circle cx="132" cy="650" r="14" fill="#9d86ff"/>
+    <text x="166" y="661">批量压缩与改尺寸</text>
+    <circle cx="132" cy="720" r="14" fill="#3dd7c7"/>
+    <text x="166" y="731">AI 抠图与高清放大</text>
+    <circle cx="132" cy="790" r="14" fill="#f17fb1"/>
+    <text x="166" y="801">证件照、拼图与九宫格</text>
+    <circle cx="132" cy="860" r="14" fill="#ffd166"/>
+    <text x="166" y="871">GIF、EXIF 与二维码</text>
+  </g>
+  <text x="112" y="1010" fill="#ffffff" font-family="Montserrat, Arial, sans-serif" font-size="48" font-weight="750">tubox.top</text>
+  <rect x="112" y="1100" width="336" height="192" rx="28" fill="#ffffff"/>
+  <image x="134" y="1122" width="148" height="148" xlink:href="qr-tubox.png"/>
+  <text x="304" y="1174" fill="#131521" font-family="Hiragino Sans GB" font-size="27" font-weight="700">扫码打开</text>
+  <text x="304" y="1220" fill="#55586b" font-family="Hiragino Sans GB" font-size="22">免登录直接使用</text>
+  <text x="112" y="1338" fill="#8c8aa0" font-family="Montserrat, Arial, sans-serif" font-size="25">13 TOOLS · 10 LANGUAGES · OPEN SOURCE</text>
+</svg>

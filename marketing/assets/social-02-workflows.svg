@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1440" viewBox="0 0 1080 1440">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#111421"/>
+      <stop offset="1" stop-color="#1d153d"/>
+    </linearGradient>
+  </defs>
+  <rect width="1080" height="1440" fill="url(#bg)"/>
+  <text x="76" y="118" fill="#c8b8ff" font-family="Hiragino Sans GB" font-size="34" font-weight="600">TUBOX · 实际使用流程</text>
+  <text x="76" y="234" fill="#ffffff" font-family="Hiragino Sans GB" font-size="78" font-weight="800">我每天怎么用图盒</text>
+  <g font-family="Hiragino Sans GB">
+    <rect x="76" y="322" width="928" height="250" rx="34" fill="#ffffff" fill-opacity=".075" stroke="#ffffff" stroke-opacity=".1"/>
+    <rect x="112" y="366" width="72" height="72" rx="20" fill="#7c5cff"/>
+    <text x="148" y="416" text-anchor="middle" fill="#fff" font-size="36" font-weight="700">1</text>
+    <text x="218" y="392" fill="#fff" font-size="43" font-weight="700">批量压缩 + 统一尺寸</text>
+    <text x="218" y="457" fill="#cfcbe2" font-size="31">电商图一次处理，按目标体积压到 200KB 以内</text>
+    <text x="218" y="514" fill="#a997ff" font-size="29">JPG / PNG / WebP / AVIF · ZIP 下载</text>
+
+    <rect x="76" y="606" width="928" height="250" rx="34" fill="#ffffff" fill-opacity=".075" stroke="#ffffff" stroke-opacity=".1"/>
+    <rect x="112" y="650" width="72" height="72" rx="20" fill="#0ea5a6"/>
+    <text x="148" y="700" text-anchor="middle" fill="#fff" font-size="36" font-weight="700">2</text>
+    <text x="218" y="676" fill="#fff" font-size="43" font-weight="700">抠图换底 + 自动构图</text>
+    <text x="218" y="741" fill="#cfcbe2" font-size="31">人像、商品、动物都可以在本地生成透明 PNG</text>
+    <text x="218" y="798" fill="#67e8e6" font-size="29">30+ 证件照规格 · 冲印排版</text>
+
+    <rect x="76" y="890" width="928" height="250" rx="34" fill="#ffffff" fill-opacity=".075" stroke="#ffffff" stroke-opacity=".1"/>
+    <rect x="112" y="934" width="72" height="72" rx="20" fill="#e879a9"/>
+    <text x="148" y="984" text-anchor="middle" fill="#fff" font-size="36" font-weight="700">3</text>
+    <text x="218" y="960" fill="#fff" font-size="43" font-weight="700">九宫格 + EXIF 隐私检查</text>
+    <text x="218" y="1025" fill="#cfcbe2" font-size="31">一张图切九张，发图前顺手清除位置和拍摄设备</text>
+    <text x="218" y="1082" fill="#f8a2c5" font-size="29">拖拽取景 · 无损清理 · 十种语言</text>
+  </g>
+  <text x="76" y="1268" fill="#ffffff" font-family="Hiragino Sans GB" font-size="52" font-weight="700">不用安装，打开浏览器就能用</text>
+  <text x="76" y="1340" fill="#bcb4d7" font-family="Montserrat, Arial, sans-serif" font-size="42" font-weight="650">tubox.top</text>
+</svg>
