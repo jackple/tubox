@@ -8,7 +8,7 @@
     "type": "git",
     "url": "git+https://github.com/jackple/tubox.git"
   },
-  "homepage": "https://github.com/jackple/tubox",
+  "homepage": "https://tubox.top",
   "type": "module",
   "scripts": {
     "dev": "vite",
