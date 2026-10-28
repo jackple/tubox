@@ -24,6 +24,10 @@
 - 已向 Bing Webmaster Tools 提交 98 个中文、繁体中文、英文、日文、韩文、西班牙文和法文页面 URL。
 - 已在 V2EX「分享创造」发布首帖：https://www.v2ex.com/t/1252552
 - 已保存 GitHub 仓库简介、正式站点主页和 18 个搜索标签。
+- 已在知乎发布技术文章：https://zhuanlan.zhihu.com/p/2098793918645145667
+- 已在小红书发布四图图文，平台当前显示审核中。
+- 已向 HelloGitHub 提交开源项目推荐：https://github.com/521xueweihan/HelloGitHub/issues/4143
+- 已发布 GitHub `v0.1.0` Release。
 
 ## V2EX：分享创造
 

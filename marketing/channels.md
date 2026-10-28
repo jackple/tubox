@@ -296,12 +296,12 @@ Description:
 ## 平台状态
 
 - V2EX：已发布，https://www.v2ex.com/t/1252552
-- GitHub：仓库简介与 Topics 已公开；README 推广版已推送。
+- GitHub：仓库简介与 Topics 已公开；README 推广版已推送；v0.1.0 Release 已发布。
 - Bing：已成功提交 98 个核心页面 URL。
 - 百度：站点已验证；当前账户的 sitemap 今日可用配额为 0。
-- 知乎：技术文章草稿已保存，等待发布确认。
-- HelloGitHub：项目推荐 Issue 草稿已填写，等待提交确认。
-- 小红书：账号已登录，四张图片和正文已存入草稿，等待发布确认。
+- 知乎：技术文章已发布，https://zhuanlan.zhihu.com/p/2098793918645145667
+- HelloGitHub：项目推荐已提交，https://github.com/521xueweihan/HelloGitHub/issues/4143
+- 小红书：四张图片和正文已发布，账号为「小犬吠吠」，平台状态为审核中。
 - 掘金：当前浏览器未登录，需要账号所有者登录。
 - 即刻：网页版要求 App 扫码登录。
 - B 站：当前账号已登录，但等级不足，无法发布动态；视频投稿需另行制作成片。
