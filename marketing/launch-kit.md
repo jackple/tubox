@@ -33,7 +33,10 @@
 - 已新增并部署 9 个中英文长尾教程页，sitemap 从 140 个 URL 增加到 151 个。
 - IndexNow 已接收全部 151 个 URL，返回 HTTP 200。
 - Product Hunt 产品页已保存全部英文画廊图，Maker 首评已发布；正式上线仍排期为 2026-11-03。
+- AlternativeTo 已重新提交，并关联 Canva 作为替代产品，当前等待审核。
 - Google Search Console 已请求优先抓取英文 200KB 压缩教程页。
+- DEV 工程文章已发布并补充封面：https://dev.to/jackple_shang_cefeacee96c/what-actually-stays-local-in-a-browser-image-editor-45jn
+- 少数派 Matrix 文章已保存为草稿，正文、四个标签和利益相关声明均已填写；发布需要账号完成实名认证。
 
 ## 首轮发布记录（2026-10-28）
 

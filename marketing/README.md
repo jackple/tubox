@@ -9,6 +9,7 @@
 | `outreach-kit.md` | 媒体、目录站和创作者外联模板 |
 | `seo-content-plan.md` | 中文与英文搜索场景、页面结构和 90 天节奏 |
 | `editorial-drafts.md` | DEV、Indie Hackers、SaaSHub、小众软件和少数派投稿稿 |
+| `sspai-matrix-article.md` | 少数派 Matrix 的完整中文教程稿 |
 | `channel-execution-status.md` | 各渠道已完成、待确认和阻塞项 |
 | `assets/` | 中文竖版社交图、二维码和 Product Hunt 画廊 |
 

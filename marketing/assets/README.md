@@ -5,6 +5,7 @@
 - `social-03-privacy.png`：本地处理与隐私定位。
 - `social-04-start.png`：带二维码的行动页。
 - `qr-tubox.png`：指向带 UTM 参数的站点二维码。
+- `dev-cover.png`：DEV Community 文章封面，1000×420。
 - `social-*.svg`：可继续编辑的矢量源文件。
 - `producthunt/`：Product Hunt 英文产品画廊，1270×760，共四张。
 
