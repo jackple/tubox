@@ -55,7 +55,7 @@ function style() {
   `
 }
 
-function shell(locale: GuideLocale, title: string, description: string, body: string, canonical?: string, alternates: { lang: string; href?: string }[] = []) {
+function shell(locale: GuideLocale, title: string, description: string, body: string, canonical?: string, alternates: { lang: string; href?: string }[] = [], image?: string) {
   const t = copy[locale]
   const home = locale === 'en' ? '/en' : '/'
   const guidesHome = guideIndexPath[locale]
@@ -66,12 +66,16 @@ function shell(locale: GuideLocale, title: string, description: string, body: st
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>${esc(title)}</title>
   <meta name="description" content="${esc(description)}">
+  <meta name="robots" content="index,follow,max-image-preview:large">
   ${canonical ? `<link rel="canonical" href="${esc(canonical)}">` : ''}
   ${alternates.filter((item) => item.href).map((item) => `<link rel="alternate" hreflang="${item.lang}" href="${esc(item.href!)}">`).join('\n  ')}
   <meta property="og:type" content="article">
   <meta property="og:title" content="${esc(title)}">
   <meta property="og:description" content="${esc(description)}">
   ${canonical ? `<meta property="og:url" content="${esc(canonical)}">` : ''}
+  ${image ? `<meta property="og:image" content="${esc(image)}">` : ''}
+  ${image ? `<meta name="twitter:card" content="summary_large_image">` : ''}
+  ${image ? `<meta name="twitter:image" content="${esc(image)}">` : ''}
   <style>${style()}</style>
 </head>
 <body>
@@ -86,6 +90,8 @@ function renderGuide(page: GuidePage, siteUrl: string | undefined, base: string)
   const t = copy[page.locale]
   const path = guidePath(page)
   const canonical = absoluteUrl(siteUrl, base, path)
+  const indexUrl = absoluteUrl(siteUrl, base, guideIndexPath[page.locale])
+  const image = absoluteUrl(siteUrl, base, page.locale === 'en' ? '/og/en.png' : '/og/zh-CN.png')
   const alternates = guideAlternates(page).map((alt) => ({ lang: alt.lang, href: absoluteUrl(siteUrl, base, alt.href) }))
   const ld = {
     '@context': 'https://schema.org',
@@ -106,6 +112,18 @@ function renderGuide(page: GuidePage, siteUrl: string | undefined, base: string)
           acceptedAnswer: { '@type': 'Answer', text: faq.answer },
         })),
       },
+      ...(canonical && indexUrl
+        ? [
+            {
+              '@type': 'BreadcrumbList',
+              itemListElement: [
+                { '@type': 'ListItem', position: 1, name: 'Tubox', item: absoluteUrl(siteUrl, base, page.locale === 'en' ? '/en' : '/') },
+                { '@type': 'ListItem', position: 2, name: t.guideHome, item: indexUrl },
+                { '@type': 'ListItem', position: 3, name: page.h1, item: canonical },
+              ],
+            },
+          ]
+        : []),
       ...(canonical
         ? [{ '@type': 'Article', headline: page.title, description: page.description, inLanguage: page.locale === 'en' ? 'en' : 'zh-CN', dateModified: page.updated, mainEntityOfPage: canonical }]
         : []),
@@ -132,7 +150,7 @@ function renderGuide(page: GuidePage, siteUrl: string | undefined, base: string)
       .join('')}</section>
     <p class="note">${esc(t.privacy)}</p>
     <script type="application/ld+json">${JSON.stringify(ld).replace(/</g, '\\u003c')}</script>
-  `, canonical, alternates)
+  `, canonical, alternates, image)
 }
 
 function renderIndex(locale: GuideLocale, siteUrl: string | undefined, base: string) {
@@ -141,6 +159,7 @@ function renderIndex(locale: GuideLocale, siteUrl: string | undefined, base: str
   const canonical = absoluteUrl(siteUrl, base, path)
   const list = guides.filter((guide) => guide.locale === locale)
   const title = locale === 'en' ? 'Tubox Image Guides' : '图盒图片处理教程'
+  const image = absoluteUrl(siteUrl, base, locale === 'en' ? '/og/en.png' : '/og/zh-CN.png')
   return shell(locale, title, t.all, `
     <div class="eyebrow">Tubox guides</div>
     <h1>${title}</h1>
@@ -148,7 +167,7 @@ function renderIndex(locale: GuideLocale, siteUrl: string | undefined, base: str
     <div class="cards">${list
       .map((guide) => `<a class="card" href="${guidePath(guide)}"><b>${esc(guide.h1)}</b><span>${esc(guide.description)}</span></a>`)
       .join('')}</div>
-  `, canonical, [])
+  `, canonical, [], image)
 }
 
 export function writeGuidePages(outDir: string, siteUrl: string | undefined, base: string) {
