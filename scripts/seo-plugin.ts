@@ -3,7 +3,9 @@ import { dirname, join } from 'node:path'
 import type { Plugin, Rollup } from 'vite'
 import { catalog } from '../src/i18n/catalog'
 import { type Locale, defaultLocale, localeMeta, locales, localizePath, splitLocale } from '../src/i18n/locales'
+import { guideAlternates, guideIndexPath, guidePath, guides } from '../src/guides'
 import { absoluteUrl, alternates, fullTitle, ogImage, pagePaths, pageSeo, type PageSeo, structuredData } from '../src/seo'
+import { writeGuidePages } from './guide-pages'
 
 /**
  * 按语言 × 路由预渲染 SEO：
@@ -151,11 +153,13 @@ export function seoPlugin(siteUrl: string | undefined): Plugin {
         }
       }
 
+      writeGuidePages(outDir, siteUrl, base)
+
       const sitemap = absoluteUrl(siteUrl, base, '/sitemap.xml')
       writeFileSync(join(outDir, 'robots.txt'), `User-agent: *\nAllow: /\n${sitemap ? `\nSitemap: ${sitemap}\n` : ''}`)
       if (siteUrl) {
         const lastmod = new Date().toISOString().slice(0, 10)
-        const urls = locales.flatMap(({ code }) =>
+        const appUrls = locales.flatMap(({ code }) =>
           pagePaths.map(({ path }) => {
             const priority = path === '/' ? '1.0' : '0.8'
             const links = alternates(siteUrl, base, path)
@@ -165,9 +169,20 @@ export function seoPlugin(siteUrl: string | undefined): Plugin {
             return `  <url>\n    <loc>${esc(loc)}</loc><lastmod>${lastmod}</lastmod><priority>${priority}</priority>${links}\n  </url>`
           }),
         )
+        const guideUrls = guides.map((guide) => {
+          const loc = absoluteUrl(siteUrl, base, guidePath(guide))!
+          const links = guideAlternates(guide)
+            .map((item) => `\n    <xhtml:link rel="alternate" hreflang="${item.lang}" href="${esc(absoluteUrl(siteUrl, base, item.href)!)}"/>`)
+            .join('')
+          return `  <url>\n    <loc>${esc(loc)}</loc><lastmod>${guide.updated}</lastmod><priority>0.9</priority>${links}\n  </url>`
+        })
+        const guideIndexUrls = (['zh-CN', 'en'] as const).map((locale) => {
+          const loc = absoluteUrl(siteUrl, base, guideIndexPath[locale])!
+          return `  <url>\n    <loc>${esc(loc)}</loc><lastmod>2026-10-30</lastmod><priority>0.9</priority>\n  </url>`
+        })
         writeFileSync(
           join(outDir, 'sitemap.xml'),
-          `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${urls.join('\n')}\n</urlset>\n`,
+          `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${[...appUrls, ...guideIndexUrls, ...guideUrls].join('\n')}\n</urlset>\n`,
         )
       }
     },

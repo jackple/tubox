@@ -42,6 +42,24 @@
 | MP4 to GIF without upload | `/en/video-to-gif` | Clip, frame rate, crop and size controls |
 | make QR code with logo SVG | `/en/qr-code` | Static QR, vector export and contrast warnings |
 
+## 已上线的内容节点
+
+以下静态教程页已加入构建流程和 sitemap，每页都有独立标题、描述、canonical、中英文 alternate、HowTo/FAQ 结构化数据和工具入口：
+
+| 语言 | 内容节点 |
+|---|---|
+| 中文 | `/guides/tupian-yasuo-200kb/` |
+| 中文 | `/guides/shanchuxiaoxiang-gps/` |
+| 中文 | `/guides/zhengjianzhao-huanlan-di/` |
+| 中文 | `/guides/liaotian-jietu-changtu/` |
+| English | `/en/guides/compress-image-to-200kb/` |
+| English | `/en/guides/remove-photo-metadata/` |
+| English | `/en/guides/passport-photo-2x2/` |
+| English | `/en/guides/split-image-for-instagram-grid/` |
+| English | `/en/guides/video-to-gif-file-size/` |
+
+内容源在 `src/guides.ts`，静态页模板在 `scripts/guide-pages.ts`。新增内容后运行带 `VITE_SITE_URL=https://tubox.top` 的生产构建，sitemap 会自动加入新 URL。
+
 ## 内容结构模板
 
 ### 结果型教程

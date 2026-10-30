@@ -19,6 +19,15 @@
 - GIF maker: https://tubox.top/gif
 - Video to GIF: https://tubox.top/video-to-gif
 - QR code generator: https://tubox.top/qr-code
+- Practical guides: https://tubox.top/en/guides/
+
+## Guides
+
+- Compress an image to 200KB: https://tubox.top/en/guides/compress-image-to-200kb/
+- Remove GPS and EXIF metadata: https://tubox.top/en/guides/remove-photo-metadata/
+- Make a 2×2 inch passport photo: https://tubox.top/en/guides/passport-photo-2x2/
+- Split an image for Instagram: https://tubox.top/en/guides/split-image-for-instagram-grid/
+- Convert video to GIF without excessive size: https://tubox.top/en/guides/video-to-gif-file-size/
 
 ## Product facts
 

@@ -9,6 +9,7 @@
 | `outreach-kit.md` | 媒体、目录站和创作者外联模板 |
 | `seo-content-plan.md` | 中文与英文搜索场景、页面结构和 90 天节奏 |
 | `video-scripts.md` | 30–45 秒真实操作短视频脚本 |
+| `editorial-drafts.md` | DEV、Indie Hackers、SaaSHub、小众软件和少数派投稿稿 |
 | `assets/` | 中文竖版社交图、二维码和 Product Hunt 画廊 |
 
 执行顺序：先完成 Product Hunt 发布和核心流程测试，再做英文开发者渠道、中文短视频与搜索页。不要按“渠道数量”考核，而要看每个渠道带来的成功导出与有效反馈。
