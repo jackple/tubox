@@ -47,6 +47,7 @@ const messages: Messages = {
 
   nav: {
     overview: 'Inicio',
+    menu: 'Menú',
     privacyTitle: 'Privacidad activada',
     privacyDesc: 'Las imágenes no salen de este dispositivo',
   },

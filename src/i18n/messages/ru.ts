@@ -47,6 +47,7 @@ const messages: Messages = {
 
   nav: {
     overview: 'Обзор',
+    menu: 'Меню',
     privacyTitle: 'Защита приватности включена',
     privacyDesc: 'Изображения не покидают устройство',
   },

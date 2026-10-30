@@ -70,7 +70,7 @@ export function Inspector({ children, footer }: { children: ReactNode; footer?: 
   return (
     <>
       <div className="min-h-0 flex-1 lg:overflow-y-auto">{children}</div>
-      {footer && <div className="sticky bottom-0 shrink-0 border-t border-line bg-panel/95 p-4 backdrop-blur">{footer}</div>}
+      {footer && <div className="sticky bottom-0 z-20 shrink-0 border-t border-line bg-panel/95 p-4 backdrop-blur">{footer}</div>}
     </>
   )
 }

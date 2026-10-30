@@ -12,7 +12,6 @@ import { LanguageSwitcher } from './LanguageSwitcher'
 import { Logo } from './Logo'
 
 export function Sidebar() {
-  const { mode, setMode } = useTheme()
   const m = useMessages()
   const to = useLocalizedPath()
   return (
@@ -62,18 +61,28 @@ export function Sidebar() {
           <ArrowUpRight className="ml-auto h-3 w-3 opacity-0 transition-opacity group-hover:opacity-100" />
         </a>
         <LanguageSwitcher />
-        <Segmented<ThemeMode>
-          size="sm"
-          value={mode}
-          onChange={setMode}
-          options={[
-            { value: 'light', label: <Sun className="h-3.5 w-3.5" aria-label={m.common.themeLight} /> },
-            { value: 'dark', label: <Moon className="h-3.5 w-3.5" aria-label={m.common.themeDark} /> },
-            { value: 'system', label: <Monitor className="h-3.5 w-3.5" aria-label={m.common.themeSystem} /> },
-          ]}
-        />
+        <ThemeSwitcher />
       </div>
     </aside>
+  )
+}
+
+/** 浅色 / 深色 / 跟随系统（侧边栏与小屏菜单共用） */
+export function ThemeSwitcher({ className }: { className?: string }) {
+  const { mode, setMode } = useTheme()
+  const m = useMessages()
+  return (
+    <Segmented<ThemeMode>
+      size="sm"
+      value={mode}
+      onChange={setMode}
+      className={className}
+      options={[
+        { value: 'light', label: <Sun className="h-3.5 w-3.5" aria-label={m.common.themeLight} /> },
+        { value: 'dark', label: <Moon className="h-3.5 w-3.5" aria-label={m.common.themeDark} /> },
+        { value: 'system', label: <Monitor className="h-3.5 w-3.5" aria-label={m.common.themeSystem} /> },
+      ]}
+    />
   )
 }
 

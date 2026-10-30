@@ -54,6 +54,7 @@ const messages = {
 
   nav: {
     overview: '概览',
+    menu: '菜单',
     privacyTitle: '隐私保护已开启',
     privacyDesc: '图片不会离开此设备',
   },

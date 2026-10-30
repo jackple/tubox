@@ -23,29 +23,11 @@ function Options() {
   ))
 }
 
-/** 侧边栏：带图标的下拉框；compact 为小屏顶栏的图标按钮（原生 select 覆盖其上） */
-export function LanguageSwitcher({ compact, className }: { compact?: boolean; className?: string }) {
+/** 带图标的下拉框（侧边栏与小屏菜单共用） */
+export function LanguageSwitcher({ className }: { className?: string }) {
   const locale = useRouteLocale()
   const change = useSwitchLocale()
   const label = useMessages().common.language
-
-  if (compact)
-    return (
-      <label
-        title={label}
-        className={cn('relative grid h-8 w-8 shrink-0 place-items-center rounded-lg text-muted hover:bg-subtle hover:text-fg', className)}
-      >
-        <Languages className="h-4 w-4" />
-        <select
-          aria-label={label}
-          className="absolute inset-0 cursor-pointer opacity-0"
-          value={locale}
-          onChange={(e) => change(e.target.value as Locale)}
-        >
-          <Options />
-        </select>
-      </label>
-    )
 
   return (
     <div className={cn('relative', className)}>

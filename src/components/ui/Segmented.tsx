@@ -18,7 +18,7 @@ interface Props<T extends string> {
 /** 分段控件，选中态使用轻量 CSS 淡入 */
 export function Segmented<T extends string>({ value, options, onChange, size = 'md', className }: Props<T>) {
   return (
-    <div className={cn('relative flex rounded-[10px] bg-fg/[0.05] p-[3px] shadow-[inset_0_1px_2px_rgb(0_0_0/0.04)]', className)}>
+    <div className={cn('relative isolate flex rounded-[10px] bg-fg/[0.05] p-[3px] shadow-[inset_0_1px_2px_rgb(0_0_0/0.04)]', className)}>
       {options.map((o) => {
         const active = o.value === value
         return (

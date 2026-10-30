@@ -82,20 +82,23 @@ export function Dropzone({
         emit(e.dataTransfer.files)
       }}
       className={cn(
-        'group relative flex cursor-pointer flex-col items-center justify-center overflow-hidden rounded-[22px] border bg-panel text-center outline-none transition-all duration-300 focus-visible:ring-4 focus-visible:ring-brand/20',
+        'group relative flex cursor-pointer flex-col items-center justify-center rounded-[22px] border bg-panel text-center outline-none transition-all duration-300 focus-visible:ring-4 focus-visible:ring-brand/20',
         over ? 'scale-[1.01] border-brand/60 shadow-glow' : 'border-line shadow-[var(--highlight),var(--shadow-soft)] hover:border-fg/20',
-        compact ? 'gap-3 p-5' : 'gap-5 p-10',
+        compact ? 'gap-3 p-5' : 'gap-4 px-6 py-8 sm:gap-5 sm:p-10',
         className,
       )}
     >
-      {/* 内嵌虚线框 + 顶部光晕 */}
+      {/* 内嵌虚线框 + 顶部光晕。裁剪只放在装饰层：根节点不能 overflow-hidden，
+          否则带 aspect-ratio 的盒子在窄屏下不会随内容长高，内容被裁切重叠 */}
       <span
         className={cn(
           'pointer-events-none absolute inset-2 rounded-2xl border border-dashed transition-colors',
           over ? 'border-brand/50 bg-brand/[0.04]' : 'border-fg/[0.12] group-hover:border-fg/25',
         )}
       />
-      <span className="pointer-events-none absolute -top-24 left-1/2 h-48 w-2/3 -translate-x-1/2 rounded-full bg-brand/10 blur-3xl transition-opacity duration-500 group-hover:opacity-100 dark:bg-brand/15 sm:opacity-60" />
+      <span className="pointer-events-none absolute inset-0 overflow-hidden rounded-[22px]">
+        <span className="absolute -top-24 left-1/2 h-48 w-2/3 -translate-x-1/2 rounded-full bg-brand/10 blur-3xl transition-opacity duration-500 group-hover:opacity-100 dark:bg-brand/15 sm:opacity-60" />
+      </span>
       <input
         ref={inputRef}
         type="file"
@@ -111,10 +114,10 @@ export function Dropzone({
         <>
           <FannedCards compact={compact} active={over} icon={icon} />
           <div className="relative space-y-1.5">
-            <div className={cn('font-semibold tracking-tight', compact ? 'text-[13px]' : 'text-[18px]')}>
+            <div className={cn('text-balance font-semibold tracking-tight', compact ? 'text-[13px]' : 'text-[18px]')}>
               {title ?? (over ? m.dropzone.release : m.dropzone.title)}
             </div>
-            <div className="text-[13px] text-muted">{hint ?? m.dropzone.hint}</div>
+            <div className="text-balance text-[13px] text-muted">{hint ?? m.dropzone.hint}</div>
           </div>
           {!compact && (
             <div className="relative flex flex-col items-center gap-3">
@@ -148,7 +151,7 @@ function FannedCards({
   const size = compact ? 'h-10 w-9' : 'h-16 w-14'
   const spread = compact ? 10 : 18
   return (
-    <div className={cn('relative', compact ? 'h-11 w-20' : 'h-20 w-32')}>
+    <div className={cn('relative shrink-0', compact ? 'h-11 w-20' : 'h-20 w-32')}>
       {[-1, 1].map((d) => (
         <motion.span
           key={d}

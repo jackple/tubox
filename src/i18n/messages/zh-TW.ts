@@ -47,6 +47,7 @@ const messages: Messages = {
 
   nav: {
     overview: '總覽',
+    menu: '選單',
     privacyTitle: '隱私保護已開啟',
     privacyDesc: '圖片不會離開此裝置',
   },

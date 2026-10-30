@@ -47,6 +47,7 @@ const messages: Messages = {
 
   nav: {
     overview: '개요',
+    menu: '메뉴',
     privacyTitle: '개인정보 보호 켜짐',
     privacyDesc: '이미지는 이 기기를 벗어나지 않아요',
   },

@@ -48,6 +48,7 @@ const messages: Messages = {
 
   nav: {
     overview: '概要',
+    menu: 'メニュー',
     privacyTitle: 'プライバシー保護 ON',
     privacyDesc: '画像はこの端末から出ません',
   },
