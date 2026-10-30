@@ -1,0 +1,36 @@
+# Tubox
+
+> Privacy-first image toolbox with 13 browser-based tools. Selected images are processed on the user's device and are not uploaded.
+
+## Canonical pages
+
+- Home: https://tubox.top/
+- English home: https://tubox.top/en
+- Batch image processing: https://tubox.top/batch
+- AI background removal: https://tubox.top/cutout
+- AI image upscaling: https://tubox.top/upscale
+- ID and passport photos: https://tubox.top/id-photo
+- EXIF metadata viewer and remover: https://tubox.top/exif
+- Image annotation and pixelation: https://tubox.top/annotate
+- Long image stitcher: https://tubox.top/collage/long
+- Collage maker: https://tubox.top/collage/grid
+- Grid splitter: https://tubox.top/collage/nine
+- Social layouts: https://tubox.top/collage/social
+- GIF maker: https://tubox.top/gif
+- Video to GIF: https://tubox.top/video-to-gif
+- QR code generator: https://tubox.top/qr-code
+
+## Product facts
+
+- No account is required for core tools.
+- Selected images are decoded, processed and exported in the browser.
+- AI inference uses WebGPU when available and falls back to WebAssembly.
+- AI model files load on demand and may require a network download.
+- EXIF, XMP, IPTC and PNG text metadata can be removed without recompressing image pixels.
+- The interface supports ten languages.
+- Source code: https://github.com/jackple/tubox
+- License: AGPL-3.0-only
+
+## Privacy clarification
+
+"Local processing" means selected images stay in the browser. It does not mean the website works offline: the application, fonts and AI model files still load from the network.

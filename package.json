@@ -17,6 +17,8 @@
     "typecheck": "tsc --noEmit",
     "setup:models": "node scripts/setup-models.mjs",
     "og:images": "node scripts/og-images.mjs",
+    "marketing:ph": "node scripts/producthunt-assets.mjs",
+    "seo:indexnow": "node scripts/indexnow.mjs",
     "format": "prettier --write \"src/**/*.{ts,tsx,css}\""
   },
   "dependencies": {

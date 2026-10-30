@@ -19,13 +19,18 @@
 - Cloudflare Web Analytics 过去 24 小时为 21 次访问、22 次页面浏览。
 - Google 中暂未发现 `tubox.top` 的站外自然提及。
 
+## 最新流量基线（2026-10-30）
+
+- Cloudflare Web Analytics 过去 24 小时为 408 次访问、927 次页面浏览。
+- 当前主要工具页已有稳定访问，可以开始观察各渠道的进入工具率和导出完成率。
+- 阶段目标从“获得首批访问”转为“确认哪些站外渠道带来真实工具使用”。
+
 ## 首轮发布记录（2026-10-28）
 
 - 已向 Bing Webmaster Tools 提交 98 个中文、繁体中文、英文、日文、韩文、西班牙文和法文页面 URL。
 - 已在 V2EX「分享创造」发布首帖：https://www.v2ex.com/t/1252552
 - 已保存 GitHub 仓库简介、正式站点主页和 18 个搜索标签。
 - 已在知乎发布技术文章：https://zhuanlan.zhihu.com/p/2098793918645145667
-- 已在小红书发布四图图文，平台当前显示审核中。
 - 已在掘金发布技术文章：https://juejin.cn/spost/7701525643872026659
 - 已向 HelloGitHub 提交开源项目推荐：https://github.com/521xueweihan/HelloGitHub/issues/4143
 - 已发布 GitHub `v0.1.0` Release。
@@ -54,7 +59,7 @@ https://tubox.top/?utm_source=v2ex&utm_medium=community&utm_campaign=tubox_launc
 - 批量压缩、改尺寸、格式转换、水印和 ZIP 下载
 - AI 抠图与 2x / 4x 高清放大
 - 30+ 规格的证件照，支持 AI 换底和冲印排版
-- 拼图、长图、九宫格和小红书等社交版式
+- 拼图、长图、九宫格和社交媒体版式
 - GIF / 视频转 GIF
 - EXIF 隐私查看与无损清除
 - 图片标注与二维码生成
@@ -77,43 +82,6 @@ https://github.com/jackple/tubox
 ```
 
 建议附图：`public/og/zh-CN.png`。它能在一张图里同时表达品牌、核心承诺和工具范围。
-
-## 小红书：首图 + 正文
-
-首图大字：
-
-```text
-我把 13 个图片工具
-塞进了浏览器
-不传图，免登录
-```
-
-正文：
-
-```text
-做图经常遇到一个尴尬：功能分散在七八个网站，证件照、身份证照片又不太敢随手传。
-
-于是做了「图盒 Tubox」：不用下载，不用注册，打开网页就能处理图片。AI 抠图、高清放大、证件照、九宫格、批量压缩、视频转 GIF 都有，处理过程直接在自己的浏览器里完成。
-
-我平时最常用的组合：
-1. 电商图先批量压缩，再统一尺寸
-2. 自拍一键抠图，换证件照底色
-3. 一张图切九宫格，直接发朋友圈
-4. 发照片前查一下 EXIF，顺手清掉拍摄位置
-
-电脑和手机浏览器都能打开：
-https://tubox.top/?utm_source=xiaohongshu&utm_medium=social&utm_campaign=tubox_launch
-
-第一次用 AI 功能会加载模型，稍微等一下；Safari 或低配手机遇到卡顿也欢迎告诉我，我继续优化。
-```
-
-配图建议：
-
-1. 深色品牌分享图，主标题“专业级图片处理，就在浏览器里”
-2. AI 抠图前后对比
-3. 证件照规格和换底界面
-4. 九宫格切图结果
-5. 批量压缩前后体积对比
 
 ## 即刻 / 朋友圈：短版
 
@@ -146,8 +114,7 @@ Feedback I am looking for: Safari/iOS compatibility, first-load friction, and th
 1. **Bing URL 提交：** 优先提交中文、英文、日文、韩文、繁体中文及常用工具页，观察 48 小时。
 2. **V2EX / 分享创造：** 用开发者视角发布，强调技术取舍、开源和求反馈。
 3. **朋友圈 / 即刻：** 用短文案做熟人扩散，验证真实使用场景。
-4. **小红书：** 在准备 5 张真实功能截图后发布，以证件照、九宫格、批量压缩为主场景。
-5. **英文社区：** 根据前两轮反馈修掉最明显的兼容性问题后发布。
+4. **英文社区：** 根据前两轮反馈修掉最明显的兼容性问题后发布。
 
 同一天不要在所有渠道发完全相同的内容。每次首发到一个渠道后，至少留出半天回复评论，并把真实问题带进下一版改动。
 
@@ -156,7 +123,6 @@ Feedback I am looking for: Safari/iOS compatibility, first-load friction, and th
 所有公开链接使用独立 UTM：
 
 - V2EX：`utm_source=v2ex&utm_medium=community&utm_campaign=tubox_launch`
-- 小红书：`utm_source=xiaohongshu&utm_medium=social&utm_campaign=tubox_launch`
 - 即刻：`utm_source=jike&utm_medium=social&utm_campaign=tubox_launch`
 - 朋友圈：`utm_source=wechat&utm_medium=social&utm_campaign=tubox_launch`
 

@@ -78,6 +78,16 @@ VITE_SITE_URL=https://tubox.example.com pnpm build   # 或写进 .env.production
 
 使用 Cloudflare Web Analytics（无 Cookie、不采集个人信息），由 Cloudflare Pages 在边缘自动注入 beacon，代码中无需接入；改用其它托管时需在 `index.html` 手动加上统计脚本。
 
+### 搜索引擎主动提交
+
+站点提供 IndexNow 验证文件和 `public/llms.txt`。部署后可将 sitemap 中的全部页面主动提交给 IndexNow 参与方：
+
+```bash
+pnpm seo:indexnow
+```
+
+如需提交预览或自定义域名，可设置 `INDEXNOW_SITE_URL`。提交前确认站点根目录能公开访问 `c7b220da8ffdf33faf03e09f455610cf.txt`。
+
 ## 技术栈
 
 Vite 6 · React 19 · TypeScript · Tailwind CSS 3 · Zustand · Framer Motion · Comlink（Web Worker）· gifenc · uqr · MediaPipe Tasks Vision · @imgly/background-removal（onnxruntime-web）· Real-ESRGAN · JSZip · Geist 字体
