@@ -32,6 +32,8 @@
 - Google Search Console 当前显示 17 个网页已编入索引，4 个网页“已抓取但尚未编入索引”。
 - 已新增并部署 9 个中英文长尾教程页，sitemap 从 140 个 URL 增加到 151 个。
 - IndexNow 已接收全部 151 个 URL，返回 HTTP 200。
+- Product Hunt 产品页已保存全部英文画廊图，Maker 首评已发布；正式上线仍排期为 2026-11-03。
+- Google Search Console 已请求优先抓取英文 200KB 压缩教程页。
 
 ## 首轮发布记录（2026-10-28）
 

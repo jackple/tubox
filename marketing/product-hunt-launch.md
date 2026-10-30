@@ -20,8 +20,8 @@ Product Hunt 的首图决定点击，产品页本身决定停留。发布前完�
 
 - 产品页与 2026-11-03 发布排期已确认。
 - 页面原有 1 张中文画廊图。
-- 四张 1270×760 英文画廊图已上传到编辑草稿，等待点击 `Save media`。
-- 保存媒体后还需检查首图顺序，并补充 Maker 首评或确认已有首评。
+- 四张 1270×760 英文画廊图已保存，产品页当前显示 5 张画廊图。
+- Maker 首评已发布并显示在产品页。
 
 ```text
 https://tubox.top/en?utm_source=producthunt&utm_medium=launch&utm_campaign=ph_20261103
