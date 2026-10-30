@@ -53,6 +53,7 @@ const messages: Messages = {
 
   legal: {
     openSource: '開源',
+    guides: '圖片教學',
     sourceCode: '原始碼',
     thirdParty: '第三方授權',
     notice: '本站以 AGPL-3.0 授權開源，依「現狀」提供，不提供任何擔保。',

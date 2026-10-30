@@ -10,7 +10,7 @@ import { SOURCE_URL, THIRD_PARTY_LICENSES_URL } from '@/config'
 import { gridTemplates } from '@/core/collage/templates'
 import { photoSpecs } from '@/core/idphoto/specs'
 import { type Tool, toolById, tools } from '@/features/tools'
-import { useLocalizedPath, useMessages } from '@/i18n'
+import { useLocalizedPath, useMessages, useRouteLocale } from '@/i18n'
 import { cn } from '@/lib/cn'
 import { ProductShot } from './ProductShot'
 import { Scenery } from './Scenery'
@@ -23,6 +23,8 @@ const fadeUp = (delay = 0) => ({
 
 export default function HomePage() {
   const legal = useMessages().legal
+  const locale = useRouteLocale()
+  const guidesHref = locale === 'zh-CN' || locale === 'zh-TW' ? '/guides/' : '/en/guides/'
   return (
     <div className="h-full overflow-y-auto overflow-x-hidden">
       <Hero />
@@ -38,6 +40,10 @@ export default function HomePage() {
             </p>
             {/* AGPL-3.0：适当法律声明 + 源代码入口 */}
             <p className="text-[11px] text-muted">
+              <a href={guidesHref} className="underline-offset-2 hover:text-fg hover:underline">
+                {legal.guides}
+              </a>
+              {' · '}
               {legal.notice}{' '}
               <a href={SOURCE_URL} target="_blank" rel="noopener noreferrer" className="underline-offset-2 hover:text-fg hover:underline">
                 {legal.sourceCode}

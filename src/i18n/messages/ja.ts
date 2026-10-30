@@ -54,6 +54,7 @@ const messages: Messages = {
 
   legal: {
     openSource: 'オープンソース',
+    guides: '画像ガイド',
     sourceCode: 'ソースコード',
     thirdParty: 'サードパーティライセンス',
     notice: 'AGPL-3.0 ライセンスで公開しています。「現状のまま」提供され、いかなる保証もありません。',

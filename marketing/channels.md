@@ -144,29 +144,6 @@ https://tubox.top/?utm_source=jike&utm_medium=social&utm_campaign=tubox_launch
 打开即用：https://tubox.top/?utm_source=wechat&utm_medium=social&utm_campaign=tubox_launch
 ```
 
-## 短视频脚本
-
-### 15 秒：批量压缩
-
-- 0–3 秒：桌面散落二十张产品图，字幕“发图又嫌太大？”
-- 3–9 秒：打开 Tubox 批量处理，拖入图片，设置目标体积。
-- 9–13 秒：展示体积下降和 ZIP 下载。
-- 13–15 秒：字幕“图片不上传，tubox.top”。
-
-### 20 秒：证件照
-
-- 0–3 秒：手机自拍或普通生活照。
-- 3–8 秒：进入证件照工具，选择“一寸 295×413”。
-- 8–14 秒：AI 换底、自动构图、检查像素和文件体积。
-- 14–20 秒：展示冲印排版与下载，CTA“tubox.top”。
-
-### 20 秒：EXIF 隐私
-
-- 0–4 秒：字幕“这张照片可能带着你拍它时的位置。”
-- 4–10 秒：拖进 EXIF 工具，展示 GPS、设备和时间字段。
-- 10–16 秒：一键无损清除，保留方向和 ICC。
-- 16–20 秒：CTA“在浏览器里处理，不上传”。
-
 ## 开源与目录站投稿
 
 ### HelloGitHub / Awesome 系列推荐

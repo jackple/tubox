@@ -61,6 +61,7 @@ const messages = {
   /** 开源许可声明（AGPL-3.0 要求的「适当法律声明」与源代码入口） */
   legal: {
     openSource: '开源',
+    guides: '图片教程',
     sourceCode: '源代码',
     thirdParty: '第三方许可',
     notice: '本站以 AGPL-3.0 许可开源，按「原样」提供，不提供任何担保。',

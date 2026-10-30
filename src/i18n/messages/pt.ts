@@ -53,6 +53,7 @@ const messages: Messages = {
 
   legal: {
     openSource: 'Código aberto',
+    guides: 'Guias de imagens',
     sourceCode: 'Código-fonte',
     thirdParty: 'Licenças de terceiros',
     notice: 'Licenciado sob AGPL-3.0. Fornecido "no estado em que se encontra", sem garantia de qualquer tipo.',

@@ -29,6 +29,9 @@
 - 百度“普通收录 → 数据反馈”中，2026-09-30 至 2026-10-28 的手动提交趋势为 0。当前没有证据表明过去的手动提交成功，更不能据此判断已经收录。
 - Bing `site:tubox.top` 当前返回约 7 个结果，已覆盖首页及抠图、长图、拼图、放大、视频转 GIF、九宫格等工具页。
 - Google `site:tubox.top` 已有多页结果，首批包含首页、批量处理、英文首页、标注、EXIF、GIF 及多种语言首页。
+- Google Search Console 当前显示 17 个网页已编入索引，4 个网页“已抓取但尚未编入索引”。
+- 已新增并部署 9 个中英文长尾教程页，sitemap 从 140 个 URL 增加到 151 个。
+- IndexNow 已接收全部 151 个 URL，返回 HTTP 200。
 
 ## 首轮发布记录（2026-10-28）
 
@@ -147,8 +150,7 @@ Feedback I am looking for: Safari/iOS compatibility, first-load friction, and th
 2. **Google 长尾搜索：** 优先优化已经获得曝光但点击低的中文工具页，不等待百度收录。
 3. **Bing / IndexNow：** 保持页面更新后的主动通知，当前已有可见收录基础。
 4. **Show HN / DEV：** 选择 Worker、WebGPU/WASM 和 EXIF 无损处理中的一个技术切口，不在同一天跨社区重复发布。
-5. **B站 / 视频号 / 抖音：** 用证件照、EXIF 隐私、九宫格和批量压缩做真实前后对比。
-6. **小众软件 / 少数派 Matrix：** 采用实操教程，不投产品发布通稿。
-7. **AlternativeTo / SaaSHub / 匹配的 Awesome 列表：** 保持产品描述一致，只提交符合收录规则的目录。
+5. **小众软件 / 少数派 Matrix：** 采用实操教程，不投产品发布通稿。
+6. **AlternativeTo / SaaSHub / 匹配的 Awesome 列表：** 保持产品描述一致，只提交符合收录规则的目录。
 
 百度先继续观察索引量和 `site:tubox.top`，不要在索引量为 0 时反复提交同一批 URL。部署 IndexNow 文件后再执行一次主动提交并记录返回状态。
