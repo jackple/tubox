@@ -1,10 +1,8 @@
-import { lazy } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { createBrowserRouter, Navigate, type RouteObject, RouterProvider } from 'react-router-dom'
-import { Toaster } from 'sonner'
 import { AppShell } from '@/components/layout/AppShell'
 import { useLocalizedPath } from '@/i18n'
 import { locales } from '@/i18n/locales'
-import { useTheme } from '@/stores/theme'
 
 // 按页面拆包：MediaPipe / onnxruntime 等重依赖只在进入抠图 / 证件照 / 高清放大时加载
 const HomePage = lazy(() => import('@/features/home/HomePage'))
@@ -21,6 +19,8 @@ const SocialPage = lazy(() => import('@/features/collage/SocialPage'))
 const GifPage = lazy(() => import('@/features/gif/GifPage'))
 const VideoGifPage = lazy(() => import('@/features/gif/VideoGifPage'))
 const QrCodePage = lazy(() => import('@/features/qrcode/QrCodePage'))
+// 首次交互后再加载提示宿主；页面在交互前不会触发全局 toast
+const ToastHost = lazy(() => import('@/components/common/ToastHost'))
 
 function pageRoutes(): RouteObject[] {
   return [
@@ -74,11 +74,20 @@ const getRouter = () =>
   ))
 
 export function App() {
-  const dark = useTheme((s) => s.dark)
+  const [toastReady, setToastReady] = useState(false)
+  useEffect(() => {
+    const events = ['pointerdown', 'keydown', 'click'] as const
+    const activate = () => setToastReady(true)
+    for (const event of events) document.addEventListener(event, activate, { capture: true, once: true })
+    return () => {
+      for (const event of events) document.removeEventListener(event, activate, { capture: true })
+    }
+  }, [])
+
   return (
     <>
       <RouterProvider router={getRouter()} future={{ v7_startTransition: true }} />
-      <Toaster position="top-center" theme={dark ? 'dark' : 'light'} richColors closeButton toastOptions={{ className: 'font-sans' }} />
+      <Suspense fallback={null}>{toastReady && <ToastHost />}</Suspense>
     </>
   )
 }

@@ -1,5 +1,4 @@
-import { useId, type ReactNode } from 'react'
-import { motion } from 'framer-motion'
+import type { ReactNode } from 'react'
 import { cn } from '@/lib/cn'
 
 export interface SegmentedOption<T extends string> {
@@ -16,9 +15,8 @@ interface Props<T extends string> {
   className?: string
 }
 
-/** 分段控件，选中态以弹性动画滑动 */
+/** 分段控件，选中态使用轻量 CSS 淡入 */
 export function Segmented<T extends string>({ value, options, onChange, size = 'md', className }: Props<T>) {
-  const id = useId()
   return (
     <div className={cn('relative flex rounded-[10px] bg-fg/[0.05] p-[3px] shadow-[inset_0_1px_2px_rgb(0_0_0/0.04)]', className)}>
       {options.map((o) => {
@@ -36,11 +34,7 @@ export function Segmented<T extends string>({ value, options, onChange, size = '
             )}
           >
             {active && (
-              <motion.span
-                layoutId={`seg-${id}`}
-                className="absolute inset-0 rounded-[7px] bg-panel shadow-[var(--highlight),0_1px_3px_rgb(0_0_0/0.12),0_0_0_0.5px_rgb(0_0_0/0.08)] dark:bg-fg/[0.12]"
-                transition={{ type: 'spring', bounce: 0.18, duration: 0.4 }}
-              />
+              <span className="segmented-active-in absolute inset-0 rounded-[7px] bg-panel shadow-[var(--highlight),0_1px_3px_rgb(0_0_0/0.12),0_0_0_0.5px_rgb(0_0_0/0.08)] dark:bg-fg/[0.12]" />
             )}
             <span className="relative z-10 inline-flex items-center justify-center gap-1.5">{o.label}</span>
           </button>

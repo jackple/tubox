@@ -1,6 +1,5 @@
 import type { ComponentType, ReactNode } from 'react'
 import { NavLink } from 'react-router-dom'
-import { motion } from 'framer-motion'
 import { ArrowUpRight, CodeXml, Monitor, Moon, Sun } from 'lucide-react'
 import { type GlyphProps, HomeGlyph } from '@/components/icons/ToolGlyphs'
 import { Segmented } from '@/components/ui/Segmented'
@@ -89,11 +88,7 @@ function NavItem({ to, label, icon: Icon, end }: { to: string; label: ReactNode;
           )}
         >
           {isActive && (
-            <motion.span
-              layoutId="nav-active"
-              className="absolute inset-0 rounded-lg border border-line bg-panel shadow-[var(--highlight),0_1px_3px_rgb(0_0_0/0.06)] dark:bg-fg/[0.06]"
-              transition={{ type: 'spring', bounce: 0.15, duration: 0.45 }}
-            />
+            <span className="nav-active-in absolute inset-0 rounded-lg border border-line bg-panel shadow-[var(--highlight),0_1px_3px_rgb(0_0_0/0.06)] dark:bg-fg/[0.06]" />
           )}
           <Icon className={cn('relative h-[18px] w-[18px] shrink-0 transition-opacity', !isActive && 'opacity-70 grayscale')} />
           <span className="relative">{label}</span>

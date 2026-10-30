@@ -1,6 +1,5 @@
-import type { MouseEvent, ReactNode } from 'react'
+import type { CSSProperties, MouseEvent, ReactNode } from 'react'
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
 import { ArrowRight, ArrowUpRight, Check, Play } from 'lucide-react'
 import { Portrait } from '@/components/common/Portrait'
 import { IconTile } from '@/components/layout/ToolIcon'
@@ -15,11 +14,7 @@ import { cn } from '@/lib/cn'
 import { ProductShot } from './ProductShot'
 import { Scenery } from './Scenery'
 
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 14, filter: 'blur(6px)' },
-  animate: { opacity: 1, y: 0, filter: 'blur(0px)' },
-  transition: { duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] as const },
-})
+const revealDelay = (delay = 0): CSSProperties => ({ animationDelay: `${delay}ms` })
 
 export default function HomePage() {
   const legal = useMessages().legal
@@ -77,7 +72,7 @@ function Hero() {
       <div className="pointer-events-none absolute left-1/2 top-0 -z-10 h-[520px] w-[900px] -translate-x-1/2 -translate-y-1/3 rounded-full bg-[radial-gradient(closest-side,rgb(var(--brand)/0.18),transparent)]" />
 
       <div className="mx-auto max-w-5xl px-6 pt-16 text-center sm:pt-24">
-        <motion.div {...fadeUp(0)}>
+        <div className="home-reveal">
           <Link
             to={to('/id-photo')}
             className="group inline-flex h-8 items-center gap-2 rounded-full border border-line bg-panel/70 pl-1 pr-3 text-[12px] text-muted shadow-[var(--highlight),0_1px_2px_rgb(0_0_0/0.04)] backdrop-blur transition hover:border-fg/20 hover:text-fg"
@@ -86,25 +81,25 @@ function Hero() {
             {m.badge}
             <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
           </Link>
-        </motion.div>
+        </div>
 
-        <motion.h1
-          {...fadeUp(0.08)}
-          className="mx-auto mt-7 max-w-4xl text-[42px] font-semibold leading-[1.08] tracking-[-0.045em] sm:text-[72px]"
+        <h1
+          className="home-reveal mx-auto mt-7 max-w-4xl text-[42px] font-semibold leading-[1.08] tracking-[-0.045em] sm:text-[72px]"
+          style={revealDelay(80)}
         >
           <span className="text-metal">{m.heroLine1}</span>
           <br />
           <span className="text-metal">{m.heroBefore}</span>
           <span className="text-gradient">{m.heroHighlight}</span>
           <span className="text-metal">{m.heroAfter}</span>
-        </motion.h1>
+        </h1>
 
-        <motion.p {...fadeUp(0.16)} className="mx-auto mt-6 max-w-xl text-[16px] leading-relaxed text-muted sm:text-[17px]">
+        <p className="home-reveal mx-auto mt-6 max-w-xl text-[16px] leading-relaxed text-muted sm:text-[17px]" style={revealDelay(160)}>
           {m.heroDesc1}
           <br className="hidden sm:block" /> {m.heroDesc2}
-        </motion.p>
+        </p>
 
-        <motion.div {...fadeUp(0.24)} className="mt-9 flex flex-wrap justify-center gap-3">
+        <div className="home-reveal mt-9 flex flex-wrap justify-center gap-3" style={revealDelay(240)}>
           <Link to={to('/batch')}>
             <Button variant="primary" size="lg" className="px-6">
               {m.start} <ArrowRight className="h-4 w-4" />
@@ -115,10 +110,10 @@ function Hero() {
               {m.makeIdPhoto}
             </Button>
           </Link>
-        </motion.div>
-        <motion.p {...fadeUp(0.3)} className="mt-5 font-mono text-[11px] tracking-wide text-muted/80">
+        </div>
+        <p className="home-reveal mt-5 font-mono text-[11px] tracking-wide text-muted/80" style={revealDelay(300)}>
           FREE · NO SIGN-UP · CHROME / SAFARI / EDGE
-        </motion.p>
+        </p>
       </div>
 
       <div className="relative mt-16 px-4 sm:px-6">

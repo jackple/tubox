@@ -176,6 +176,19 @@
     background-size: 64px 64px;
   }
 
+  .home-reveal {
+    animation: home-reveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .product-shot-reveal {
+    animation: product-shot-reveal 1.2s 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .nav-active-in,
+  .segmented-active-in {
+    animation: active-indicator-in 0.18s ease-out both;
+  }
+
   .label {
     @apply text-[12px] font-medium text-muted;
   }
@@ -217,5 +230,54 @@
   .input {
     @apply h-9 w-full rounded-lg border border-line bg-panel px-3 text-[13px] text-fg outline-none transition placeholder:text-muted/60 focus:border-fg/30 focus:ring-4 focus:ring-fg/5;
     box-shadow: 0 1px 2px rgb(0 0 0 / 0.03);
+  }
+}
+
+@keyframes home-reveal {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+@keyframes product-shot-reveal {
+  from {
+    opacity: 0;
+    transform: perspective(2200px) translateY(48px) rotateX(22deg);
+  }
+  to {
+    opacity: 1;
+    transform: perspective(2200px) translateY(0) rotateX(8deg);
+  }
+}
+
+@keyframes active-indicator-in {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-reveal,
+  .nav-active-in,
+  .segmented-active-in {
+    animation: none;
+  }
+
+  .product-shot-reveal {
+    animation: none;
+    opacity: 1;
+    transform: perspective(2200px) rotateX(8deg);
   }
 }

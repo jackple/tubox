@@ -35,6 +35,7 @@ export default defineConfig(({ mode }) => {
     worker: { format: 'es', plugins: () => [licenses.worker] },
     build: {
       target: 'es2022',
+      modulePreload: { polyfill: false },
       chunkSizeWarningLimit: 1200,
     },
   }

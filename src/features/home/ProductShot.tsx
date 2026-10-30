@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
 import { Check, Download, Grid2x2, Lock, Printer, RotateCcw, Search, ZoomIn } from 'lucide-react'
 import { Portrait } from '@/components/common/Portrait'
 import { IdPhotoGlyph } from '@/components/icons/ToolGlyphs'
@@ -32,13 +31,7 @@ export function ProductShot() {
   }, [])
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 48, rotateX: 22 }}
-      animate={{ opacity: 1, y: 0, rotateX: 8 }}
-      transition={{ duration: 1.2, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-      style={{ transformPerspective: 2200 }}
-      className="relative mx-auto w-full max-w-[1080px]"
-    >
+    <div className="product-shot-reveal relative mx-auto w-full max-w-[1080px]">
       {/* 底部光晕 */}
       <div className="pointer-events-none absolute -inset-x-16 -top-10 bottom-10 -z-10 rounded-[50%] bg-[radial-gradient(closest-side,rgb(var(--brand)/0.28),transparent)] blur-2xl" />
 
@@ -86,17 +79,15 @@ export function ProductShot() {
             {/* 舞台 */}
             <div className="stage-dots relative grid place-items-center">
               <div className="relative">
-                <motion.div
-                  animate={{ backgroundColor: BGS[bg].c }}
-                  transition={{ duration: 0.6 }}
-                  className="relative w-[188px] overflow-hidden rounded-[2px] shadow-stage"
-                  style={{ aspectRatio: `${specs[0].px[0]} / ${specs[0].px[1]}` }}
+                <div
+                  className="relative w-[188px] overflow-hidden rounded-[2px] shadow-stage transition-colors duration-700"
+                  style={{ aspectRatio: `${specs[0].px[0]} / ${specs[0].px[1]}`, backgroundColor: BGS[bg].c }}
                 >
                   <Portrait className="absolute bottom-0 left-1/2 w-[94%] -translate-x-1/2" shirt="#1F2937" />
                   <div className="absolute inset-x-0 top-[10%] border-t border-dashed border-cyan-400/90" />
                   <div className="absolute inset-y-0 left-1/2 border-l border-dashed border-cyan-400/60" />
                   <div className="absolute inset-x-0 top-[68%] h-[10%] bg-cyan-400/10" />
-                </motion.div>
+                </div>
                 <div className="absolute -right-28 top-8 hidden items-center gap-1.5 rounded-full border border-line bg-panel/90 px-2.5 py-1 text-[11px] shadow-soft backdrop-blur sm:flex">
                   <span className="grid h-3.5 w-3.5 place-items-center rounded-full bg-success text-white">
                     <Check className="h-2.5 w-2.5" strokeWidth={3} />
@@ -187,6 +178,6 @@ export function ProductShot() {
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   )
 }
